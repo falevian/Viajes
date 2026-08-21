@@ -298,6 +298,7 @@ function fmtMin(min){
   return min < 60 ? `${min} min` : `${Math.floor(min/60)} h ${String(min % 60).padStart(2,"0")} min`;
 }
 const gmaps = p => `https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}&travelmode=driving`;
+const gplace = p => `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`;
 
 // ---- mapa ----
 const map = L.map("map", {scrollWheelZoom:false}).setView([51.95, -8.8], 8);
@@ -371,6 +372,7 @@ function render(zoneFilter){
           </div>
           <div class="links">
             <a class="btn primary" href="${gmaps(p)}" target="_blank" rel="noopener">Cómo llegar</a>
+            <a class="btn" href="${gplace(p)}" target="_blank" rel="noopener">Maps</a>
             <button class="btn" data-fly="${p.id}">Ver en mapa</button>
             ${p.web ? `<a class="btn" href="${p.web}" target="_blank" rel="noopener">Web</a>` : ""}
           </div>

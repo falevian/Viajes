@@ -2,7 +2,16 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f1c18">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Cork">
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAABA0lEQVR4nGPkl5FgoCVgoqnpoxYQA1jI1ukwqR7COJDXiEcZIxmpCG40MsBlDfk+CJV8DmGsfi6JRxnJcQBxPtx0OBurt3BasGvZLFItxgVwBhHcDreoNEosIDmIIJGJHO4QNvUjGX/cUmQBxLFE5gPyfYDfXDgY+mURAQsoTKMMJMUBrryKDDAjhrAFxJiLphjZGkZ+GQmHSfVoNsOzcdubp/gdiN8pB/IaGf3XTcdUWiUijWwBkSkSqzVQH+CyAGsky6jJI3Of3HqIxybsFQ5aSYdmIn6AZh++Gg2PuXBTCKph1HYyJ8NdxLuJQDIl0lxM9XCbyKn0SQIDXRaNWsDAAACpzVyhneRafwAAAABJRU5ErkJggg==">
+<link rel="icon" type="image/png" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAFWUlEQVR4nO3dP67cRADHcS+iT0ORiCfR0XAA2oiCloqGA1C+A9BEr+EAaZBygDRIOUCqdw46JFAaDkFh6cVvd37jGXv+/Mb+ftrEXq/n+8a79q738uLu5QSEfNF7A+CLOCARByTigEQckIgDEnFAIg5IxAGJOCARByTigEQckIgDEnFAIg5IxAGJOCARByTigEQckIgDEnFAIg5IxAGJOCARByTigEQckL7svQEH8frtG/VPj/cPLbekoAu3YNgsEoQyVijEscWGLJZGSYQ48uzMYsk/EV6QZihYRvG11cDMkSo+lj+/+qT+6c9PryILOs8fxJFElRFp4paqxLYP4lgXLCMri6VgIp598JpjRdky1LKerz+YOWJux2xPFldupxC3+YOZQ6paRnBtbvMHcaQqW0a9dRZEHGG9/oitJg/iCKh9QImv2acP4lhXe/K3PbgQByTiuHY1q7f5s756FJMjC3FAIg5IxPGMyXw+eWwJccS0fB9h+J6FOCARByTigGQRx8f373pvAgIs4pim6eP7dyTixiWOGX1Y8YpjYgpxYhfHzCSR+LcKxn2sRKZxzNon4vMpToctsY5j5jCFnNMAcUw2R5mz6R+H26hfzedtXgpcPYrDMWVyiAO2iGNd7cnD8H3KjDgCbmf1euPn/L034gjrNUI+ZUzEka7G5GF7QJkRh1T74OJ8QJkRR0ywj/2JBFfiVsZEHKuCY7anD27eciiqj9xE1CKeZUzcwTjR4/1D8LsCT4N9yBvGEUcq1cds24HGuYyJw0qWsmNpXsbEzJFrHtGT3N6aOLbYnMgoWcw6x+F2vT7LcqQP+ZMaw8wcP/7ya+9NiBm3gAhekEIiDkjEAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHpJ5xDH29/gyYOSARByTigEQckIgD0jCfITWR+InzY3yklDjCdn4zRS0+VjTE8VmDX85aPoR/KGePo+NPqfmHcsY4HH5b74pnKOeKwzCLW/NGOiRy/DiGCOKWw1xy5DgqZbE6VMUft9dccnlx97LxQz7Juiqb9V3ZIsNTfDA8tyqiWxy51+tX4xhr1w+xtUeIY/Rbqdhu/9hxbN6t3YNQrJ7ReHHY/p0VZPIcR4rD6q+qmY7Peow4fv/v322PMnQWS13mksPGcZgslhoncvnpwx+bF96jRhyHDEJpEMqzOHIX3qNsHKfKYqlqIjKO9FVs8Prtm9+++jr9/0fiOG0WSwVP2C/3Z1Ic8VWsCm76njgIIqJgKBsvvPW61EkWq4rcgHs2zFVZssiSeHfluDG+mkAZezzeP+w9z9H4SJH1msP83tbDSRzr8Emw2qFklTERRx2ro7x+hrRGKMTh6Wqst5w+3/87I8U/6YMatrxb4eXhSQzzVra7u2+/yV3kn7/+rrElzRBH2IYU0lcySjTEMU2FUtj2cM6hnDeOxkEozqH0/N5KeyZBpHAI5fhxDBSE0iuUI8dRPIusQaoUZctQjhZHwSGpNAxFtrBNIkeIY6DdfcV8y8eOY+fOdXjR98TwuYwXh+FOLM7kOY4Rh8nO6qLjc/eNw/x43EXjUC7f/fD95oUrOfM8kaLZn82zOHIXLoIZYo+qe0/Gkb6KLH1PTB1Vpb2aEYcPgogoGMowV2UJItFyR+0MxToOgthpZyif38paXb0ki6oSxzp8nqNxKKTQUWSsU0+C+V/tRClPY+17hhTdjfFFanRBHJCIAxJxQCIOSMQBiTggEQck4oBEHJCIAxJxQCIOSMQBiTggEQck4oBEHJCIAxJxQCIOSMQBiTggEQck4oBEHJCIAxJxQCIOSMQBiTgg/Q8AsQg+L45SzAAAAABJRU5ErkJggg==">
+<link rel="apple-touch-icon" sizes="180x180" href="cork_icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAFWUlEQVR4nO3dP67cRADHcS+iT0ORiCfR0XAA2oiCloqGA1C+A9BEr+EAaZBygDRIOUCqdw46JFAaDkFh6cVvd37jGXv+/Mb+ftrEXq/n+8a79q738uLu5QSEfNF7A+CLOCARByTigEQckIgDEnFAIg5IxAGJOCARByTigEQckIgDEnFAIg5IxAGJOCARByTigEQckIgDEnFAIg5IxAGJOCARByTigEQckL7svQEH8frtG/VPj/cPLbekoAu3YNgsEoQyVijEscWGLJZGSYQ48uzMYsk/EV6QZihYRvG11cDMkSo+lj+/+qT+6c9PryILOs8fxJFElRFp4paqxLYP4lgXLCMri6VgIp598JpjRdky1LKerz+YOWJux2xPFldupxC3+YOZQ6paRnBtbvMHcaQqW0a9dRZEHGG9/oitJg/iCKh9QImv2acP4lhXe/K3PbgQByTiuHY1q7f5s756FJMjC3FAIg5IxPGMyXw+eWwJccS0fB9h+J6FOCARByTigGQRx8f373pvAgIs4pim6eP7dyTixiWOGX1Y8YpjYgpxYhfHzCSR+LcKxn2sRKZxzNon4vMpToctsY5j5jCFnNMAcUw2R5mz6R+H26hfzedtXgpcPYrDMWVyiAO2iGNd7cnD8H3KjDgCbmf1euPn/L034gjrNUI+ZUzEka7G5GF7QJkRh1T74OJ8QJkRR0ywj/2JBFfiVsZEHKuCY7anD27eciiqj9xE1CKeZUzcwTjR4/1D8LsCT4N9yBvGEUcq1cds24HGuYyJw0qWsmNpXsbEzJFrHtGT3N6aOLbYnMgoWcw6x+F2vT7LcqQP+ZMaw8wcP/7ya+9NiBm3gAhekEIiDkjEAYk4IBEHJOKARByQiAMScUAiDkjEAYk4IBEHpJ5xDH29/gyYOSARByTigEQckIgD0jCfITWR+InzY3yklDjCdn4zRS0+VjTE8VmDX85aPoR/KGePo+NPqfmHcsY4HH5b74pnKOeKwzCLW/NGOiRy/DiGCOKWw1xy5DgqZbE6VMUft9dccnlx97LxQz7Juiqb9V3ZIsNTfDA8tyqiWxy51+tX4xhr1w+xtUeIY/Rbqdhu/9hxbN6t3YNQrJ7ReHHY/p0VZPIcR4rD6q+qmY7Peow4fv/v322PMnQWS13mksPGcZgslhoncvnpwx+bF96jRhyHDEJpEMqzOHIX3qNsHKfKYqlqIjKO9FVs8Prtm9+++jr9/0fiOG0WSwVP2C/3Z1Ic8VWsCm76njgIIqJgKBsvvPW61EkWq4rcgHs2zFVZssiSeHfluDG+mkAZezzeP+w9z9H4SJH1msP83tbDSRzr8Emw2qFklTERRx2ro7x+hrRGKMTh6Wqst5w+3/87I8U/6YMatrxb4eXhSQzzVra7u2+/yV3kn7/+rrElzRBH2IYU0lcySjTEMU2FUtj2cM6hnDeOxkEozqH0/N5KeyZBpHAI5fhxDBSE0iuUI8dRPIusQaoUZctQjhZHwSGpNAxFtrBNIkeIY6DdfcV8y8eOY+fOdXjR98TwuYwXh+FOLM7kOY4Rh8nO6qLjc/eNw/x43EXjUC7f/fD95oUrOfM8kaLZn82zOHIXLoIZYo+qe0/Gkb6KLH1PTB1Vpb2aEYcPgogoGMowV2UJItFyR+0MxToOgthpZyif38paXb0ki6oSxzp8nqNxKKTQUWSsU0+C+V/tRClPY+17hhTdjfFFanRBHJCIAxJxQCIOSMQBiTggEQck4oBEHJCIAxJxQCIOSMQBiTggEQck4oBEHJCIAxJxQCIOSMQBiTggEQck4oBEHJCIAxJxQCIOSMQBiTgg/Q8AsQg+L45SzAAAAABJRU5ErkJggg==">
 <title>Cork y suroeste de Irlanda · 27 ago – 3 sep 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -15,7 +24,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:"Public Sans",system-ui,sans-serif;line-height:1.55}
+body{padding-top:env(safe-area-inset-top);background:var(--bg);color:var(--text);font-family:"Public Sans",system-ui,sans-serif;line-height:1.55}
 header{padding:44px 24px 20px;max-width:1180px;margin:0 auto}
 .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
 h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(2rem,5vw,3.4rem);line-height:1.05;margin:.35em 0 .3em}
@@ -289,6 +298,7 @@ function fmtMin(min){
   return min < 60 ? `${min} min` : `${Math.floor(min/60)} h ${String(min % 60).padStart(2,"0")} min`;
 }
 const gmaps = p => `https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}&travelmode=driving`;
+const gplace = p => `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`;
 
 // ---- mapa ----
 const map = L.map("map", {scrollWheelZoom:false}).setView([51.95, -8.8], 8);
@@ -362,6 +372,7 @@ function render(zoneFilter){
           </div>
           <div class="links">
             <a class="btn primary" href="${gmaps(p)}" target="_blank" rel="noopener">Cómo llegar</a>
+            <a class="btn" href="${gplace(p)}" target="_blank" rel="noopener">Maps</a>
             <button class="btn" data-fly="${p.id}">Ver en mapa</button>
             ${p.web ? `<a class="btn" href="${p.web}" target="_blank" rel="noopener">Web</a>` : ""}
           </div>
