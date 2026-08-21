@@ -6,6 +6,8 @@
 <title>Japón 2026 · Guía de viaje</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 :root{
   --paper:#F7F6F2; --card:#FFFFFF; --ink:#1B1B1F; --muted:#6E6E74; --line:#E4E2DB;
@@ -115,6 +117,30 @@ ul.check li.done label{color:var(--muted);text-decoration:line-through}
 .total small{font-family:var(--body);font-weight:400;font-size:13px;color:var(--muted);display:block}
 
 footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted);font-size:12.5px;font-family:var(--mono)}
+
+/* ---------- Mapa ---------- */
+#map{height:62vh;min-height:380px;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+.leaflet-container{font-family:var(--body)}
+.leaflet-popup-content{font-size:13.5px;line-height:1.4;margin:10px 14px}
+.leaflet-popup-content b{display:block;margin-bottom:2px}
+.maplegend{display:flex;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:10px;align-items:center}
+.maplegend i{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:-1px}
+.maplegend .ln{width:22px;height:0;border-top:3px dashed var(--muted);display:inline-block;margin-right:5px;vertical-align:3px}
+
+/* ---------- Paseos ---------- */
+.walk{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 17px;margin-bottom:10px;border-left:5px solid var(--muted)}
+.wl-t{border-left-color:var(--tokio)} .wl-k{border-left-color:var(--kanazawa)} .wl-y{border-left-color:var(--kioto)} .wl-o{border-left-color:var(--osaka)}
+.walk .whead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.walk b{font-size:16px}
+.walk .wmeta{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-left:auto;white-space:nowrap}
+.walk p{font-size:14.5px;margin-bottom:11px}
+.walk .wacts{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.walk button.showmap{font-family:var(--body);font-weight:700;font-size:13px;border:1.5px solid var(--ink);background:var(--ink);color:#fff;border-radius:8px;padding:7px 13px;cursor:pointer}
+.walk button.showmap:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
+/* ---------- Cultura ---------- */
+.cult{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.cult .info{margin-bottom:0}
 </style>
 </head>
 <body>
@@ -134,10 +160,13 @@ footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted);font-s
 <nav aria-label="Secciones">
   <div class="wrap">
     <button class="on" data-p="itinerario">Itinerario</button>
+    <button data-p="mapa">Mapa</button>
     <button data-p="ciudades">Ciudades</button>
+    <button data-p="paseos">Paseos</button>
     <button data-p="trenes">Trenes y buses</button>
     <button data-p="comer">Dónde comer</button>
     <button data-p="camaras">Cámaras</button>
+    <button data-p="cultura">Cultura</button>
     <button data-p="requisitos">Requisitos</button>
     <button data-p="presupuesto">Presupuesto</button>
   </div>
@@ -252,7 +281,7 @@ footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted);font-s
     <div class="dbody"><ol>
       <li><span class="t">MAÑANA</span>Tren Kintetsu o JR a Nara, 45 min. <a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Todaiji+Temple+Nara" target="_blank" rel="noopener">Tōdai-ji</a>: el gran Buda de 15 m. Ciervos por todo el parque (guardad mapas y papeles: se los comen).</li>
       <li><a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Kasuga+Taisha" target="_blank" rel="noopener">Kasuga-taisha</a> y su bosque de linternas de piedra. Comida en Naramachi.</li>
-      <li><span class="t">TARDE</span>Vuelta a Kioto.</li>
+      <li><span class="t">TARDE</span>Vuelta a Kioto y, con la última luz, el Camino del Filósofo: de Ginkaku-ji a Nanzen-ji junto al canal, bajo los arces (detalle en la pestaña Paseos).</li>
       <li><span class="t">17:30</span>Si <a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Eikando+Temple+Kyoto" target="_blank" rel="noopener">Eikan-dō</a> ya abre su iluminación nocturna (suele arrancar a mediados de mes), es la noche de ir: el momiji nocturno por excelencia.</li>
     </ol></div>
   </details>
@@ -337,6 +366,69 @@ footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted);font-s
   </div>
 </section>
 
+<!-- ================= MAPA ================= -->
+<section class="pane" id="mapa">
+  <h2>Mapa del viaje</h2>
+  <p class="sub">Todos los puntos de la guía, coloreados por ciudad, con los seis paseos dibujados como líneas discontinuas. Toca cualquier marcador para abrir su ficha y su enlace a Google Maps. Necesita conexión para cargar el fondo.</p>
+  <div class="chips" aria-label="Ir a ciudad">
+    <button class="on" data-city="all">Todo Japón</button>
+    <button data-city="t">Tokio</button>
+    <button data-city="k">Kanazawa</button>
+    <button data-city="y">Kioto y Nara</button>
+    <button data-city="o">Osaka</button>
+  </div>
+  <div id="map" role="application" aria-label="Mapa interactivo del viaje"></div>
+  <div class="maplegend">
+    <span><i style="background:var(--tokio)"></i>TOKIO</span>
+    <span><i style="background:var(--kanazawa)"></i>KANAZAWA</span>
+    <span><i style="background:var(--kioto)"></i>KIOTO · NARA</span>
+    <span><i style="background:var(--osaka)"></i>OSAKA</span>
+    <span><span class="ln"></span>PASEOS A PIE</span>
+  </div>
+</section>
+
+<!-- ================= PASEOS ================= -->
+<section class="pane" id="paseos">
+  <h2>Paseos bonitos</h2>
+  <p class="sub">Seis recorridos a pie escogidos, con su mejor hora. Cada uno se puede ver dibujado en el mapa o abrir como ruta a pie en Google Maps.</p>
+
+  <div class="walk wl-t">
+    <div class="whead"><b>Shitamachi: Yanaka y alrededores</b><span class="wmeta">TOKIO · 3,5 KM · ~2 H · MAÑANA O ATARDECER</span></div>
+    <p>El Tokio de antes de la guerra: la calle comercial de Yanaka Ginza, el cementerio arbolado entre casas bajas, el santuario de Nezu con su túnel pequeño de torii y bajada al parque de Ueno. Barrio de gatos, talleres y cero rascacielos. Encaja en el domingo 1.</p>
+    <div class="wacts"><button class="showmap" data-w="0">Ver en el mapa</button><a class="map mc-t" href="https://www.google.com/maps/dir/?api=1&origin=35.7276,139.7666&destination=35.7156,139.7745&waypoints=35.7256,139.7690%7C35.7203,139.7610&travelmode=walking" target="_blank" rel="noopener">Ruta en Google Maps</a></div>
+  </div>
+
+  <div class="walk wl-t">
+    <div class="whead"><b>Del bosque al neón: Meiji Jingū a Shibuya</b><span class="wmeta">TOKIO · 3 KM · ~2 H · TARDE</span></div>
+    <p>El contraste más didáctico de la ciudad en una sola línea recta: del silencio del bosque del santuario al caos de Takeshita-dōri, bajada serena por Cat Street y desembocadura en el cruce de Shibuya justo cuando se encienden las pantallas. Es el paseo del martes 3, terminando en Shibuya Sky.</p>
+    <div class="wacts"><button class="showmap" data-w="1">Ver en el mapa</button><a class="map mc-t" href="https://www.google.com/maps/dir/?api=1&origin=35.6764,139.6993&destination=35.6595,139.7005&waypoints=35.6702,139.7026%7C35.6668,139.7045&travelmode=walking" target="_blank" rel="noopener">Ruta en Google Maps</a></div>
+  </div>
+
+  <div class="walk wl-k">
+    <div class="whead"><b>Kanazawa entera a pie</b><span class="wmeta">KANAZAWA · 3,5 KM · ~MEDIA JORNADA · MAÑANA</span></div>
+    <p>La ciudad se recorre en una sola línea: de las casas de té de Higashi Chaya, cruzando el río Asano, al castillo, el jardín de Kenroku-en y remate en los muros de adobe del barrio samurái de Nagamachi. Es literalmente el plan del sábado 7 antes del tren.</p>
+    <div class="wacts"><button class="showmap" data-w="2">Ver en el mapa</button><a class="map mc-k" href="https://www.google.com/maps/dir/?api=1&origin=36.5726,136.6668&destination=36.5613,136.6520&waypoints=36.5656,136.6592%7C36.5622,136.6626&travelmode=walking" target="_blank" rel="noopener">Ruta en Google Maps</a></div>
+  </div>
+
+  <div class="walk wl-y">
+    <div class="whead"><b>Higashiyama al anochecer</b><span class="wmeta">KIOTO · 2,5 KM · ~2 H · ÚLTIMA HORA DE LA TARDE</span></div>
+    <p>El paseo clásico de Kioto, hecho en el sentido y la hora correctos: Kiyomizu-dera con la última luz, bajada por las cuestas conservadas de Sannenzaka y Ninenzaka mientras cierran las tiendas, Kōdai-ji, el santuario de Yasaka ya con los farolillos encendidos y llegada al canal de Shirakawa en Gion de noche. Domingo 8.</p>
+    <div class="wacts"><button class="showmap" data-w="3">Ver en el mapa</button><a class="map mc-y" href="https://www.google.com/maps/dir/?api=1&origin=34.9949,135.7850&destination=35.0053,135.7754&waypoints=34.9967,135.7810%7C35.0007,135.7810%7C35.0037,135.7787&travelmode=walking" target="_blank" rel="noopener">Ruta en Google Maps</a></div>
+  </div>
+
+  <div class="walk wl-y">
+    <div class="whead"><b>Camino del Filósofo</b><span class="wmeta">KIOTO · 2 KM · ~1,5 H · TARDE DEL MARTES 10</span></div>
+    <p>Senda junto a un canal bajo cerezos y arces, del Pabellón de Plata (Ginkaku-ji) a Nanzen-ji con su acueducto de ladrillo. En noviembre, con los arces encendidos, es el paseo de momiji por excelencia; y termina en la puerta de Eikan-dō justo a la hora de su iluminación nocturna. Encaja perfecto a la vuelta de Nara.</p>
+    <div class="wacts"><button class="showmap" data-w="4">Ver en el mapa</button><a class="map mc-y" href="https://www.google.com/maps/dir/?api=1&origin=35.0270,135.7982&destination=35.0116,135.7943&waypoints=35.0244,135.7946%7C35.0145,135.7936&travelmode=walking" target="_blank" rel="noopener">Ruta en Google Maps</a></div>
+  </div>
+
+  <div class="walk wl-o">
+    <div class="whead"><b>Osaka de neón</b><span class="wmeta">OSAKA · 1,5 KM · ~2 H CON PARADAS · NOCHE</span></div>
+    <p>Del puente Ebisubashi y el cartel de Glico al minúsculo callejón empedrado de Hōzenji Yokochō, donde se moja de agua al buda cubierto de musgo, y remate en las barras de Ura-Namba. Todo el arco de Osaka, del neón total al farolillo de papel, en tres manzanas. Miércoles 11, cámara en mano.</p>
+    <div class="wacts"><button class="showmap" data-w="5">Ver en el mapa</button><a class="map mc-o" href="https://www.google.com/maps/dir/?api=1&origin=34.6687,135.5013&destination=34.6640,135.5050&waypoints=34.6673,135.5031&travelmode=walking" target="_blank" rel="noopener">Ruta en Google Maps</a></div>
+  </div>
+</section>
+
 <!-- ================= TRENES ================= -->
 <section class="pane" id="trenes">
   <h2>Trenes y buses</h2>
@@ -404,6 +496,58 @@ footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted);font-s
   <h3>Reglas de compra</h3>
   <div class="info"><b>Aduana a la vuelta</b>Franquicia de 430 € por persona y por viaje, aplicable a artículos completos: no se combinan las dos franquicias para un mismo artículo, pero sí se reparten artículos distintos entre los dos pasaportes. Por encima, corresponde declarar: cámaras y objetivos tienen arancel 0 y tributan el 21 % de IVA sobre el valor íntegro. Guardad todas las facturas.</div>
   <div class="info"><b>Comprobar antes de pagar</b>En usado: hongos y neblina en lentes (mirar a contraluz con la linterna del móvil), diafragma ágil, helicoide suave, contactos limpios. Las tiendas grandes dejan probar con cuerpo propio sin problema.</div>
+</section>
+
+<!-- ================= CULTURA ================= -->
+<section class="pane" id="cultura">
+  <h2>Cultura y curiosidades</h2>
+  <p class="sub">Lo que conviene saber para no meter la pata y para entender lo que estáis viendo. La palabra comodín para todo es sumimasen: perdone, disculpe, gracias y oiga, según el tono.</p>
+
+  <h3>Trato y costumbres</h3>
+  <div class="cult">
+    <div class="info"><b>La propina no existe</b>No se deja nunca, ni en restaurantes ni en taxis; intentarlo genera confusión y a veces persecución por la calle para devolver el dinero. El servicio impecable es el estándar, no un extra.</div>
+    <div class="info"><b>La bandejita del dinero</b>Al pagar, el dinero o la tarjeta se dejan en la bandeja del mostrador, no en la mano. El cambio vuelve por la misma vía. No es frialdad, es el protocolo.</div>
+    <div class="info"><b>Zapatos fuera</b>Donde haya tatami o un escalón de entrada con zapatillas alineadas (algunos restaurantes, templos por dentro, probadores): descalzarse sin que lo pidan. Calcetines dignos en la maleta.</div>
+    <div class="info"><b>Señalar y sonarse</b>No se señala a personas con el dedo (mano abierta) y sonarse la nariz en público se considera desagradable: la gente sorbe y se suena en el baño.</div>
+    <div class="info"><b>Colas para todo</b>Se hace cola con precisión geométrica: en el andén hay marcas en el suelo indicando dónde esperar cada puerta del tren. El tren para exactamente ahí, siempre.</div>
+    <div class="info"><b>Escaleras mecánicas: física regional</b>En Tokio se deja libre el lado derecho; en Osaka, el izquierdo. La frontera de convención pasa cerca de Kioto. Observaréis el cambio en directo en vuestra propia ruta.</div>
+  </div>
+
+  <h3>Templos y santuarios</h3>
+  <div class="cult">
+    <div class="info"><b>Santuario ≠ templo</b>Los santuarios (con torii, como Fushimi Inari o Meiji) son sintoístas; los templos (con buda e incienso, como Sensō-ji o Kinkaku-ji) son budistas. Conviven sin conflicto: la mayoría de japoneses practica ritos de ambos.</div>
+    <div class="info"><b>Cómo rezar en un santuario</b>Ligera reverencia en el torii, purificación en la fuente (mano izquierda, derecha, boca con la izquierda), moneda al cepillo, dos reverencias, dos palmadas, deseo, una reverencia final. En los templos budistas, sin palmadas: manos juntas en silencio.</div>
+    <div class="info"><b>Omikuji y omamori</b>El omikuji es la papeleta de la fortuna (si sale mala, se anuda en el soporte del recinto y ahí se queda); los omamori son amuletos por causas concretas. Souvenir con más sentido que el imán de nevera.</div>
+    <div class="info"><b>Goshuinchō: la libreta de sellos</b>Cuaderno donde en cada templo o santuario un monje caligrafía e imprime en tinta y sello rojo la visita (300 a 500 ¥). Se compra en el primer templo (Sensō-ji mismo) y al final del viaje es un objeto precioso. Muy recomendable para vosotros.</div>
+    <div class="info"><b>El 33 y el 42 no, el 8 sí</b>El 4 (shi) suena como muerte y el 9 (ku) como sufrimiento: muchos hoteles no tienen cuarta planta. El 8 es próspero por la forma abierta de su kanji (八).</div>
+  </div>
+
+  <h3>Mesa</h3>
+  <div class="cult">
+    <div class="info"><b>Sorber está bien</b>El ramen y la soba se sorben con ruido: airea los fideos y señala aprecio. Lo maleducado es lo contrario de aquí.</div>
+    <div class="info"><b>Palillos: dos vetos serios</b>Nunca clavados verticales en el arroz ni pasando comida de palillos a palillos: ambos gestos pertenecen a los ritos funerarios. Dejarlos en el reposapalillos o cruzados sobre el bol.</div>
+    <div class="info"><b>El oshibori y el vaso ajeno</b>La toallita húmeda al sentarse es para las manos, no para la cara ni la mesa. Y en una izakaya, cada uno sirve la bebida del otro, no la propia: rellenad el vaso del de enfrente.</div>
+    <div class="info"><b>No se come andando</b>Lo comprado en un puesto se come de pie junto al puesto, y el envoltorio se devuelve ahí. De ahí que no haya papeleras y las calles estén impolutas: bolsa propia para los residuos del día.</div>
+  </div>
+
+  <h3>Para fotógrafos</h3>
+  <div class="cult">
+    <div class="info warn"><b>Gion: prohibición con multa</b>Las callejuelas privadas del barrio de geishas (zona de Hanamikōji) prohíben fotografiar, con multa de 10.000 ¥ y carteles que lo indican. Fotografiar o perseguir a una geiko o maiko es la falta grave del turismo en Kioto. El canal de Shirakawa y las calles públicas, sin problema.</div>
+    <div class="info"><b>Trípodes y drones</b>Trípode vetado en la mayoría de templos, jardines y miradores (Shibuya Sky incluido): ISO alto y apoyos. Drones, prohibidos de facto en todo entorno urbano y en parques sin permiso.</div>
+    <div class="info"><b>Personas en el encuadre</b>La sensibilidad con la imagen propia es alta: para retratos cercanos de alguien identificable, gesto de permiso con la cámara y una inclinación de cabeza bastan. En mercados, pedir antes de fotografiar el puesto.</div>
+  </div>
+
+  <h3>Curiosidades que veréis</h3>
+  <div class="cult">
+    <div class="info"><b>Máquinas expendedoras con bebida caliente</b>Hay unas cuatro millones, y en noviembre la mitad de la máquina está en rojo: café y té en lata calientes. Etiqueta roja caliente, azul fría. El café caliente de lata en una mañana a 7 °C es una institución.</div>
+    <div class="info"><b>El konbini es un ecosistema</b>7-Eleven, Lawson y FamilyMart resuelven cajero sin comisión, comida digna 24 h, entradas, paquetería y baño. El onigiri de konbini y el sando de huevo tienen culto justificado.</div>
+    <div class="info"><b>Taxis con puerta automática</b>La puerta trasera izquierda la abre y cierra el conductor con palanca: no la toquéis, es su gesto. Guantes blancos y fundas de encaje en los asientos, de serie.</div>
+    <div class="info"><b>Los inodoros</b>Asiento calefactado, agua a presión regulable y sonido ambiente para la intimidad. En noviembre, el asiento caliente pasa de anécdota a argumento.</div>
+    <div class="info"><b>Melodías de estación</b>Cada estación de tren tiene su melodía propia de salida (hassha merodi), compuestas ex profeso. En la línea Yamanote, cada parada suena distinta.</div>
+    <div class="info"><b>La comida de plástico</b>Los escaparates muestran réplicas exactas de cada plato (sanpuru), artesanía centenaria de Kappabashi. Resuelven cualquier barrera idiomática: señalar funciona.</div>
+    <div class="info"><b>Puntualidad ferroviaria</b>El retraso medio anual del shinkansen se mide en segundos, y un retraso de cinco minutos genera certificados oficiales de disculpa para presentar en el trabajo. Con 3.500 millones de pasajeros-año, es el sistema complejo mejor sincronizado que veréis nunca.</div>
+    <div class="info"><b>Silencio en el tren</b>Se viaja en silencio o hablando muy bajo, con el móvil en modo vibración (manner mode). Nadie habla por teléfono. Un vagón lleno y callado a las 8:00 impresiona la primera vez.</div>
+  </div>
 </section>
 
 <!-- ================= REQUISITOS ================= -->
@@ -487,6 +631,76 @@ function upd(){
 }
 boxes.forEach(b=>b.addEventListener('change',upd));
 upd();
+
+// ================= MAPA =================
+const COL={t:'#679B10',k:'#2C5387',y:'#6C4F82',o:'#D6301F'};
+const SPOTS=[
+ ['Sensō-ji','t',35.7148,139.7967],['Mercado de Tsukiji','t',35.6654,139.7707],
+ ['teamLab Planets','t',35.6494,139.7898],['Meiji Jingū','t',35.6764,139.6993],
+ ['Shibuya Sky','t',35.6585,139.7023],['Golden Gai','t',35.6938,139.7048],
+ ['Omoide Yokochō','t',35.6928,139.6995],['Yanaka Ginza','t',35.7276,139.7666],
+ ['Fujiya Camera (Nakano)','t',35.7073,139.6653],['Nakano Broadway','t',35.7093,139.6655],
+ ['Map Camera (Shinjuku)','t',35.6917,139.6994],['Gado-shita de Yurakucho','t',35.6749,139.7628],
+ ['Mirador Gobierno Metropolitano','t',35.6896,139.6921],
+ ['Kenroku-en','k',36.5622,136.6626],['Castillo de Kanazawa','k',36.5656,136.6592],
+ ['Higashi Chaya','k',36.5726,136.6668],['Nagamachi (barrio samurái)','k',36.5613,136.6520],
+ ['Mercado de Ōmichō','k',36.5717,136.6560],['Shirakawa-gō','k',36.2578,136.9066],
+ ['Fushimi Inari','y',34.9671,135.7727],['Tōfuku-ji','y',34.9764,135.7735],
+ ['Kiyomizu-dera','y',34.9949,135.7850],['Kōdai-ji','y',35.0007,135.7810],
+ ['Gion · canal de Shirakawa','y',35.0053,135.7754],['Pontochō','y',35.0043,135.7710],
+ ['Mercado de Nishiki','y',35.0050,135.7649],['Kinkaku-ji','y',35.0394,135.7292],
+ ['Ryōan-ji','y',35.0345,135.7183],['Bosque de bambú de Arashiyama','y',35.0170,135.6710],
+ ['Tenryū-ji','y',35.0158,135.6738],['Giō-ji','y',35.0227,135.6666],
+ ['Ginkaku-ji','y',35.0270,135.7982],['Eikan-dō','y',35.0145,135.7936],
+ ['Nanzen-ji','y',35.0116,135.7943],['Tōdai-ji (Nara)','y',34.6890,135.8398],
+ ['Kasuga-taisha (Nara)','y',34.6814,135.8484],
+ ['Dōtonbori · puente Ebisubashi','o',34.6687,135.5013],['Hōzenji Yokochō','o',34.6673,135.5031],
+ ['Shinsekai · Tsūtenkaku','o',34.6525,135.5063],['Ura-Namba','o',34.6640,135.5050]
+];
+const WALKS=[
+ {n:'Shitamachi: Yanaka',c:'t',pts:[[35.7276,139.7666],[35.7256,139.7690],[35.7203,139.7610],[35.7156,139.7745]]},
+ {n:'Meiji Jingū a Shibuya',c:'t',pts:[[35.6764,139.6993],[35.6702,139.7026],[35.6668,139.7045],[35.6595,139.7005]]},
+ {n:'Kanazawa a pie',c:'k',pts:[[36.5726,136.6668],[36.5656,136.6592],[36.5622,136.6626],[36.5613,136.6520]]},
+ {n:'Higashiyama al anochecer',c:'y',pts:[[34.9949,135.7850],[34.9967,135.7810],[35.0007,135.7810],[35.0037,135.7787],[35.0053,135.7754]]},
+ {n:'Camino del Filósofo',c:'y',pts:[[35.0270,135.7982],[35.0244,135.7946],[35.0145,135.7936],[35.0116,135.7943]]},
+ {n:'Osaka de neón',c:'o',pts:[[34.6687,135.5013],[34.6673,135.5031],[34.6640,135.5050]]}
+];
+const CITYVIEW={all:{c:[36.0,137.2],z:6},t:{c:[35.690,139.735],z:12},k:{c:[36.45,136.78],z:9},y:{c:[34.93,135.79],z:10},o:{c:[34.662,135.503],z:14}};
+let map=null,walkLines=[];
+function initMap(){
+  if(map){setTimeout(()=>map.invalidateSize(),60);return;}
+  map=L.map('map',{scrollWheelZoom:true}).setView(CITYVIEW.all.c,CITYVIEW.all.z);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap'}).addTo(map);
+  SPOTS.forEach(s=>{
+    L.circleMarker([s[2],s[3]],{radius:7,color:'#fff',weight:2,fillColor:COL[s[1]],fillOpacity:1})
+     .addTo(map)
+     .bindPopup('<b>'+s[0]+'</b><a href="https://www.google.com/maps/search/?api=1&query='+s[2]+','+s[3]+'" target="_blank" rel="noopener">Abrir en Google Maps ↗</a>');
+  });
+  WALKS.forEach(w=>{
+    const pl=L.polyline(w.pts,{color:COL[w.c],weight:3,dashArray:'6 7',opacity:.85}).addTo(map).bindPopup('<b>Paseo: '+w.n+'</b>');
+    walkLines.push(pl);
+  });
+  setTimeout(()=>map.invalidateSize(),60);
+}
+function openPane(id){document.querySelector('nav button[data-p="'+id+'"]').click();}
+document.querySelector('nav button[data-p="mapa"]').addEventListener('click',()=>setTimeout(initMap,60));
+document.querySelectorAll('#mapa .chips button').forEach(c=>c.addEventListener('click',()=>{
+  document.querySelectorAll('#mapa .chips button').forEach(x=>x.classList.remove('on'));
+  c.classList.add('on');
+  if(!map)return;
+  const v=CITYVIEW[c.dataset.city];
+  map.setView(v.c,v.z);
+}));
+document.querySelectorAll('.walk .showmap').forEach(b=>b.addEventListener('click',()=>{
+  openPane('mapa');
+  setTimeout(()=>{
+    initMap();
+    const i=+b.dataset.w;
+    walkLines.forEach((pl,j)=>pl.setStyle({weight:j===i?6:3,opacity:j===i?1:.5}));
+    map.fitBounds(walkLines[i].getBounds(),{padding:[46,46]});
+    walkLines[i].openPopup();
+  },120);
+}));
 </script>
 </body>
 </html>
