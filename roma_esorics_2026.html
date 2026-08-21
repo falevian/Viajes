@@ -7,73 +7,33 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Karla:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
 :root{
-  --piedra:#F6F4EF;
-  --piedra-2:#EDE9E0;
-  --tinta:#26221C;
-  --tinta-suave:#5C554A;
-  --pompeya:#8E2F2F;
-  --pompeya-osc:#6E2323;
-  --laurel:#4A5D45;
-  --bronce:#A67C2E;
-  --linea:#D8D2C4;
-  --blanco:#FFFFFF;
-  --sombra:0 2px 14px rgba(38,34,28,.08);
-  --radio:10px;
+  --piedra:#F6F4EF; --piedra-2:#EDE9E0; --tinta:#26221C; --tinta-suave:#5C554A;
+  --pompeya:#8E2F2F; --pompeya-osc:#6E2323; --laurel:#4A5D45; --bronce:#A67C2E;
+  --linea:#D8D2C4; --blanco:#FFFFFF;
+  --sombra:0 2px 14px rgba(38,34,28,.08); --radio:10px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{
-  font-family:'Karla',system-ui,sans-serif;
-  background:var(--piedra);
-  color:var(--tinta);
-  line-height:1.55;
-  font-size:16px;
-}
-h1,h2,h3,.display{font-family:'Marcellus',serif;font-weight:400;letter-spacing:.02em}
+body{font-family:'Karla',system-ui,sans-serif;background:var(--piedra);color:var(--tinta);line-height:1.55;font-size:16px}
+h1,h2,h3{font-family:'Marcellus',serif;font-weight:400;letter-spacing:.02em}
 
-/* ---------- Cabecera ---------- */
-header{
-  background:linear-gradient(180deg,#2B2620 0%,#3A332A 100%);
-  color:#F0EBE0;
-  padding:52px 24px 40px;
-  text-align:center;
-  border-bottom:4px solid var(--bronce);
-}
-header .eyebrow{
-  font-size:.78rem;letter-spacing:.28em;text-transform:uppercase;
-  color:var(--bronce);margin-bottom:14px;
-}
+header{background:linear-gradient(180deg,#2B2620 0%,#3A332A 100%);color:#F0EBE0;padding:52px 24px 40px;text-align:center;border-bottom:4px solid var(--bronce)}
+header .eyebrow{font-size:.78rem;letter-spacing:.28em;text-transform:uppercase;color:var(--bronce);margin-bottom:14px}
 header h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.1}
 header h1 .roma{color:#E8C87A}
-header p.sub{
-  max-width:640px;margin:16px auto 0;color:#C9C2B4;font-size:.98rem;
-}
-header .fechas{
-  display:inline-block;margin-top:20px;padding:8px 22px;
-  border:1px solid rgba(232,200,122,.45);border-radius:999px;
-  font-family:'Marcellus',serif;font-size:.95rem;color:#E8C87A;letter-spacing:.12em;
-}
+header p.sub{max-width:640px;margin:16px auto 0;color:#C9C2B4;font-size:.98rem}
+header .fechas{display:inline-block;margin-top:20px;padding:8px 22px;border:1px solid rgba(232,200,122,.45);border-radius:999px;font-family:'Marcellus',serif;font-size:.95rem;color:#E8C87A;letter-spacing:.12em}
+header .indice{margin-top:22px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+header .indice a{color:#C9C2B4;text-decoration:none;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;border:1px solid rgba(201,194,180,.3);border-radius:5px}
+header .indice a:hover{color:#E8C87A;border-color:#E8C87A}
 
-/* ---------- Filtros ---------- */
-.filtros{
-  position:sticky;top:0;z-index:50;
-  background:rgba(246,244,239,.96);backdrop-filter:blur(6px);
-  border-bottom:1px solid var(--linea);
-  padding:14px 24px;
-}
+.filtros{position:sticky;top:0;z-index:1001;background:rgba(246,244,239,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--linea);padding:14px 24px}
 .filtros-inner{max-width:1180px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.filtros .grupo-label{
-  font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--tinta-suave);margin-right:2px;
-}
-.chip{
-  border:1px solid var(--linea);background:var(--blanco);color:var(--tinta);
-  padding:7px 16px;border-radius:6px;cursor:pointer;
-  font-family:'Karla',sans-serif;font-size:.88rem;font-weight:500;
-  transition:all .15s ease;
-}
+.filtros .grupo-label{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--tinta-suave);margin-right:2px}
+.chip{border:1px solid var(--linea);background:var(--blanco);color:var(--tinta);padding:7px 16px;border-radius:6px;cursor:pointer;font-family:'Karla',sans-serif;font-size:.88rem;font-weight:500;transition:all .15s ease}
 .chip:hover{border-color:var(--bronce)}
 .chip:focus-visible{outline:2px solid var(--pompeya);outline-offset:2px}
 .chip.activo{background:var(--pompeya);border-color:var(--pompeya);color:#fff}
@@ -82,56 +42,45 @@ header .fechas{
 .sep{width:1px;height:24px;background:var(--linea);margin:0 6px}
 .contador{margin-left:auto;font-size:.82rem;color:var(--tinta-suave)}
 
-/* ---------- Plan por días ---------- */
 .seccion{max-width:1180px;margin:0 auto;padding:48px 24px}
-.seccion>h2{
-  font-size:1.7rem;margin-bottom:6px;color:var(--tinta);
-}
+.seccion>h2{font-size:1.7rem;margin-bottom:6px}
 .seccion>.nota{color:var(--tinta-suave);font-size:.95rem;margin-bottom:26px;max-width:760px}
+
 .timeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
-.dia{
-  background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);
-  padding:18px 18px 16px;box-shadow:var(--sombra);
-  border-top:3px solid var(--bronce);
-}
-.dia .num{
-  font-family:'Marcellus',serif;font-size:1.5rem;color:var(--pompeya);
-  letter-spacing:.06em;
-}
+.dia{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);padding:18px 18px 16px;box-shadow:var(--sombra);border-top:3px solid var(--bronce)}
+.dia .num{font-family:'Marcellus',serif;font-size:1.5rem;color:var(--pompeya);letter-spacing:.06em}
 .dia .nombre{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--tinta-suave);margin-bottom:10px}
 .dia ul{list-style:none;font-size:.86rem}
 .dia li{padding:5px 0;border-top:1px dashed var(--linea)}
 .dia li:first-child{border-top:none}
-.dia .quien{
-  display:inline-block;font-size:.66rem;font-weight:700;letter-spacing:.08em;
-  padding:1px 7px;border-radius:4px;margin-right:6px;vertical-align:1px;text-transform:uppercase;
-}
+.dia .quien{display:inline-block;font-size:.66rem;font-weight:700;letter-spacing:.08em;padding:1px 7px;border-radius:4px;margin-right:6px;vertical-align:1px;text-transform:uppercase}
 .q-rafa{background:#F3E0E0;color:var(--pompeya-osc)}
 .q-lucia{background:#E2E8DF;color:#33452F}
 .q-juntos{background:#F0E6CF;color:#775A1F}
 
-/* ---------- Tarjetas ---------- */
+/* Mapa */
+#mapa{height:520px;border-radius:var(--radio);border:1px solid var(--linea);box-shadow:var(--sombra);z-index:1}
+.mapa-controles{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-bottom:14px;font-size:.86rem}
+.mapa-controles label{display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--tinta-suave)}
+.mapa-controles input{accent-color:var(--pompeya)}
+.leyenda{display:flex;gap:14px;flex-wrap:wrap;margin-left:auto}
+.leyenda span{display:flex;align-items:center;gap:5px;font-size:.8rem;color:var(--tinta-suave)}
+.punto{width:12px;height:12px;border-radius:50%;display:inline-block;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.2)}
+.p-rafa{background:var(--pompeya)}.p-lucia{background:var(--laurel)}.p-juntos{background:var(--bronce)}.p-comer{background:var(--tinta);border-radius:2px}
+.leaflet-popup-content{font-family:'Karla',sans-serif;font-size:.85rem}
+.leaflet-popup-content b{font-family:'Marcellus',serif;font-size:1rem;display:block;margin-bottom:2px}
+.leaflet-popup-content a{color:var(--pompeya);font-weight:700;text-decoration:none}
+
+/* Tarjetas de lugares */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:22px}
-.card{
-  background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);
-  overflow:hidden;box-shadow:var(--sombra);display:flex;flex-direction:column;
-  transition:transform .15s ease, box-shadow .15s ease;
-}
+.card{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);overflow:hidden;box-shadow:var(--sombra);display:flex;flex-direction:column;transition:transform .15s ease, box-shadow .15s ease}
 .card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(38,34,28,.13)}
 .card .foto{position:relative;height:190px;background:var(--piedra-2);overflow:hidden}
 .card .foto img{width:100%;height:100%;object-fit:cover;display:block}
-.card .foto .credito{
-  position:absolute;bottom:0;right:0;font-size:.6rem;color:#fff;
-  background:rgba(0,0,0,.45);padding:2px 7px;border-top-left-radius:6px;
-}
-.badges{position:absolute;top:10px;left:10px;display:flex;gap:6px}
-.badge{
-  font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-  padding:4px 10px;border-radius:5px;color:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3);
-}
-.b-rafa{background:var(--pompeya)}
-.b-lucia{background:var(--laurel)}
-.b-juntos{background:var(--bronce)}
+.card .foto .credito{position:absolute;bottom:0;right:0;font-size:.6rem;color:#fff;background:rgba(0,0,0,.45);padding:2px 7px;border-top-left-radius:6px}
+.badges{position:absolute;top:10px;left:10px;display:flex;gap:6px;flex-wrap:wrap;max-width:calc(100% - 20px)}
+.badge{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:5px;color:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.b-rafa{background:var(--pompeya)}.b-lucia{background:var(--laurel)}.b-juntos{background:var(--bronce)}
 .b-dia{background:rgba(38,34,28,.78);font-family:'Marcellus',serif;letter-spacing:.1em;font-weight:400}
 .card .cuerpo{padding:18px 18px 16px;display:flex;flex-direction:column;flex:1}
 .card h3{font-size:1.22rem;margin-bottom:4px}
@@ -140,29 +89,55 @@ header .fechas{
 .datos{border-top:1px solid var(--linea);font-size:.85rem}
 .datos .fila{display:flex;gap:10px;padding:7px 0;border-bottom:1px dashed var(--linea)}
 .datos .fila:last-child{border-bottom:none}
-.datos .k{flex:0 0 78px;font-weight:700;color:var(--tinta);font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;padding-top:1px}
+.datos .k{flex:0 0 78px;font-weight:700;font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;padding-top:1px}
 .datos .v{flex:1;color:var(--tinta-suave)}
-.tip{
-  margin-top:12px;background:var(--piedra);border-left:3px solid var(--pompeya);
-  padding:9px 12px;font-size:.84rem;color:var(--tinta);border-radius:0 6px 6px 0;
-}
+.tip{margin-top:12px;background:var(--piedra);border-left:3px solid var(--pompeya);padding:9px 12px;font-size:.84rem;border-radius:0 6px 6px 0}
 .tip b{color:var(--pompeya)}
 .acciones{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
-.btn{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:8px 14px;border-radius:6px;font-size:.84rem;font-weight:700;
-  text-decoration:none;transition:background .15s ease;
-}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:6px;font-size:.84rem;font-weight:700;text-decoration:none;transition:background .15s ease;cursor:pointer;border:none;font-family:'Karla',sans-serif}
 .btn-mapa{background:var(--tinta);color:#fff}
 .btn-mapa:hover{background:#000}
 .btn-web{background:var(--piedra-2);color:var(--tinta);border:1px solid var(--linea)}
 .btn-web:hover{border-color:var(--bronce)}
-.vacio{
-  grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--tinta-suave);
-  font-size:.95rem;
-}
+.vacio{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--tinta-suave);font-size:.95rem}
 
-/* ---------- Transporte ---------- */
+/* Paseos */
+.paseos-fondo{background:var(--piedra-2);border-top:1px solid var(--linea);border-bottom:1px solid var(--linea)}
+.paseo{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);box-shadow:var(--sombra);padding:22px;display:flex;flex-direction:column}
+.paseo .cabecera{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
+.paseo h3{font-size:1.18rem}
+.paseo .metricas{display:flex;gap:12px;font-size:.78rem;color:var(--tinta-suave);margin-bottom:12px;flex-wrap:wrap}
+.paseo .metricas b{color:var(--pompeya);font-family:'Marcellus',serif;font-size:.9rem}
+.paseo .etapas{font-size:.86rem;color:var(--tinta-suave);margin-bottom:12px;line-height:1.8}
+.paseo .etapas .flecha{color:var(--bronce);margin:0 3px}
+.paseo p.desc{font-size:.88rem;color:var(--tinta-suave);margin-bottom:12px}
+.ruta-color{width:26px;height:8px;border-radius:4px;display:inline-block;flex-shrink:0;margin-top:8px}
+
+/* Comer */
+.grid-comer{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.rest{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);box-shadow:var(--sombra);padding:20px;display:flex;flex-direction:column}
+.rest .tipo{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.t-comida{color:var(--laurel)}.t-cena{color:var(--pompeya)}.t-dulce{color:var(--bronce)}
+.rest h3{font-size:1.1rem;margin-bottom:2px}
+.rest .zona-r{font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;color:var(--tinta-suave);margin-bottom:10px}
+.rest .plato{font-size:.87rem;margin-bottom:8px}
+.rest .plato b{color:var(--pompeya)}
+.rest p.nota-r{font-size:.83rem;color:var(--tinta-suave);flex:1;margin-bottom:12px}
+.rest .pie-r{display:flex;justify-content:space-between;align-items:center;border-top:1px dashed var(--linea);padding-top:10px}
+.rest .precio-r{font-family:'Marcellus',serif;color:var(--tinta);font-size:.9rem}
+.rest a{color:var(--pompeya);font-weight:700;text-decoration:none;font-size:.84rem}
+
+/* Curiosidades */
+.curio-fondo{background:linear-gradient(180deg,#2B2620,#332C24);color:#D8D2C4}
+.curio-fondo h2{color:#F0EBE0}
+.curio-fondo .nota{color:#9A9284}
+.grid-curio{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+.curio{border:1px solid rgba(216,210,196,.2);border-radius:var(--radio);padding:20px;background:rgba(255,255,255,.03)}
+.curio .cat{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:#E8C87A;margin-bottom:8px;font-weight:700}
+.curio h3{color:#F0EBE0;font-size:1.05rem;margin-bottom:8px}
+.curio p{font-size:.86rem;color:#B5AD9E}
+
+/* Transporte */
 .transporte{background:var(--piedra-2);border-top:1px solid var(--linea);border-bottom:1px solid var(--linea)}
 .trans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:8px}
 .trans-card{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);padding:20px}
@@ -171,14 +146,9 @@ header .fechas{
 .trans-card li{padding:6px 0;border-bottom:1px dashed var(--linea);color:var(--tinta-suave)}
 .trans-card li:last-child{border-bottom:none}
 .trans-card li b{color:var(--tinta)}
-.precio-tag{
-  float:right;font-family:'Marcellus',serif;color:var(--pompeya);font-size:.95rem;
-}
+.precio-tag{float:right;font-family:'Marcellus',serif;color:var(--pompeya);font-size:.95rem}
 
-/* ---------- Pie ---------- */
-footer{
-  background:#2B2620;color:#C9C2B4;padding:36px 24px;text-align:center;font-size:.85rem;
-}
+footer{background:#2B2620;color:#C9C2B4;padding:36px 24px;text-align:center;font-size:.85rem}
 footer .consejos{max-width:820px;margin:0 auto 18px;text-align:left;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
 footer .consejos div{border-left:2px solid var(--bronce);padding-left:12px}
 footer .consejos b{color:#E8C87A;display:block;margin-bottom:3px;font-family:'Marcellus',serif;letter-spacing:.06em}
@@ -188,10 +158,10 @@ footer .firma{margin-top:20px;font-family:'Marcellus',serif;letter-spacing:.2em;
   .seccion{padding:36px 16px}
   .filtros{padding:12px 14px}
   .contador{width:100%;margin-left:0;order:99}
+  #mapa{height:400px}
+  .leyenda{margin-left:0}
 }
-@media (prefers-reduced-motion:reduce){
-  *{transition:none!important}
-}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
@@ -199,8 +169,11 @@ footer .firma{margin-top:20px;font-family:'Marcellus',serif;letter-spacing:.2em;
 <header>
   <div class="eyebrow">ESORICS 2026 · Sapienza Università di Roma</div>
   <h1>Rafa &amp; Lucía en <span class="roma">Roma</span></h1>
-  <p class="sub">Guía de la semana: congreso por las mañanas (L, M, X) en la Città Universitaria, visitas de Lucía a media mañana, y tardes, atardeceres y cenas en común. Filtra por persona o por día.</p>
+  <p class="sub">Guía de la semana: congreso por las mañanas (L, M, X) en la Città Universitaria, visitas de Lucía a media mañana, y tardes, paseos y cenas en común.</p>
   <div class="fechas">XIII — XVIII · SEPTIEMBRE · MMXXVI</div>
+  <nav class="indice">
+    <a href="#plan">Plan</a><a href="#mapa-sec">Mapa</a><a href="#lugares">Lugares</a><a href="#paseos">Paseos</a><a href="#comer">Comer</a><a href="#curiosidades">Curiosidades</a><a href="#transporte">Transporte</a>
+  </nav>
 </header>
 
 <nav class="filtros" aria-label="Filtros">
@@ -227,58 +200,69 @@ footer .firma{margin-top:20px;font-family:'Marcellus',serif;letter-spacing:.2em;
   <p class="nota">Esqueleto orientativo. Las reservas con hora fija (Borghese, Colosseo, Vaticanos) condicionan el resto; lo demás se mueve sin problema. El congreso se celebra en Piazzale Aldo Moro 5 (Città Universitaria), a un paso de Termini.</p>
   <div class="timeline">
     <div class="dia">
-      <div class="num">D · XIII</div>
-      <div class="nombre">Llegada, noche</div>
+      <div class="num">D · XIII</div><div class="nombre">Llegada, noche</div>
       <ul>
         <li><span class="quien q-juntos">Juntos</span>Check-in y paseo corto</li>
         <li><span class="quien q-juntos">Juntos</span>Fontana di Trevi iluminada (menos gente después de las 22:30)</li>
       </ul>
     </div>
     <div class="dia">
-      <div class="num">L · XIV</div>
-      <div class="nombre">Lunes</div>
+      <div class="num">L · XIV</div><div class="nombre">Lunes</div>
       <ul>
         <li><span class="quien q-rafa">Rafa</span>Congreso (mañana)</li>
-        <li><span class="quien q-lucia">Lucía</span>Galleria Borghese (reserva ~11:00) + Villa Borghese</li>
-        <li><span class="quien q-juntos">Juntos</span>Pantheon → Piazza Navona → cena en el Ghetto</li>
+        <li><span class="quien q-lucia">Lucía</span>Galleria Borghese (ver plan B: cierra lunes) o Villa Borghese + Pincio</li>
+        <li><span class="quien q-juntos">Juntos</span>Paseo del centro storico → cena en el Ghetto</li>
       </ul>
     </div>
     <div class="dia">
-      <div class="num">M · XV</div>
-      <div class="nombre">Martes</div>
+      <div class="num">M · XV</div><div class="nombre">Martes</div>
       <ul>
-        <li><span class="quien q-rafa">Rafa</span>Congreso (mañana)</li>
-        <li><span class="quien q-lucia">Lucía</span>Santa Maria Maggiore + barrio Monti</li>
-        <li><span class="quien q-juntos">Juntos</span>Colosseo (franja ~15:30) + Foro + Palatino, cena en Monti</li>
+        <li><span class="quien q-rafa">Rafa</span>Congreso; mediodía: meridiana de S. M. degli Angeli</li>
+        <li><span class="quien q-lucia">Lucía</span>Paseo Esquilino–Monti (S. M. Maggiore, S. Prassede)</li>
+        <li><span class="quien q-juntos">Juntos</span>Colosseo (~15:30) + paseo arqueológico, cena en Monti</li>
       </ul>
     </div>
     <div class="dia">
-      <div class="num">X · XVI</div>
-      <div class="nombre">Miércoles</div>
+      <div class="num">X · XVI</div><div class="nombre">Miércoles</div>
       <ul>
         <li><span class="quien q-rafa">Rafa</span>Congreso (mañana)</li>
         <li><span class="quien q-lucia">Lucía</span>Doria Pamphilj o Capitolinos</li>
-        <li><span class="quien q-juntos">Juntos</span>Aventino + Caracalla → atardecer en el Gianicolo → cena en Trastevere</li>
+        <li><span class="quien q-juntos">Juntos</span>Paseo Aventino → Trastevere → atardecer en el Gianicolo, cena</li>
       </ul>
     </div>
     <div class="dia">
-      <div class="num">J · XVII</div>
-      <div class="nombre">Jueves</div>
+      <div class="num">J · XVII</div><div class="nombre">Jueves</div>
       <ul>
-        <li><span class="quien q-juntos">Juntos</span>Museos Vaticanos + Sixtina (reserva primera hora)</li>
-        <li><span class="quien q-juntos">Juntos</span>San Pedro + cúpula</li>
-        <li><span class="quien q-juntos">Juntos</span>Castel Sant'Angelo al atardecer, cena en Prati</li>
+        <li><span class="quien q-juntos">Juntos</span>Museos Vaticanos + Sixtina (primera hora) + San Pedro y cúpula</li>
+        <li><span class="quien q-juntos">Juntos</span>Comida en Pizzarium; Castel Sant'Angelo</li>
+        <li><span class="quien q-juntos">Juntos</span>Paseo del Tíber y los ángeles, cena en Prati o Trastevere</li>
       </ul>
     </div>
     <div class="dia">
-      <div class="num">V · XVIII</div>
-      <div class="nombre">Viernes, vuelta</div>
+      <div class="num">V · XVIII</div><div class="nombre">Viernes, vuelta</div>
       <ul>
-        <li><span class="quien q-juntos">Juntos</span>Según hora del vuelo: Piazza di Spagna o San Lorenzo</li>
+        <li><span class="quien q-juntos">Juntos</span>Según vuelo: paseo del Tridente (Popolo → Margutta → Spagna → Trevi)</li>
         <li><span class="quien q-juntos">Juntos</span>Leonardo Express a Fiumicino desde Termini (32 min)</li>
       </ul>
     </div>
   </div>
+</section>
+
+<section class="seccion" id="mapa-sec">
+  <h2>Mapa</h2>
+  <p class="nota">Los marcadores obedecen a los filtros de arriba (persona y día). Las líneas discontinuas son los paseos; los cuadrados oscuros, sitios para comer. Pulsa cualquier elemento para ver su ficha y el enlace a Google Maps.</p>
+  <div class="mapa-controles">
+    <label><input type="checkbox" id="chk-paseos" checked> Mostrar paseos</label>
+    <label><input type="checkbox" id="chk-comer" checked> Mostrar sitios de comer</label>
+    <div class="leyenda">
+      <span><i class="punto p-rafa"></i>Rafa</span>
+      <span><i class="punto p-lucia"></i>Lucía</span>
+      <span><i class="punto p-juntos"></i>Juntos</span>
+      <span><i class="punto p-comer"></i>Comer</span>
+      <span>★ Sapienza (congreso)</span>
+    </div>
+  </div>
+  <div id="mapa"></div>
 </section>
 
 <section class="seccion" id="lugares">
@@ -287,7 +271,35 @@ footer .firma{margin-top:20px;font-family:'Marcellus',serif;letter-spacing:.2em;
   <div class="grid" id="grid"></div>
 </section>
 
-<section class="transporte">
+<div class="paseos-fondo" id="paseos">
+  <section class="seccion">
+    <h2>Paseos</h2>
+    <p class="nota">Roma se explica andando: cada ruta está pensada para una franja de luz concreta y termina cerca de un sitio de cena. El botón abre la ruta a pie completa en Google Maps, con todas las etapas como puntos intermedios. Todas están dibujadas en el mapa.</p>
+    <div class="grid" id="grid-paseos"></div>
+  </section>
+</div>
+
+<section class="seccion" id="comer">
+  <h2>Dónde comer</h2>
+  <p class="nota">Selección corta y contrastada: trattorias romanas de las de mantel de papel, el mejor café y la mejor pizza al taglio de la ciudad, y los dulces que justifican la cola. Precios por persona sin vino. Regla general: se cena a partir de las 20:00 y lo bueno se reserva.</p>
+  <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
+    <button class="chip activo" data-comer="todos">Todo</button>
+    <button class="chip" data-comer="comida">Comidas</button>
+    <button class="chip" data-comer="cena">Cenas</button>
+    <button class="chip" data-comer="dulce">Café y dulce</button>
+  </div>
+  <div class="grid-comer" id="grid-comer"></div>
+</section>
+
+<div class="curio-fondo" id="curiosidades">
+  <section class="seccion">
+    <h2>Curiosidades</h2>
+    <p class="nota">Datos con los que amenizar las sobremesas, con sesgo confesado hacia la física y la ingeniería.</p>
+    <div class="grid-curio" id="grid-curio"></div>
+  </section>
+</div>
+
+<section class="transporte" id="transporte">
   <div class="seccion">
     <h2>Transporte público</h2>
     <p class="nota">Red ATAC (metro, tranvía, bus) con billete único Metrebus. Se valida en cada acceso; en el bus, también con tarjeta bancaria contactless (tap&amp;go, aplica la mejor tarifa del día). Para la Sapienza desde el centro: Metro B hasta Policlinico o tranvías 3 / 19.</p>
@@ -344,14 +356,15 @@ footer .firma{margin-top:20px;font-family:'Marcellus',serif;letter-spacing:.2em;
   <div class="firma">S · P · Q · R — GUÍA GENERADA PARA ESORICS MMXXVI</div>
 </footer>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 const IMG = {
 sanlorenzo:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Basilica_of_Saint_Lawrence_outside_the_Walls.jpg/960px-Basilica_of_Saint_Lawrence_outside_the_Walls.jpg",
 verano:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Roma_-_Ingresso_del_Cimitero_Monumentale_del_Verano.jpg/960px-Roma_-_Ingresso_del_Cimitero_Monumentale_del_Verano.jpg",
 fermi:"https://upload.wikimedia.org/wikipedia/commons/c/c9/Regio_Istituto_di_Fisica_Esterno.png",
+meridiana:"https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/3234_-_Roma_-_Santa_Maria_degli_Angeli_-_Meridiana_-_Foto_Giovanni_Dall%27Orto_17-June-2007.jpg/960px-3234_-_Roma_-_Santa_Maria_degli_Angeli_-_Meridiana_-_Foto_Giovanni_Dall%27Orto_17-June-2007.jpg",
 portamaggiore:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Porta_Maggiore_%28%22Larger_Gate%22%29.jpg/960px-Porta_Maggiore_%28%22Larger_Gate%22%29.jpg",
 borghese:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Galleria_borghese_facade.jpg/960px-Galleria_borghese_facade.jpg",
-capitolini:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Fountain_in_Piazza_del_Campidoglio_%28Rome%29_-_Nile.jpg/960px-Fountain_in_Piazza_del_Campidoglio_%28Rome%29_-_Nile.jpg",
 campofiori:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Campo_dei_Fiori.jpg/960px-Campo_dei_Fiori.jpg",
 mariamaggiore:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Basilica_di_Santa_Maria_Maggiore_-_Roma.jpg/960px-Basilica_di_Santa_Maria_Maggiore_-_Roma.jpg",
 trastevere:"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Santa_Maria_in_Trastevere_church_in_Rome_%285%29.jpg/960px-Santa_Maria_in_Trastevere_church_in_Rome_%285%29.jpg",
@@ -366,244 +379,298 @@ gianicolo:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Rome_from_g
 aventino:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Vista_de_Roma_desde_el_jard%C3%ADn_de_los_Naranjos%2C_Italia%2C_2022-09-15%2C_DD_106-108_HDR.jpg/960px-Vista_de_Roma_desde_el_jard%C3%ADn_de_los_Naranjos%2C_Italia%2C_2022-09-15%2C_DD_106-108_HDR.jpg",
 santangelo:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Castel_Sant%27Angelo_at_dusk%2C_Rome%2C_Italy.jpg/960px-Castel_Sant%27Angelo_at_dusk%2C_Rome%2C_Italy.jpg",
 vaticano:"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg/960px-St_Peter%27s_Square%2C_Vatican_City_-_April_2007.jpg",
+sistina:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/CAPPELLA_SISTINA_Ceiling.jpg/960px-CAPPELLA_SISTINA_Ceiling.jpg",
 ghetto:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Portico_di_Ottavia_and_Sant%27Angelo_in_Pescheria.jpg/960px-Portico_di_Ottavia_and_Sant%27Angelo_in_Pescheria.jpg",
 monti:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/P_za_Madonna_dei_Monti%2C_via_dei_serpenti_e_via_Baccina_P1080717.JPG/960px-P_za_Madonna_dei_Monti%2C_via_dei_serpenti_e_via_Baccina_P1080717.JPG",
 caracalla:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Terme_di_Caracalla3.jpg/960px-Terme_di_Caracalla3.jpg"
 };
 
 const NOMBRE_DIA = {L14:"L·XIV", M15:"M·XV", X16:"X·XVI", J17:"J·XVII", V18:"V·XVIII", D13:"D·XIII"};
+const COLOR = {rafa:"#8E2F2F", lucia:"#4A5D45", juntos:"#A67C2E"};
 
 const LUGARES = [
-{
-  nombre:"Galleria Borghese", zona:"Villa Borghese", persona:"lucia", dias:["L14"], img:"borghese",
-  desc:"Bernini (Apolo y Dafne, El rapto de Proserpina) y Caravaggio en un casino del s. XVII. Aforo limitado por franjas de 2 h; la de las 11:00 encaja con una mañana sin madrugar.",
-  horario:"Ma–Do 9:00–19:00 (cierra lunes: si toca lunes, mover a otro día o sustituir por Villa Borghese y el Pincio)",
-  precio:"15 € + 2 € de reserva obligatoria (galleriaborghese.beniculturali.it)",
-  transporte:"Bus 910 desde Termini o paseo por Via Veneto; desde el parque, bajada a pie al Pincio",
-  tip:"Ojo: cierra los lunes. Si la reserva no sale para el lunes, el plan B de esa mañana es Villa Borghese + terraza del Pincio (gratis) y pasar la galería al miércoles.",
-  web:"https://galleriaborghese.beniculturali.it", maps:"Galleria Borghese, Roma"
-},
-{
-  nombre:"Santa Maria Maggiore", zona:"Esquilino", persona:"lucia", dias:["M15"], img:"mariamaggiore",
-  desc:"La mayor basílica mariana de Roma: mosaicos del s. V en la nave, artesonado dorado con el primer oro americano y la tumba de Bernini. A 10 min a pie de Termini.",
-  horario:"Diario 7:00–18:45, entrada libre",
-  precio:"Gratis (museo y loggia, ≈ 5 €)",
-  transporte:"Metro A/B Termini y 8 min a pie, o parada Cavour (Metro B)",
-  tip:"Combinable con San Pietro in Vincoli (el Moisés de Miguel Ángel, gratis) bajando hacia Monti.",
-  web:"", maps:"Basilica di Santa Maria Maggiore, Roma"
-},
-{
-  nombre:"Trastevere por la mañana", zona:"Trastevere", persona:"lucia", dias:["X16"], img:"trastevere",
-  desc:"El barrio sin las multitudes nocturnas: Santa Maria in Trastevere (mosaicos del s. XII), Santa Cecilia y callejones con ropa tendida. Ritmo lento, café en Piazza di Santa Maria.",
-  horario:"Iglesias 7:30–21:00 aprox.; el barrio, a cualquier hora",
-  precio:"Gratis (cripta de Santa Cecilia, 2,50 €)",
-  transporte:"Tranvía 8 desde Piazza Venezia o bus H desde Termini",
-  tip:"El mercado de Porta Portese solo abre domingos; entre semana, el mercadillo de San Cosimato es la alternativa auténtica.",
-  web:"", maps:"Piazza di Santa Maria in Trastevere, Roma"
-},
-{
-  nombre:"Galleria Doria Pamphilj", zona:"Via del Corso", persona:"lucia", dias:["X16"], img:"doriapamphilj",
-  desc:"Colección privada en un palacio habitado: Velázquez (retrato de Inocencio X), Caravaggio y una galería de espejos sin apreturas. La gran desconocida de las mañanas romanas.",
-  horario:"Diario 9:00–19:00 (última entrada 18:00)",
-  precio:"≈ 16 € con audioguía narrada por el propio príncipe Doria Pamphilj",
-  transporte:"Cualquier bus a Piazza Venezia; está a 200 m por Via del Corso",
-  tip:"Rara vez hay cola: se puede decidir esa misma mañana. Alternativa equivalente: Musei Capitolini (≈ 16 €) en el Campidoglio.",
-  web:"https://www.doriapamphilj.it", maps:"Galleria Doria Pamphilj, Roma"
-},
-{
-  nombre:"Campo de' Fiori y mercado", zona:"Centro storico", persona:"lucia", dias:["L14","M15","X16"], img:"campofiori",
-  desc:"Mercado matinal (frutas, especias, flores) bajo la estatua de Giordano Bruno, quemado aquí en 1600. Encadena bien con Piazza Farnese y Via Giulia, la calle renacentista más elegante.",
-  horario:"Mercado: L–S ~7:00–14:00",
-  precio:"Gratis",
-  transporte:"Bus 64/40 hasta Largo Argentina y 5 min a pie",
-  tip:"El forno de la esquina (Forno Campo de' Fiori) hace la pizza bianca de referencia; se compra al peso.",
-  web:"", maps:"Campo de' Fiori, Roma"
-},
-{
-  nombre:"San Lorenzo fuori le Mura", zona:"San Lorenzo · junto a Sapienza", persona:"rafa", dias:["L14","M15","X16"], img:"sanlorenzo",
-  desc:"Basílica paleocristiana del s. VI sobre la tumba de San Lorenzo, con pórtico cosmatesco y candelabro pascual del s. XII. A 5 minutos del campus: perfecta para el hueco del mediodía.",
-  horario:"Diario 8:00–12:30 y 16:00–19:00",
-  precio:"Gratis",
-  transporte:"A pie desde la Città Universitaria (entrada este, tranvía 3/19 parada Verano)",
-  tip:"Fue la única basílica dañada en el bombardeo de 1943; el pórtico reconstruido se distingue bien del original. Buen ejercicio de lectura de fábricas para un físico con cámara.",
-  web:"", maps:"Basilica di San Lorenzo fuori le Mura, Roma"
-},
-{
-  nombre:"Cimitero del Verano", zona:"San Lorenzo · junto a Sapienza", persona:"rafa", dias:["L14","M15","X16"], img:"verano",
-  desc:"Cementerio monumental (1807) contiguo al campus: panteones neoclásicos, esculturas funerarias y cipreses. Como Père-Lachaise pero sin turistas; territorio fotográfico de primera.",
-  horario:"Diario 7:30–18:00 (verano hasta 19:00)",
-  precio:"Gratis",
-  transporte:"Entrada principal en Piazzale del Verano, frente al tranvía 3/19",
-  tip:"Luz dura del mediodía compensada por las sombras de los cipreses: blanco y negro, contraste alto. Aquí descansan Marconi (trasladado) y buena parte de la Roma ilustre del XIX–XX.",
-  web:"", maps:"Cimitero Monumentale del Verano, Roma"
-},
-{
-  nombre:"Museo Fermi · Via Panisperna", zona:"Monti · CREF", persona:"rafa", dias:["M15","X16"], img:"fermi",
-  desc:"El edificio donde Fermi y los 'ragazzi di Via Panisperna' descubrieron los neutrones lentos (1934) alberga hoy el Centro Ricerche Enrico Fermi y su museo histórico: instrumentación original, la fuente de radón-berilio y la famosa fuente de peces del patio.",
-  horario:"Visitas con reserva previa (agenda en la web del CREF); cerrado fines de semana",
-  precio:"Gratis, con inscripción",
-  transporte:"Metro B Cavour + 7 min a pie, o bus 71 desde la zona Sapienza",
-  tip:"Peregrinación obligada para un físico: el experimento de la fuente ('el agua modera los neutrones') ocurrió a metros de la entrada. Reservar antes del viaje.",
-  web:"https://cref.it", maps:"Via Panisperna 89a, Roma"
-},
-{
-  nombre:"Porta Maggiore", zona:"Esquilino este", persona:"rafa", dias:["L14","M15","X16"], img:"portamaggiore",
-  desc:"Ingeniería romana en estado puro: dos acueductos superpuestos (Claudia y Anio Novus, 52 d.C.) convertidos en puerta de la muralla Aureliana, con la excéntrica tumba del panadero Eurísaces delante.",
-  horario:"Exterior siempre visible",
-  precio:"Gratis",
-  transporte:"Tranvía 3 desde el Verano, dos paradas; el tranvía cruza literalmente bajo los arcos",
-  tip:"Nudo de tranvías + acueducto = composiciones de capas históricas. La basílica subterránea neopitagórica (s. I) abre solo algunos días con reserva de la Soprintendenza.",
-  web:"", maps:"Porta Maggiore, Roma"
-},
-{
-  nombre:"Colosseo · Foro · Palatino", zona:"Roma antigua", persona:"juntos", dias:["M15"], img:"colosseo",
-  desc:"La entrada de 24 h cubre los tres recintos. Secuencia recomendada de tarde: Colosseo (franja ~15:30), Foro por el Arco de Tito y subida al Palatino para la vista general con luz baja.",
-  horario:"9:00–19:15 en septiembre (última entrada 18:15)",
-  precio:"18 € entrada ordinaria 24 h; Full Experience (arena + subterráneos) 24 €. Solo venta oficial: ticketing.colosseo.it",
-  transporte:"Metro B Colosseo, directa desde Policlinico/Termini (Rafa llega en 10 min desde el congreso)",
-  tip:"Las franjas se liberan 30 días antes y vuelan. La terraza del Palatino sobre el Foro hacia las 18:00 da la mejor foto del conjunto con sombras largas.",
-  web:"https://ticketing.colosseo.it", maps:"Colosseo, Roma"
-},
-{
-  nombre:"Pantheon", zona:"Centro storico", persona:"juntos", dias:["L14"], img:"pantheon",
-  desc:"La cúpula de hormigón no armado más grande jamás construida (43,3 m, año 126): el óculo de 8,2 m es la única fuente de luz. Dos milenios después sigue sin tener rival estructural.",
-  horario:"Diario 9:00–19:00 (última entrada 18:30)",
-  precio:"5 € (reserva online recomendable en fin de semana; entre semana se compra en puerta)",
-  transporte:"Bus a Largo Argentina y 4 min a pie",
-  tip:"Física recreativa: la relación altura/diámetro es exactamente 1, una esfera perfecta inscrita. El haz del óculo a media tarde barre el lado este del tambor.",
-  web:"https://www.pantheonroma.com", maps:"Pantheon, Roma"
-},
-{
-  nombre:"Piazza Navona", zona:"Centro storico", persona:"juntos", dias:["L14"], img:"navona",
-  desc:"Sobre el estadio de Domiciano (se conserva la planta exacta): Fuente de los Cuatro Ríos de Bernini frente a Sant'Agnese de Borromini, la rivalidad barroca más citada de Roma.",
-  horario:"Siempre abierta",
-  precio:"Gratis",
-  transporte:"5 min a pie desde el Pantheon",
-  tip:"Los cafés de la plaza cobran la ubicación: mejor un caffè al banco en Sant'Eustachio (a 300 m), probablemente el mejor espresso de la ciudad.",
-  web:"", maps:"Piazza Navona, Roma"
-},
-{
-  nombre:"Fontana di Trevi de noche", zona:"Trevi", persona:"juntos", dias:["V18"], img:"trevi",
-  desc:"De día es una lucha con 2 000 personas; después de las 23:00 se recupera la escala del conjunto de Salvi. Idónea para la noche de llegada del domingo 13 o cualquier sobremesa.",
-  horario:"Siempre visible; posible acceso regulado con pasarela en horas punta",
-  precio:"Gratis (la moneda al agua, opcional: ~1,5 M €/año a Cáritas)",
-  transporte:"Metro A Barberini + 5 min a pie",
-  tip:"Trípode pequeño o apoyo en la balaustrada: 1–2 s de exposición, el travertino iluminado quema un paso menos que el agua. Mejor desde el lateral derecho, menos frontal.",
-  web:"", maps:"Fontana di Trevi, Roma"
-},
-{
-  nombre:"Aventino: naranjos y cerradura", zona:"Aventino", persona:"juntos", dias:["X16"], img:"aventino",
-  desc:"El Giardino degli Aranci abre un balcón sobre el Tíber y San Pedro; a 100 m, la mirilla de la puerta del Priorato de Malta encuadra la cúpula entre setos: tres estados soberanos en una cerradura.",
-  horario:"Jardín: amanecer a atardecer",
-  precio:"Gratis",
-  transporte:"Metro B Circo Massimo y subida suave de 8 min",
-  tip:"La cola de la cerradura ronda 10–20 min; la foto exige tele corto (70–100 mm eq.) y f/8 para sacar nítidos seto y cúpula. Después, bajada a pie a Caracalla o al Testaccio para cenar.",
-  web:"", maps:"Giardino degli Aranci, Roma"
-},
-{
-  nombre:"Terme di Caracalla", zona:"Aventino sur", persona:"juntos", dias:["X16"], img:"caracalla",
-  desc:"El complejo termal mejor conservado de Roma (216 d.C., 1 600 usuarios simultáneos): muros de 30 m, mosaicos in situ y una escala que el Foro ya no transmite. Sorprendentemente vacío.",
-  horario:"9:00–19:15 en septiembre (última entrada 1 h antes); lunes solo mañana",
-  precio:"≈ 10 €",
-  transporte:"Metro B Circo Massimo + 8 min a pie",
-  tip:"Ingeniería para el gremio: bajo el suelo hay 3 km de galerías de servicio y un mitreo. La visita con visor 3D (suplemento) reconstruye los volúmenes originales.",
-  web:"", maps:"Terme di Caracalla, Roma"
-},
-{
-  nombre:"Atardecer en el Gianicolo", zona:"Gianicolo", persona:"juntos", dias:["X16"], img:"gianicolo",
-  desc:"El mirador clásico sobre todas las cúpulas de Roma, con el Fontanone barroco a un paso. El 17 de septiembre el sol se pone a las 19:17: llegar a las 18:45 asegura sitio en la balaustrada.",
-  horario:"Siempre abierto; cañonazo diario a las 12:00",
-  precio:"Gratis",
-  transporte:"Bus 115 desde Trastevere o subida a pie (15 min) desde San Pietro in Montorio",
-  tip:"La hora azul (19:30–19:50) es superior al propio ocaso: cúpulas iluminadas contra cielo aún denso. De bajada, el Tempietto de Bramante en San Pietro in Montorio, gratis y casi siempre vacío.",
-  web:"", maps:"Terrazza del Gianicolo, Roma"
-},
-{
-  nombre:"Museos Vaticanos y Sixtina", zona:"Vaticano", persona:"juntos", dias:["J17"], img:"vaticano",
-  desc:"7 km de galerías: Laocoonte, Estancias de Rafael y la Capilla Sixtina. El jueves, sin congreso, admite la entrada de primera hora (8:00–8:30), la única franja razonablemente tranquila.",
-  horario:"L–S 8:00–19:00 (última entrada 17:00); cerrado domingos",
-  precio:"20 € + 5 € de reserva online obligatoria de facto (museivaticani.va); evitar reventa",
-  transporte:"Metro A Ottaviano + 8 min a pie",
-  tip:"Ruta directa a la Sixtina primero (contra corriente, 25 min) y museos después con calma. La salida por la puerta del grupo (esquina derecha de la Sixtina) deja directamente en San Pedro y ahorra 30 min de rodeo.",
-  web:"https://tickets.museivaticani.va", maps:"Musei Vaticani, Roma"
-},
-{
-  nombre:"San Pedro y cúpula", zona:"Vaticano", persona:"juntos", dias:["J17"], img:"sistina",
-  desc:"La basílica es gratuita (control de seguridad con cola variable): Pietà de Miguel Ángel, baldaquino de Bernini y la subida a la cúpula, la mejor cota fotográfica de la ciudad.",
-  horario:"7:00–19:10; cúpula 7:30–18:00",
-  precio:"Basílica gratis; cúpula ≈ 10 € con ascensor (quedan 320 escalones) u 8 € a pie (551)",
-  transporte:"Salida directa desde la Sixtina (ver truco anterior) o Metro A Ottaviano",
-  tip:"El tramo final entre los dos casquetes de la cúpula se inclina con la curvatura: claustrofóbico pero breve. Arriba, la columnata de Bernini se lee como un plano; mediodía-tarde, luz frontal sobre la plaza.",
-  web:"", maps:"Basilica di San Pietro, Vaticano"
-},
-{
-  nombre:"Castel Sant'Angelo", zona:"Borgo · Tíber", persona:"juntos", dias:["J17"], img:"santangelo",
-  desc:"Mausoleo de Adriano → fortaleza papal → prisión → museo, con el Passetto que lo une al Vaticano. La terraza superior (la de Tosca) da el frente fluvial completo al atardecer.",
-  horario:"9:00–19:30 (última entrada 18:30)",
-  precio:"≈ 15 €",
-  transporte:"A pie desde San Pedro por Via della Conciliazione (10 min)",
-  tip:"El puente Sant'Angelo con los ángeles de Bernini es la foto: mejor desde el puente Umberto I contiguo, castillo y puente en el mismo encuadre con reflejo en el Tíber.",
-  web:"https://castelsantangelo.beniculturali.it", maps:"Castel Sant'Angelo, Roma"
-},
-{
-  nombre:"Cena en el Ghetto", zona:"Sant'Angelo", persona:"juntos", dias:["L14"], img:"ghetto",
-  desc:"El barrio judío junto al Portico di Ottavia: cocina judeo-romana con el carciofo alla giudia (alcachofa frita) como emblema. En septiembre las alcachofas son de cámara, pero la fritura salva.",
-  horario:"Cenas desde las 19:30; muchos locales cierran viernes noche y sábado (shabbat)",
-  precio:"25–40 €/persona (Nonna Betta, Ba'Ghetto, Piperno)",
-  transporte:"A pie desde Largo Argentina (5 min); tranvía 8 de vuelta",
-  tip:"De postre, la 'pizza ebraica' del Forno Boccione: un horno sin cartel con cola propia. Cruzar después la Isla Tiberina iluminada, el paseo nocturno más corto y mejor de Roma.",
-  web:"", maps:"Via del Portico d'Ottavia, Roma"
-},
-{
-  nombre:"Monti: aperitivo y cena", zona:"Monti", persona:"juntos", dias:["M15"], img:"monti",
-  desc:"El barrio entre el Foro y Santa Maria Maggiore: vinotecas, trattorias y la Piazza della Madonna dei Monti como salón vecinal. A 10 min a pie del Colosseo, remate natural del martes.",
-  horario:"Aperitivo 18:30–20:30; cenas hasta 23:00",
-  precio:"Aperitivo 8–12 €; cena 25–35 €/persona (Ai Tre Scalini, La Taverna dei Fori Imperiali: reservar)",
-  transporte:"Metro B Cavour; de vuelta al hotel, Metro B directa",
-  tip:"Zona con la mejor relación calidad/turista del centro. Para Rafa: también es el barrio del Museo Fermi, se puede combinar reserva de tarde con cena.",
-  web:"", maps:"Piazza della Madonna dei Monti, Roma"
-},
-{
-  nombre:"Piazza di Spagna y Pincio", zona:"Tridente", persona:"juntos", dias:["V18"], img:"spagna",
-  desc:"La escalinata (1725) hacia Trinità dei Monti y, subiendo, la terraza del Pincio sobre Piazza del Popolo. Cierre compacto para la última mañana si el vuelo sale por la tarde.",
-  horario:"Siempre abierta; prohibido sentarse en la escalinata (multa de 250 €)",
-  precio:"Gratis",
-  transporte:"Metro A Spagna; con maletas, mejor dejar el equipaje en consigna de Termini (KiPoint, ≈ 6 €/bulto)",
-  tip:"Circuito de 1 h: escalinata → Trinità dei Monti → Villa Medici → Pincio → bajada a Piazza del Popolo (las dos iglesias gemelas y el Caravaggio de Santa Maria del Popolo, gratis).",
-  web:"", maps:"Piazza di Spagna, Roma"
-},
-{
-  nombre:"Foro Romano al detalle", zona:"Roma antigua", persona:"juntos", dias:["M15"], img:"foro",
-  desc:"Incluido en la entrada del Colosseo: Via Sacra, Curia (el senado, intacto), templo de Vesta y arcos de Tito y Septimio Severo. Recorrerlo de este a oeste sigue el eje de los triunfos.",
-  horario:"Mismo billete y horario que el Colosseo (24 h de validez)",
-  precio:"Incluido en los 18 € del billete combinado",
-  transporte:"Entrada por Via Sacra (junto al Arco de Tito) tras salir del Colosseo",
-  tip:"La vista cenital gratuita, si un día no hay entrada: desde las terrazas del Campidoglio, detrás del ayuntamiento, a cualquier hora. De noche, el Foro iluminado desde Via dei Fori Imperiali.",
-  web:"", maps:"Foro Romano, Roma"
-}
+{nombre:"Galleria Borghese", zona:"Villa Borghese", persona:"lucia", dias:["L14"], img:"borghese", lat:41.9142, lng:12.4922,
+ desc:"Bernini (Apolo y Dafne, El rapto de Proserpina) y Caravaggio en un casino del s. XVII. Aforo limitado por franjas de 2 h; la de las 11:00 encaja con una mañana sin madrugar.",
+ horario:"Ma–Do 9:00–19:00 (cierra lunes)", precio:"15 € + 2 € de reserva obligatoria",
+ transporte:"Bus 910 desde Termini o paseo por Via Veneto",
+ tip:"Ojo: cierra los lunes. Si la reserva no sale para el lunes, el plan B de esa mañana es Villa Borghese + terraza del Pincio (gratis) y pasar la galería al miércoles.",
+ web:"https://galleriaborghese.beniculturali.it", maps:"Galleria Borghese, Roma"},
+{nombre:"Santa Maria Maggiore", zona:"Esquilino", persona:"lucia", dias:["M15"], img:"mariamaggiore", lat:41.8976, lng:12.4986,
+ desc:"La mayor basílica mariana de Roma: mosaicos del s. V en la nave, artesonado dorado con el primer oro americano y la tumba de Bernini. A 10 min a pie de Termini.",
+ horario:"Diario 7:00–18:45, entrada libre", precio:"Gratis (museo y loggia, ≈ 5 €)",
+ transporte:"Metro A/B Termini y 8 min a pie, o parada Cavour (Metro B)",
+ tip:"Forma parte del paseo Esquilino–Monti (ver sección Paseos): la mañana de Lucía del martes ya viene resuelta.",
+ web:"", maps:"Basilica di Santa Maria Maggiore, Roma"},
+{nombre:"Trastevere por la mañana", zona:"Trastevere", persona:"lucia", dias:["X16"], img:"trastevere", lat:41.8895, lng:12.4700,
+ desc:"El barrio sin las multitudes nocturnas: Santa Maria in Trastevere (mosaicos del s. XII), Santa Cecilia y callejones con ropa tendida. Ritmo lento, café en Piazza di Santa Maria.",
+ horario:"Iglesias 7:30–21:00 aprox.", precio:"Gratis (cripta de Santa Cecilia, 2,50 €)",
+ transporte:"Tranvía 8 desde Piazza Venezia o bus H desde Termini",
+ tip:"El mercado de Porta Portese solo abre domingos; entre semana, el mercadillo de San Cosimato es la alternativa auténtica.",
+ web:"", maps:"Piazza di Santa Maria in Trastevere, Roma"},
+{nombre:"Galleria Doria Pamphilj", zona:"Via del Corso", persona:"lucia", dias:["X16"], img:"doriapamphilj", lat:41.8980, lng:12.4809,
+ desc:"Colección privada en un palacio habitado: Velázquez (retrato de Inocencio X), Caravaggio y una galería de espejos sin apreturas. La gran desconocida de las mañanas romanas.",
+ horario:"Diario 9:00–19:00 (última entrada 18:00)", precio:"≈ 16 € con audioguía narrada por el propio príncipe Doria Pamphilj",
+ transporte:"Cualquier bus a Piazza Venezia; está a 200 m por Via del Corso",
+ tip:"Rara vez hay cola: se puede decidir esa misma mañana. Alternativa equivalente: Musei Capitolini (≈ 16 €) en el Campidoglio.",
+ web:"https://www.doriapamphilj.it", maps:"Galleria Doria Pamphilj, Roma"},
+{nombre:"Campo de' Fiori y mercado", zona:"Centro storico", persona:"lucia", dias:["L14","M15","X16"], img:"campofiori", lat:41.8956, lng:12.4722,
+ desc:"Mercado matinal (frutas, especias, flores) bajo la estatua de Giordano Bruno, quemado aquí en 1600. Encadena bien con Piazza Farnese y Via Giulia, la calle renacentista más elegante.",
+ horario:"Mercado: L–S ~7:00–14:00", precio:"Gratis",
+ transporte:"Bus 64/40 hasta Largo Argentina y 5 min a pie",
+ tip:"El forno de la esquina (Forno Campo de' Fiori) hace la pizza bianca de referencia; se compra al peso.",
+ web:"", maps:"Campo de' Fiori, Roma"},
+{nombre:"San Lorenzo fuori le Mura", zona:"San Lorenzo · junto a Sapienza", persona:"rafa", dias:["L14","M15","X16"], img:"sanlorenzo", lat:41.9027, lng:12.5210,
+ desc:"Basílica paleocristiana del s. VI sobre la tumba de San Lorenzo, con pórtico cosmatesco y candelabro pascual del s. XII. A 5 minutos del campus: perfecta para el hueco del mediodía.",
+ horario:"Diario 8:00–12:30 y 16:00–19:00", precio:"Gratis",
+ transporte:"A pie desde la Città Universitaria (entrada este, tranvía 3/19 parada Verano)",
+ tip:"Fue la única basílica dañada en el bombardeo de 1943; el pórtico reconstruido se distingue bien del original. Buen ejercicio de lectura de fábricas para un físico con cámara.",
+ web:"", maps:"Basilica di San Lorenzo fuori le Mura, Roma"},
+{nombre:"Cimitero del Verano", zona:"San Lorenzo · junto a Sapienza", persona:"rafa", dias:["L14","M15","X16"], img:"verano", lat:41.9040, lng:12.5215,
+ desc:"Cementerio monumental (1807) contiguo al campus: panteones neoclásicos, esculturas funerarias y cipreses. Como Père-Lachaise pero sin turistas; territorio fotográfico de primera.",
+ horario:"Diario 7:30–18:00 (verano hasta 19:00)", precio:"Gratis",
+ transporte:"Entrada principal en Piazzale del Verano, frente al tranvía 3/19",
+ tip:"Luz dura del mediodía compensada por las sombras de los cipreses: blanco y negro, contraste alto. Aquí descansa buena parte de la Roma ilustre del XIX–XX.",
+ web:"", maps:"Cimitero Monumentale del Verano, Roma"},
+{nombre:"Museo Fermi · Via Panisperna", zona:"Monti · CREF", persona:"rafa", dias:["M15","X16"], img:"fermi", lat:41.8993, lng:12.4915,
+ desc:"El edificio donde Fermi y los 'ragazzi di Via Panisperna' descubrieron los neutrones lentos (1934) alberga hoy el Centro Ricerche Enrico Fermi y su museo histórico: instrumentación original, la fuente de radón-berilio y la famosa fuente de peces del patio.",
+ horario:"Visitas con reserva previa (agenda en la web del CREF); cerrado fines de semana", precio:"Gratis, con inscripción",
+ transporte:"Metro B Cavour + 7 min a pie, o bus 71 desde la zona Sapienza",
+ tip:"Peregrinación obligada para un físico: el experimento de la fuente ('el agua modera los neutrones') ocurrió a metros de la entrada. Reservar antes del viaje.",
+ web:"https://cref.it", maps:"Via Panisperna 89a, Roma"},
+{nombre:"Meridiana de S. M. degli Angeli", zona:"Piazza della Repubblica", persona:"rafa", dias:["L14","M15","X16"], img:"meridiana", lat:41.9030, lng:12.4966,
+ desc:"Dentro de la iglesia que Miguel Ángel encajó en las termas de Diocleciano, la Línea Clementina de Bianchini (1702): 45 m de latón y mármol que funcionaron como reloj y calendario solar oficial de Roma. Un gnomon a 20 m proyecta el disco solar sobre la línea.",
+ horario:"Diario ~7:30–19:00; el tránsito solar cruza la línea en torno a las 13:05 (hora civil de septiembre)", precio:"Gratis",
+ transporte:"Metro A/B Repubblica–Termini; 12 min a pie desde la Sapienza",
+ tip:"Escapada perfecta del mediodía entre sesiones: llegar 12:55, ver cruzar la elipse solar la línea meridiana y volver al congreso. Sirvió también para verificar la oblicuidad de la eclíptica durante dos siglos.",
+ web:"", maps:"Basilica di Santa Maria degli Angeli e dei Martiri, Roma"},
+{nombre:"Porta Maggiore", zona:"Esquilino este", persona:"rafa", dias:["L14","M15","X16"], img:"portamaggiore", lat:41.8912, lng:12.5151,
+ desc:"Ingeniería romana en estado puro: dos acueductos superpuestos (Claudia y Anio Novus, 52 d.C.) convertidos en puerta de la muralla Aureliana, con la excéntrica tumba del panadero Eurísaces delante.",
+ horario:"Exterior siempre visible", precio:"Gratis",
+ transporte:"Tranvía 3 desde el Verano, dos paradas; el tranvía cruza literalmente bajo los arcos",
+ tip:"Nudo de tranvías + acueducto = composiciones de capas históricas. La basílica subterránea neopitagórica (s. I) abre solo algunos días con reserva de la Soprintendenza.",
+ web:"", maps:"Porta Maggiore, Roma"},
+{nombre:"Colosseo · Foro · Palatino", zona:"Roma antigua", persona:"juntos", dias:["M15"], img:"colosseo", lat:41.8902, lng:12.4922,
+ desc:"La entrada de 24 h cubre los tres recintos. Secuencia recomendada de tarde: Colosseo (franja ~15:30), Foro por el Arco de Tito y subida al Palatino para la vista general con luz baja.",
+ horario:"9:00–19:15 en septiembre (última entrada 18:15)", precio:"18 € entrada ordinaria 24 h; Full Experience (arena + subterráneos) 24 €. Solo venta oficial: ticketing.colosseo.it",
+ transporte:"Metro B Colosseo, directa desde Policlinico/Termini (Rafa llega en 10 min desde el congreso)",
+ tip:"Las franjas se liberan 30 días antes y vuelan. La terraza del Palatino sobre el Foro hacia las 18:00 da la mejor foto del conjunto con sombras largas.",
+ web:"https://ticketing.colosseo.it", maps:"Colosseo, Roma"},
+{nombre:"Foro Romano al detalle", zona:"Roma antigua", persona:"juntos", dias:["M15"], img:"foro", lat:41.8925, lng:12.4853,
+ desc:"Incluido en la entrada del Colosseo: Via Sacra, Curia (el senado, intacto), templo de Vesta y arcos de Tito y Septimio Severo. Recorrerlo de este a oeste sigue el eje de los triunfos.",
+ horario:"Mismo billete y horario que el Colosseo (24 h de validez)", precio:"Incluido en los 18 € del billete combinado",
+ transporte:"Entrada por Via Sacra (junto al Arco de Tito) tras salir del Colosseo",
+ tip:"La vista cenital gratuita, si un día no hay entrada: desde las terrazas del Campidoglio, detrás del ayuntamiento, a cualquier hora. De noche, el Foro iluminado desde Via dei Fori Imperiali.",
+ web:"", maps:"Foro Romano, Roma"},
+{nombre:"Pantheon", zona:"Centro storico", persona:"juntos", dias:["L14"], img:"pantheon", lat:41.8986, lng:12.4769,
+ desc:"La cúpula de hormigón no armado más grande jamás construida (43,3 m, año 126): el óculo de 8,2 m es la única fuente de luz. Dos milenios después sigue sin tener rival estructural.",
+ horario:"Diario 9:00–19:00 (última entrada 18:30)", precio:"5 € (reserva online recomendable en fin de semana; entre semana se compra en puerta)",
+ transporte:"Bus a Largo Argentina y 4 min a pie",
+ tip:"Física recreativa: la relación altura/diámetro es exactamente 1, una esfera perfecta inscrita. El haz del óculo a media tarde barre el lado este del tambor.",
+ web:"https://www.pantheonroma.com", maps:"Pantheon, Roma"},
+{nombre:"Piazza Navona", zona:"Centro storico", persona:"juntos", dias:["L14"], img:"navona", lat:41.8992, lng:12.4731,
+ desc:"Sobre el estadio de Domiciano (se conserva la planta exacta): Fuente de los Cuatro Ríos de Bernini frente a Sant'Agnese de Borromini, la rivalidad barroca más citada de Roma.",
+ horario:"Siempre abierta", precio:"Gratis",
+ transporte:"5 min a pie desde el Pantheon",
+ tip:"Los cafés de la plaza cobran la ubicación: mejor un caffè al banco en Sant'Eustachio (a 300 m), probablemente el mejor espresso de la ciudad.",
+ web:"", maps:"Piazza Navona, Roma"},
+{nombre:"Fontana di Trevi de noche", zona:"Trevi", persona:"juntos", dias:["V18"], img:"trevi", lat:41.9009, lng:12.4833,
+ desc:"De día es una lucha con 2 000 personas; después de las 23:00 se recupera la escala del conjunto de Salvi. Idónea para la noche de llegada del domingo 13 o cualquier sobremesa.",
+ horario:"Siempre visible; posible acceso regulado con pasarela en horas punta", precio:"Gratis (la moneda al agua, opcional)",
+ transporte:"Metro A Barberini + 5 min a pie",
+ tip:"Trípode pequeño o apoyo en la balaustrada: 1–2 s de exposición, el travertino iluminado quema un paso menos que el agua. Mejor desde el lateral derecho, menos frontal.",
+ web:"", maps:"Fontana di Trevi, Roma"},
+{nombre:"Aventino: naranjos y cerradura", zona:"Aventino", persona:"juntos", dias:["X16"], img:"aventino", lat:41.8846, lng:12.4790,
+ desc:"El Giardino degli Aranci abre un balcón sobre el Tíber y San Pedro; a 100 m, la mirilla de la puerta del Priorato de Malta encuadra la cúpula entre setos: tres estados soberanos en una cerradura.",
+ horario:"Jardín: amanecer a atardecer", precio:"Gratis",
+ transporte:"Metro B Circo Massimo y subida suave de 8 min",
+ tip:"La cola de la cerradura ronda 10–20 min; la foto exige tele corto (70–100 mm eq.) y f/8 para sacar nítidos seto y cúpula. Después, bajada a pie a Caracalla o al Testaccio para cenar.",
+ web:"", maps:"Giardino degli Aranci, Roma"},
+{nombre:"Terme di Caracalla", zona:"Aventino sur", persona:"juntos", dias:["X16"], img:"caracalla", lat:41.8790, lng:12.4926,
+ desc:"El complejo termal mejor conservado de Roma (216 d.C., 1 600 usuarios simultáneos): muros de 30 m, mosaicos in situ y una escala que el Foro ya no transmite. Sorprendentemente vacío.",
+ horario:"9:00–19:15 en septiembre (última entrada 1 h antes); lunes solo mañana", precio:"≈ 10 €",
+ transporte:"Metro B Circo Massimo + 8 min a pie",
+ tip:"Ingeniería para el gremio: bajo el suelo hay 3 km de galerías de servicio y un mitreo. La visita con visor 3D (suplemento) reconstruye los volúmenes originales.",
+ web:"", maps:"Terme di Caracalla, Roma"},
+{nombre:"Atardecer en el Gianicolo", zona:"Gianicolo", persona:"juntos", dias:["X16"], img:"gianicolo", lat:41.8919, lng:12.4614,
+ desc:"El mirador clásico sobre todas las cúpulas de Roma, con el Fontanone barroco a un paso. El 17 de septiembre el sol se pone a las 19:17: llegar a las 18:45 asegura sitio en la balaustrada.",
+ horario:"Siempre abierto; cañonazo diario a las 12:00", precio:"Gratis",
+ transporte:"Bus 115 desde Trastevere o subida a pie (15 min) desde San Pietro in Montorio",
+ tip:"La hora azul (19:30–19:50) es superior al propio ocaso: cúpulas iluminadas contra cielo aún denso. De bajada, el Tempietto de Bramante en San Pietro in Montorio, gratis y casi siempre vacío.",
+ web:"", maps:"Terrazza del Gianicolo, Roma"},
+{nombre:"Museos Vaticanos y Sixtina", zona:"Vaticano", persona:"juntos", dias:["J17"], img:"vaticano", lat:41.9065, lng:12.4536,
+ desc:"7 km de galerías: Laocoonte, Estancias de Rafael y la Capilla Sixtina. El jueves, sin congreso, admite la entrada de primera hora (8:00–8:30), la única franja razonablemente tranquila.",
+ horario:"L–S 8:00–19:00 (última entrada 17:00); cerrado domingos", precio:"20 € + 5 € de reserva online obligatoria de facto (museivaticani.va); evitar reventa",
+ transporte:"Metro A Ottaviano + 8 min a pie",
+ tip:"Ruta directa a la Sixtina primero (contra corriente, 25 min) y museos después con calma. La salida por la puerta del grupo (esquina derecha de la Sixtina) deja directamente en San Pedro y ahorra 30 min de rodeo.",
+ web:"https://tickets.museivaticani.va", maps:"Musei Vaticani, Roma"},
+{nombre:"San Pedro y cúpula", zona:"Vaticano", persona:"juntos", dias:["J17"], img:"sistina", lat:41.9022, lng:12.4539,
+ desc:"La basílica es gratuita (control de seguridad con cola variable): Pietà de Miguel Ángel, baldaquino de Bernini y la subida a la cúpula, la mejor cota fotográfica de la ciudad.",
+ horario:"7:00–19:10; cúpula 7:30–18:00", precio:"Basílica gratis; cúpula ≈ 10 € con ascensor (quedan 320 escalones) u 8 € a pie (551)",
+ transporte:"Salida directa desde la Sixtina (ver truco anterior) o Metro A Ottaviano",
+ tip:"El tramo final entre los dos casquetes de la cúpula se inclina con la curvatura: claustrofóbico pero breve. Arriba, la columnata de Bernini se lee como un plano; mediodía-tarde, luz frontal sobre la plaza.",
+ web:"", maps:"Basilica di San Pietro, Vaticano"},
+{nombre:"Castel Sant'Angelo", zona:"Borgo · Tíber", persona:"juntos", dias:["J17"], img:"santangelo", lat:41.9031, lng:12.4663,
+ desc:"Mausoleo de Adriano → fortaleza papal → prisión → museo, con el Passetto que lo une al Vaticano. La terraza superior (la de Tosca) da el frente fluvial completo al atardecer.",
+ horario:"9:00–19:30 (última entrada 18:30)", precio:"≈ 15 €",
+ transporte:"A pie desde San Pedro por Via della Conciliazione (10 min)",
+ tip:"El puente Sant'Angelo con los ángeles de Bernini es la foto: mejor desde el puente Umberto I contiguo, castillo y puente en el mismo encuadre con reflejo en el Tíber.",
+ web:"https://castelsantangelo.beniculturali.it", maps:"Castel Sant'Angelo, Roma"},
+{nombre:"Cena en el Ghetto", zona:"Sant'Angelo", persona:"juntos", dias:["L14"], img:"ghetto", lat:41.8926, lng:12.4778,
+ desc:"El barrio judío junto al Portico di Ottavia: cocina judeo-romana con el carciofo alla giudia (alcachofa frita) como emblema. En septiembre las alcachofas son de cámara, pero la fritura salva.",
+ horario:"Cenas desde las 19:30; muchos locales cierran viernes noche y sábado (shabbat)", precio:"25–40 €/persona",
+ transporte:"A pie desde Largo Argentina (5 min); tranvía 8 de vuelta",
+ tip:"De postre, la 'pizza ebraica' del Forno Boccione: un horno sin cartel con cola propia. Cruzar después la Isla Tiberina iluminada, el paseo nocturno más corto y mejor de Roma.",
+ web:"", maps:"Via del Portico d'Ottavia, Roma"},
+{nombre:"Monti: aperitivo y cena", zona:"Monti", persona:"juntos", dias:["M15"], img:"monti", lat:41.8946, lng:12.4903,
+ desc:"El barrio entre el Foro y Santa Maria Maggiore: vinotecas, trattorias y la Piazza della Madonna dei Monti como salón vecinal. A 10 min a pie del Colosseo, remate natural del martes.",
+ horario:"Aperitivo 18:30–20:30; cenas hasta 23:00", precio:"Aperitivo 8–12 €; cena 25–35 €/persona",
+ transporte:"Metro B Cavour; de vuelta al hotel, Metro B directa",
+ tip:"Zona con la mejor relación calidad/turista del centro. Para Rafa: también es el barrio del Museo Fermi, se puede combinar reserva de tarde con cena.",
+ web:"", maps:"Piazza della Madonna dei Monti, Roma"},
+{nombre:"Piazza di Spagna y Pincio", zona:"Tridente", persona:"juntos", dias:["V18"], img:"spagna", lat:41.9058, lng:12.4823,
+ desc:"La escalinata (1725) hacia Trinità dei Monti y, subiendo, la terraza del Pincio sobre Piazza del Popolo. Cierre compacto para la última mañana si el vuelo sale por la tarde.",
+ horario:"Siempre abierta; prohibido sentarse en la escalinata (multa de 250 €)", precio:"Gratis",
+ transporte:"Metro A Spagna; con maletas, mejor dejar el equipaje en consigna de Termini (KiPoint, ≈ 6 €/bulto)",
+ tip:"El paseo del Tridente (ver sección Paseos) cubre esta zona en un circuito de hora y media que acaba en la Fontana di Trevi.",
+ web:"", maps:"Piazza di Spagna, Roma"}
 ];
 
+const PASEOS = [
+{nombre:"Centro storico al caer la tarde", persona:"juntos", dias:["L14"], color:"#8E2F2F", km:"3,0", tiempo:"2–3 h con paradas", luz:"18:00 → cena",
+ desc:"El paseo canónico del lunes: barroco, mercado y río, terminando en la mesa. Via Giulia es el tramo que casi nadie hace y el más fotogénico: recta renacentista de 1 km con glicinas y el arco Farnese.",
+ etapas:[["Pantheon",41.8986,12.4769],["Caffè Sant'Eustachio",41.8983,12.4753],["Piazza Navona",41.8992,12.4731],["Campo de' Fiori",41.8956,12.4722],["Piazza Farnese",41.8946,12.4713],["Via Giulia",41.8933,12.4680],["Ponte Sisto",41.8917,12.4699],["Ghetto (cena)",41.8926,12.4778]],
+ tip:"La luz rasante de las 18:30 entra por el óculo del Pantheon y por los callejones este-oeste; llevar la cámara lista entre Navona y Farnese."},
+{nombre:"Paseo arqueológico nocturno", persona:"juntos", dias:["M15"], color:"#A67C2E", km:"2,5", tiempo:"1,5 h", luz:"tras salir del Palatino (~19:00)",
+ desc:"Prolongación natural de la visita al Colosseo: se rodea el Foro ya cerrado, que iluminado desde Via dei Fori Imperiali gana teatralidad, se suben las terrazas del Campidoglio y se cierra en Piazza Venezia camino de la cena en Monti.",
+ etapas:[["Colosseo",41.8902,12.4922],["Arco de Constantino",41.8898,12.4907],["Via dei Fori Imperiali",41.8930,12.4870],["Terrazas del Campidoglio",41.8934,12.4827],["Piazza Venezia",41.8958,12.4823],["Monti (cena)",41.8946,12.4903]],
+ tip:"Las terrazas traseras del Campidoglio (detrás del Palazzo Senatorio) dan la vista del Foro iluminado sin verja: trípode de mesa sobre la balaustrada y exposiciones de 2–4 s."},
+{nombre:"Aventino, Tíber y Gianicolo", persona:"juntos", dias:["X16"], color:"#4A5D45", km:"4,2", tiempo:"3 h con paradas", luz:"17:00 → hora azul",
+ desc:"El paseo grande de la semana, todo en descenso salvo el remate: colina del Aventino (naranjos, cerradura de Malta, Santa Sabina), bajada al río, cruce por la Isla Tiberina y Trastevere hasta subir al Gianicolo para el atardecer de las 19:17.",
+ etapas:[["Circo Massimo",41.8860,12.4853],["Giardino degli Aranci",41.8846,12.4790],["Cerradura de Malta",41.8837,12.4779],["Lungotevere",41.8871,12.4763],["Isla Tiberina",41.8907,12.4776],["Santa Maria in Trastevere",41.8895,12.4700],["Gianicolo",41.8919,12.4614]],
+ tip:"La subida final al Gianicolo por la escalinata de San Pietro in Montorio son 15 min; calcular para estar arriba a las 18:45. La cena espera abajo, en Trastevere."},
+{nombre:"El Tíber y los ángeles, de noche", persona:"juntos", dias:["J17"], color:"#6E2323", km:"2,0", tiempo:"1 h", luz:"crepúsculo → noche",
+ desc:"Cierre del día vaticano: la Via della Conciliazione con la cúpula de fondo, el Castel Sant'Angelo iluminado y el puente de los ángeles de Bernini, con el mejor encuadre desde el puente Umberto I contiguo.",
+ etapas:[["Plaza de San Pedro",41.9022,12.4539],["Via della Conciliazione",41.9023,12.4600],["Castel Sant'Angelo",41.9031,12.4663],["Ponte Sant'Angelo",41.9017,12.4666],["Ponte Umberto I",41.9022,12.4707]],
+ tip:"Reflejo del castillo en el Tíber desde Umberto I: 20:15–20:45, cielo azul profundo con la iluminación ya encendida. La foto de la semana con diferencia."},
+{nombre:"El Tridente, despedida", persona:"juntos", dias:["V18"], color:"#5C554A", km:"2,2", tiempo:"1,5 h", luz:"mañana",
+ desc:"Circuito compacto para la última mañana: Piazza del Popolo (con los dos Caravaggio de Santa Maria del Popolo, gratis), la Via Margutta de los anticuarios y los estudios de artistas, la escalinata de Spagna y remate en la Fontana di Trevi a plena luz.",
+ etapas:[["Piazza del Popolo",41.9109,12.4768],["Via Margutta",41.9086,12.4790],["Piazza di Spagna",41.9058,12.4823],["Fontana di Trevi",41.9009,12.4833]],
+ tip:"Via Margutta a primera hora está vacía: hiedra, talleres y patios abiertos. Equipaje en la consigna de Termini y este paseo cabe antes de un vuelo de tarde."},
+{nombre:"Esquilino–Monti, mañana de Lucía", persona:"lucia", dias:["M15"], color:"#33452F", km:"1,8", tiempo:"2 h tranquilas", luz:"10:00–13:00",
+ desc:"Mañana sin madrugón y sin metro: de la basílica de Santa Maria Maggiore a la joya escondida de Santa Prassede (mosaicos bizantinos del s. IX en la capilla de San Zenón, llevar moneda de 1 € para la luz), bajando por Via Urbana hasta el Moisés de Miguel Ángel y las tiendas de Monti.",
+ etapas:[["Santa Maria Maggiore",41.8976,12.4986],["Santa Prassede",41.8961,12.4987],["Via Urbana",41.8955,12.4945],["San Pietro in Vincoli (Moisés)",41.8938,12.4931],["Piazza Madonna dei Monti",41.8946,12.4903]],
+ tip:"Todo gratis. Comer en Monti y, si apetece, esperar allí a Rafa: el Colosseo de la tarde queda a 10 min a pie."}
+];
+
+const COMER = [
+{nombre:"Pommidoro", zona:"San Lorenzo", tipo:"comida", precio:"20–30 €", lat:41.9005, lng:12.5182,
+ plato:"Rigatoni alla carbonara, parrilla",
+ nota:"Trattoria histórica del barrio a 5 min del congreso: mesa de universitarios, artistas y, en su día, Pasolini, que cenó aquí su última noche. Ideal para la pausa larga del mediodía de Rafa.",
+ maps:"Trattoria Pommidoro, Piazza dei Sanniti, Roma"},
+{nombre:"Said dal 1923", zona:"San Lorenzo", tipo:"dulce", precio:"5–10 €", lat:41.9008, lng:12.5156,
+ plato:"Chocolate caliente denso, pralinés",
+ nota:"Antigua fábrica de chocolate reconvertida en café-bistró, con la maquinaria original a la vista. Café de después de comer para los días de congreso.",
+ maps:"SAID dal 1923, Via Tiburtina 135, Roma"},
+{nombre:"Armando al Pantheon", zona:"Centro storico", tipo:"comida", precio:"35–45 €", lat:41.8989, lng:12.4766,
+ plato:"Spaghetti alla gricia, abbacchio",
+ nota:"Familiar desde 1961 a 30 m del Pantheon, con la cocina romana de manual. Reservar con días de antelación en su web; sin reserva es misión imposible.",
+ maps:"Armando al Pantheon, Roma"},
+{nombre:"Roscioli Salumeria", zona:"Campo de' Fiori", tipo:"cena", precio:"45–60 €", lat:41.8938, lng:12.4737,
+ plato:"Carbonara, burrata con anchoas",
+ nota:"Salumeria-restaurante de culto: la carbonara más citada de Roma y una carta de vinos seria. Se reserva con semanas; si no hay mesa, su forno de al lado salva la comida.",
+ maps:"Salumeria Roscioli, Via dei Giubbonari, Roma"},
+{nombre:"Da Enzo al 29", zona:"Trastevere", tipo:"cena", precio:"25–35 €", lat:41.8886, lng:12.4772,
+ plato:"Tonnarelli cacio e pepe, alcachofa",
+ nota:"Diminuta, sin reservas para cenar: la cola empieza a las 18:45 para abrir a las 19:15. Cocina romana estricta y honesta; encaja con el paseo del miércoles al bajar del Gianicolo.",
+ maps:"Da Enzo al 29, Via dei Vascellari, Roma"},
+{nombre:"Da Teo", zona:"Trastevere", tipo:"cena", precio:"30–40 €", lat:41.8887, lng:12.4750,
+ plato:"Amatriciana, puntarelle en temporada",
+ nota:"La alternativa con reserva en Trastevere, en una plaza tranquila lejos del bullicio de Santa Maria. Terraza agradable en septiembre.",
+ maps:"Da Teo, Piazza dei Ponziani 7, Roma"},
+{nombre:"Nonna Betta", zona:"Ghetto", tipo:"cena", precio:"30–40 €", lat:41.8928, lng:12.4774,
+ plato:"Carciofo alla giudia, aliciotti con indivia",
+ nota:"Cocina judeo-romana kosher en plena Via del Portico d'Ottavia. Cierra viernes noche y sábado mediodía (shabbat): perfecta para el lunes, imposible para el viernes.",
+ maps:"Nonna Betta, Via del Portico d'Ottavia, Roma"},
+{nombre:"Ai Tre Scalini", zona:"Monti", tipo:"cena", precio:"20–30 €", lat:41.8952, lng:12.4907,
+ plato:"Tablas de quesos y embutidos, vino natural",
+ nota:"Vineria centenaria con hiedra en la fachada: el aperitivo largo que se convierte en cena. Sin reservas, llegar antes de las 19:30 o esperar en la calle con copa en mano.",
+ maps:"Ai Tre Scalini, Via Panisperna 251, Roma"},
+{nombre:"Pizzarium (Bonci)", zona:"Prati · Vaticano", tipo:"comida", precio:"8–15 €", lat:41.9068, lng:12.4451,
+ plato:"Pizza al taglio (la de patata es el clásico)",
+ nota:"La pizza al corte más influyente de Italia, a 5 min del Metro Cipro y a 10 de los Museos Vaticanos: comida de pie perfecta para el jueves entre museos y castillo.",
+ maps:"Pizzarium Bonci, Via della Meloria 43, Roma"},
+{nombre:"Felice a Testaccio", zona:"Testaccio", tipo:"cena", precio:"35–45 €", lat:41.8776, lng:12.4770,
+ plato:"Tonnarelli cacio e pepe (mantecados en mesa)",
+ nota:"Institución de 1936 en el barrio más comestible de Roma; la cacio e pepe se termina de emulsionar delante del cliente. Reservar sí o sí. Remate alternativo del paseo del Aventino.",
+ maps:"Felice a Testaccio, Via Mastro Giorgio 29, Roma"},
+{nombre:"Mordi e Vai", zona:"Mercato Testaccio", tipo:"comida", precio:"5–8 €", lat:41.8756, lng:12.4736,
+ plato:"Panino con allesso di scottona",
+ nota:"Puesto del mercado de Testaccio: bocadillo de ternera guisada mojado en su jugo, obra del carnicero Sergio Esposito. Solo mediodías; el mercado cierra a las 15:30.",
+ maps:"Mordi e Vai, Mercato Testaccio, Roma"},
+{nombre:"Sant'Eustachio il Caffè", zona:"Centro storico", tipo:"dulce", precio:"1,50–4 €", lat:41.8983, lng:12.4753,
+ plato:"Gran Caffè (azúcar emulsionado de serie: pedir 'amaro' si se quiere sin)",
+ nota:"Tostadero de leña desde 1938 entre Pantheon y Navona. El espresso de referencia de la ciudad, de pie en la barra como manda el rito.",
+ maps:"Sant'Eustachio Il Caffè, Roma"},
+{nombre:"Tazza d'Oro", zona:"Pantheon", tipo:"dulce", precio:"2–5 €", lat:41.8993, lng:12.4772,
+ plato:"Granita di caffè con panna",
+ nota:"El otro templo del café, en la esquina del Pantheon: con 27 °C de septiembre, la granita con nata doble es la parada obligatoria del paseo del lunes.",
+ maps:"La Casa del Caffè Tazza d'Oro, Roma"},
+{nombre:"Giolitti", zona:"Centro storico", tipo:"dulce", precio:"3–6 €", lat:41.9007, lng:12.4767,
+ plato:"Gelato (pistacho y crema Giolitti)",
+ nota:"Heladería de 1900, la clásica de diputados y turistas a partes iguales. Abierta hasta la 1:00: el postre andante de cualquier cena en el centro.",
+ maps:"Giolitti, Via degli Uffici del Vicario 40, Roma"},
+{nombre:"Otaleg", zona:"Trastevere", tipo:"dulce", precio:"3–6 €", lat:41.8890, lng:12.4693,
+ plato:"Gelato de autor (sabores de temporada)",
+ nota:"'Gelato' al revés: el heladero Marco Radicioni trabaja fruta de mercado y combinaciones serias. La comparación directa con Giolitti es un experimento reproducible y delicioso.",
+ maps:"Otaleg, Via di San Cosimato 14a, Roma"},
+{nombre:"Forno Boccione", zona:"Ghetto", tipo:"dulce", precio:"3–8 €", lat:41.8929, lng:12.4771,
+ plato:"Pizza ebraica, crostata de ricotta y visciole",
+ nota:"Horno judío sin cartel ni sonrisas, con horario caprichoso y todo casi quemado a propósito: así es la receta. Cierra viernes tarde y sábado. Se compra y se come andando.",
+ maps:"Pasticceria Boccione, Via del Portico d'Ottavia 1, Roma"}
+];
+
+const CURIOSIDADES = [
+{cat:"Ciencia de materiales", titulo:"El hormigón que se repara solo",
+ texto:"El opus caementicium romano mezclaba cal viva en caliente: los clastos de cal que quedan embebidos reaccionan con el agua que penetra por las fisuras y las recristalizan. Autorreparación pasiva, descrita en 2023 (MIT), y una de las razones de que el Panteón y Caracalla sigan en pie sin una sola armadura de acero."},
+{cat:"Astronomía", titulo:"Una iglesia como instrumento de medida",
+ texto:"La meridiana de Bianchini (1702) en S. M. degli Angeli fijó la hora oficial de Roma durante siglos y sirvió para medir la oblicuidad de la eclíptica y verificar la deriva del equinoccio que motivó la reforma gregoriana. El gnomon está a 20,34 m de altura; la línea, orientada al norte astronómico con precisión de segundos de arco."},
+{cat:"Geometría", titulo:"La esfera del Panteón",
+ texto:"Diámetro interior: 43,3 m. Altura hasta el óculo: 43,3 m. Una esfera perfecta inscrita en el tambor, con el hormigón dosificado en gradiente de densidad: travertino en la base, toba a media altura, pómez y ánforas vacías en la corona. Ingeniería de masas variable dos mil años antes del elemento finito."},
+{cat:"Metrología", titulo:"El cañonazo de las 12:00",
+ texto:"Desde 1847, un cañón dispara una salva al mediodía (hoy desde el Gianicolo) para sincronizar las campanas de todas las iglesias, que hasta entonces daban la hora cada una a su criterio. Señal horaria acústica: la sincronización de relojes distribuidos, versión pontificia."},
+{cat:"Egiptología", titulo:"Más obeliscos que Egipto",
+ texto:"Roma conserva 13 obeliscos egipcios antiguos en pie, más que ningún otro lugar del mundo, Egipto incluido. Traerlos exigió barcos construidos a medida; volver a levantarlos en el Renacimiento (Fontana, 1586, con el del Vaticano) fue el gran problema de ingeniería de su siglo: 900 hombres, 74 cabrestantes y prohibición de hablar bajo pena de muerte."},
+{cat:"Hidráulica", titulo:"Los nasoni y Bernoulli",
+ texto:"Unas 2 500 fuentes de hierro fundido (1874) dan agua potable continua; el flujo permanente evita el estancamiento y mantiene el agua a la temperatura del acuífero. Truco local: tapar la boca del caño con el dedo y el agua sale en arco por el agujero superior. Conservación del caudal aplicada a beber sin agacharse."},
+{cat:"Economía", titulo:"La moneda de Trevi",
+ texto:"Se recogen en torno a 3 000 € diarios del fondo de la fuente, aspirados periódicamente y entregados a Cáritas por convenio municipal: alrededor de un millón y medio de euros al año en física de proyectiles de baja energía."},
+{cat:"Derecho", titulo:"S·P·Q·R, la marca más antigua en uso",
+ texto:"Senatus Populusque Romanus figura hoy en tapas de alcantarilla, autobuses y nóminas municipales: la misma sigla institucional desde la República, hace unos 2 500 años. Continuidad de identidad corporativa sin equivalente conocido."},
+{cat:"Geografía política", titulo:"Una frontera sin control",
+ texto:"El límite entre Italia y el Vaticano (el estado más pequeño del mundo: 0,44 km²) cruza la Plaza de San Pedro por la línea blanca del pavimento entre los brazos de la columnata. Se cambia de país andando, sin darse cuenta, varias veces en una misma foto."},
+{cat:"Física nuclear", titulo:"El pasillo de los neutrones lentos",
+ texto:"En octubre de 1934, en Via Panisperna 89a, Fermi interpuso parafina entre la fuente y la plata y la actividad inducida se multiplicó: los núcleos de hidrógeno moderaban los neutrones. El efecto se confirmó esa misma tarde en la fuente de peces del jardín. Del pasillo de un instituto romano a los reactores nucleares hay una línea recta."}
+];
+
+/* ---------- Estado y render de lugares ---------- */
 const grid = document.getElementById("grid");
 const contador = document.getElementById("contador");
-let fPersona = "todos", fDia = "todos";
+let fPersona = "todos", fDia = "todos", fComer = "todos";
 
 function badgePersona(p){
   if(p==="rafa") return '<span class="badge b-rafa">Rafa</span>';
   if(p==="lucia") return '<span class="badge b-lucia">Lucía</span>';
   return '<span class="badge b-juntos">Juntos</span>';
 }
+function pasaFiltro(l){
+  return (fPersona==="todos" || l.persona===fPersona) &&
+         (fDia==="todos" || l.dias.includes(fDia));
+}
 
 function render(){
-  const visibles = LUGARES.filter(l =>
-    (fPersona==="todos" || l.persona===fPersona) &&
-    (fDia==="todos" || l.dias.includes(fDia))
-  );
+  const visibles = LUGARES.filter(pasaFiltro);
   contador.textContent = visibles.length + " de " + LUGARES.length + " lugares";
-  if(!visibles.length){
-    grid.innerHTML = '<div class="vacio">Nada con esa combinación de filtros. Prueba con "Todos" en alguno de los dos grupos.</div>';
-    return;
-  }
-  grid.innerHTML = visibles.map(l => {
+  grid.innerHTML = visibles.length ? visibles.map(l => {
     const mapsUrl = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(l.maps);
     const dias = l.dias.map(d => NOMBRE_DIA[d]).join(" · ");
     return `
@@ -630,15 +697,130 @@ function render(){
         </div>
       </div>
     </article>`;
+  }).join("") : '<div class="vacio">Nada con esa combinación de filtros. Prueba con "Todos" en alguno de los dos grupos.</div>';
+  actualizarMapa();
+}
+
+/* ---------- Paseos ---------- */
+function renderPaseos(){
+  const cont = document.getElementById("grid-paseos");
+  const visibles = PASEOS.filter(p =>
+    (fPersona==="todos" || p.persona===fPersona) &&
+    (fDia==="todos" || p.dias.includes(fDia))
+  );
+  cont.innerHTML = visibles.length ? visibles.map(p => {
+    const origen = encodeURIComponent(p.etapas[0][0] + ", Roma");
+    const destino = encodeURIComponent(p.etapas[p.etapas.length-1][0] + ", Roma");
+    const way = p.etapas.slice(1,-1).map(e => encodeURIComponent(e[0] + ", Roma")).join("%7C");
+    const dirUrl = `https://www.google.com/maps/dir/?api=1&origin=${origen}&destination=${destino}${way?"&waypoints="+way:""}&travelmode=walking`;
+    const dias = p.dias.map(d => NOMBRE_DIA[d]).join(" · ");
+    return `
+    <article class="paseo">
+      <div class="cabecera">
+        <div><h3>${p.nombre}</h3></div>
+        <span class="ruta-color" style="background:${p.color}"></span>
+      </div>
+      <div class="metricas">
+        <span><b>${p.km} km</b> a pie</span><span><b>${p.tiempo}</b></span><span>Luz: <b>${p.luz}</b></span><span>${badgePersona(p.persona)} <span class="badge b-dia">${dias}</span></span>
+      </div>
+      <div class="etapas">${p.etapas.map(e => e[0]).join('<span class="flecha">→</span>')}</div>
+      <p class="desc">${p.desc}</p>
+      <div class="tip"><b>Consejo:</b> ${p.tip}</div>
+      <div class="acciones">
+        <a class="btn btn-mapa" href="${dirUrl}" target="_blank" rel="noopener">🚶 Ruta en Google Maps</a>
+      </div>
+    </article>`;
+  }).join("") : '<div class="vacio">Ningún paseo con esos filtros.</div>';
+}
+
+/* ---------- Comer ---------- */
+const ETIQ = {comida:["t-comida","Comida"], cena:["t-cena","Cena"], dulce:["t-dulce","Café · dulce"]};
+function renderComer(){
+  const cont = document.getElementById("grid-comer");
+  const visibles = COMER.filter(r => fComer==="todos" || r.tipo===fComer);
+  cont.innerHTML = visibles.map(r => {
+    const mapsUrl = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(r.maps);
+    return `
+    <article class="rest">
+      <div class="tipo ${ETIQ[r.tipo][0]}">${ETIQ[r.tipo][1]}</div>
+      <h3>${r.nombre}</h3>
+      <div class="zona-r">${r.zona}</div>
+      <div class="plato"><b>Pedir:</b> ${r.plato}</div>
+      <p class="nota-r">${r.nota}</p>
+      <div class="pie-r"><span class="precio-r">${r.precio}</span><a href="${mapsUrl}" target="_blank" rel="noopener">📍 Mapa</a></div>
+    </article>`;
   }).join("");
 }
 
+/* ---------- Curiosidades ---------- */
+document.getElementById("grid-curio").innerHTML = CURIOSIDADES.map(c => `
+  <article class="curio"><div class="cat">${c.cat}</div><h3>${c.titulo}</h3><p>${c.texto}</p></article>
+`).join("");
+
+/* ---------- Mapa Leaflet ---------- */
+let mapa, capaLugares, capaPaseos, capaComer;
+function initMapa(){
+  mapa = L.map("mapa", {scrollWheelZoom:false}).setView([41.8955, 12.4850], 13);
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap'
+  }).addTo(mapa);
+  mapa.on("click", () => mapa.scrollWheelZoom.enable());
+
+  // Sapienza (fijo)
+  L.marker([41.9019, 12.5142], {icon: L.divIcon({
+    className:"", html:'<div style="font-size:22px;line-height:22px;text-shadow:0 1px 3px #fff, 0 0 6px #fff">★</div>',
+    iconSize:[22,22], iconAnchor:[11,11]
+  })}).addTo(mapa).bindPopup("<b>Sapienza · Città Universitaria</b>Sede de ESORICS 2026 (Piazzale Aldo Moro 5)");
+
+  capaLugares = L.layerGroup().addTo(mapa);
+  capaPaseos = L.layerGroup().addTo(mapa);
+  capaComer = L.layerGroup().addTo(mapa);
+
+  // Paseos (estáticos, se filtran con checkbox)
+  PASEOS.forEach(p => {
+    const linea = L.polyline(p.etapas.map(e => [e[1], e[2]]), {
+      color: p.color, weight: 3.5, dashArray: "7 6", opacity: .85
+    }).bindPopup(`<b>${p.nombre}</b>${p.km} km · ${p.tiempo}`);
+    linea.addTo(capaPaseos);
+  });
+
+  COMER.forEach(r => {
+    const mapsUrl = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(r.maps);
+    L.marker([r.lat, r.lng], {icon: L.divIcon({
+      className:"", html:'<div style="width:10px;height:10px;background:#26221C;border:2px solid #fff;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.3)"></div>',
+      iconSize:[14,14], iconAnchor:[7,7]
+    })}).bindPopup(`<b>${r.nombre}</b>${ETIQ[r.tipo][1]} · ${r.zona} · ${r.precio}<br><a href="${mapsUrl}" target="_blank" rel="noopener">Abrir en Google Maps</a>`).addTo(capaComer);
+  });
+
+  document.getElementById("chk-paseos").addEventListener("change", e => {
+    e.target.checked ? mapa.addLayer(capaPaseos) : mapa.removeLayer(capaPaseos);
+  });
+  document.getElementById("chk-comer").addEventListener("change", e => {
+    e.target.checked ? mapa.addLayer(capaComer) : mapa.removeLayer(capaComer);
+  });
+
+  actualizarMapa();
+}
+
+function actualizarMapa(){
+  if(!capaLugares) return;
+  capaLugares.clearLayers();
+  LUGARES.filter(pasaFiltro).forEach(l => {
+    const mapsUrl = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(l.maps);
+    L.circleMarker([l.lat, l.lng], {
+      radius: 8, color: "#fff", weight: 2, fillColor: COLOR[l.persona], fillOpacity: .95
+    }).bindPopup(`<b>${l.nombre}</b>${l.zona} · ${l.dias.map(d=>NOMBRE_DIA[d]).join(" · ")}<br><a href="${mapsUrl}" target="_blank" rel="noopener">Abrir en Google Maps</a>`).addTo(capaLugares);
+  });
+}
+
+/* ---------- Eventos de filtros ---------- */
 document.querySelectorAll("[data-persona]").forEach(b => {
   b.addEventListener("click", () => {
     document.querySelectorAll("[data-persona]").forEach(x => x.classList.remove("activo"));
     b.classList.add("activo");
     fPersona = b.dataset.persona;
-    render();
+    render(); renderPaseos();
   });
 });
 document.querySelectorAll("[data-dia]").forEach(b => {
@@ -646,11 +828,19 @@ document.querySelectorAll("[data-dia]").forEach(b => {
     document.querySelectorAll("[data-dia]").forEach(x => x.classList.remove("activo"));
     b.classList.add("activo");
     fDia = b.dataset.dia;
-    render();
+    render(); renderPaseos();
+  });
+});
+document.querySelectorAll("[data-comer]").forEach(b => {
+  b.addEventListener("click", () => {
+    document.querySelectorAll("[data-comer]").forEach(x => x.classList.remove("activo"));
+    b.classList.add("activo");
+    fComer = b.dataset.comer;
+    renderComer();
   });
 });
 
-render();
+render(); renderPaseos(); renderComer(); initMapa();
 </script>
 </body>
 </html>
