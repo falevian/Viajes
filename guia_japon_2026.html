@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Japón 2026 · Guía de viaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7F6F2; --card:#FFFFFF; --ink:#1B1B1F; --muted:#6E6E74; --line:#E4E2DB;
+  --tokio:#679B10; --kanazawa:#2C5387; --kioto:#6C4F82; --osaka:#D6301F; --tren:#1B1B1F;
+  --disp:"Shippori Mincho",serif; --body:"Zen Kaku Gothic New",system-ui,sans-serif; --mono:"IBM Plex Mono",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55}
+a{color:inherit}
+.wrap{max-width:880px;margin:0 auto;padding:0 16px}
+
+/* ---------- Cabecera: cartel de estación ---------- */
+header{background:var(--card);border-bottom:1px solid var(--line);padding:26px 0 0}
+.eki{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.eki h1{font-family:var(--disp);font-weight:800;font-size:clamp(30px,6vw,46px);letter-spacing:.01em}
+.eki .kanji{font-family:var(--disp);font-size:clamp(18px,3vw,24px);color:var(--muted)}
+.eki .dates{font-family:var(--mono);font-size:13px;color:var(--muted);margin-left:auto}
+.lineband{display:flex;height:34px;margin-top:18px;font-family:var(--mono);font-size:11px;color:#fff}
+.lineband span{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;letter-spacing:.06em}
+.lineband i{width:8px;height:8px;border-radius:50%;background:#fff;flex:none}
+.lb-t{background:var(--tokio)} .lb-k{background:var(--kanazawa)} .lb-y{background:var(--kioto)} .lb-o{background:var(--osaka)}
+
+/* ---------- Navegación ---------- */
+nav{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--line);z-index:20;overflow-x:auto;-webkit-overflow-scrolling:touch}
+nav .wrap{display:flex;gap:2px;padding:0 8px}
+nav button{appearance:none;border:0;background:none;font-family:var(--body);font-weight:500;font-size:14px;padding:13px 13px 11px;color:var(--muted);cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent}
+nav button:hover{color:var(--ink)}
+nav button:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+nav button.on{color:var(--ink);border-bottom-color:var(--ink);font-weight:700}
+
+main{padding:26px 0 70px}
+section.pane{display:none}
+section.pane.on{display:block}
+h2{font-family:var(--disp);font-weight:800;font-size:26px;margin:6px 0 4px}
+.sub{color:var(--muted);font-size:14px;margin-bottom:20px}
+h3{font-family:var(--disp);font-weight:600;font-size:19px;margin:26px 0 10px}
+
+/* ---------- Itinerario ---------- */
+details.day{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
+details.day summary{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;list-style:none}
+details.day summary::-webkit-details-marker{display:none}
+details.day summary:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+.dot{width:12px;height:12px;border-radius:50%;flex:none}
+.d-t{background:var(--tokio)} .d-k{background:var(--kanazawa)} .d-y{background:var(--kioto)} .d-o{background:var(--osaka)} .d-x{background:var(--muted)}
+.dnum{font-family:var(--mono);font-size:12px;color:var(--muted);width:82px;flex:none}
+.dtit{font-weight:700;font-size:15px;flex:1}
+.chev{color:var(--muted);transition:transform .15s;flex:none}
+details.day[open] .chev{transform:rotate(90deg)}
+.dbody{padding:2px 18px 16px 18px;border-top:1px solid var(--line)}
+.dbody ol{margin:12px 0 4px 20px}
+.dbody li{margin-bottom:9px}
+.dbody .hint{background:var(--paper);border-left:3px solid var(--ink);padding:9px 12px;font-size:14px;margin-top:12px;border-radius:0 8px 8px 0}
+.t{font-family:var(--mono);font-size:13px;font-weight:600;background:var(--ink);color:#fff;border-radius:5px;padding:1px 7px;margin-right:5px;white-space:nowrap}
+a.map{font-size:13px;font-weight:700;text-decoration:none;border-bottom:1.5px solid currentColor;white-space:nowrap}
+a.map::after{content:" ↗"}
+.mc-t{color:var(--tokio)} .mc-k{color:var(--kanazawa)} .mc-y{color:var(--kioto)} .mc-o{color:var(--osaka)}
+
+/* ---------- Ciudades ---------- */
+.cityhead{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:26px 0 14px;overflow:hidden}
+.cityhead svg{display:block;width:100%;height:auto}
+.citysign{display:flex;align-items:baseline;gap:12px;padding:14px 18px 6px}
+.citysign .romaji{font-family:var(--disp);font-weight:800;font-size:28px}
+.citysign .kj{font-family:var(--disp);font-size:17px;color:var(--muted)}
+.citysign .n{font-family:var(--mono);font-size:12px;color:var(--muted);margin-left:auto}
+.cityband{height:8px}
+.cb-t{background:var(--tokio)} .cb-k{background:var(--kanazawa)} .cb-y{background:var(--kioto)} .cb-o{background:var(--osaka)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.spot{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 15px}
+.spot b{display:block;font-size:15px;margin-bottom:3px}
+.spot p{font-size:13.5px;color:var(--muted);margin-bottom:9px}
+.tag{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:1px 6px;margin-bottom:8px}
+
+/* ---------- Trenes ---------- */
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:14px}
+table{display:block;overflow-x:auto}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);text-align:left;padding:11px 12px;border-bottom:2px solid var(--ink);white-space:nowrap}
+td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top;min-width:90px}
+tr:last-child td{border-bottom:0}
+td.mono{font-family:var(--mono);font-size:13px;font-weight:600;white-space:nowrap}
+.note{font-size:12.5px;color:var(--muted)}
+
+/* ---------- Comer ---------- */
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.chips button{font-family:var(--body);font-weight:700;font-size:13px;border:1.5px solid var(--line);background:var(--card);border-radius:99px;padding:7px 14px;cursor:pointer;color:var(--muted)}
+.chips button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.chips button.on{border-color:var(--ink);color:var(--ink)}
+.food{display:none}
+.food.show{display:block}
+
+/* ---------- Requisitos ---------- */
+.prog{font-family:var(--mono);font-size:13px;color:var(--muted);margin-bottom:14px}
+ul.check{list-style:none}
+ul.check li{display:flex;gap:11px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:8px}
+ul.check input{width:19px;height:19px;margin-top:2px;accent-color:var(--ink);flex:none}
+ul.check label{cursor:pointer;font-size:14.5px}
+ul.check label b{font-weight:700}
+ul.check .when{display:block;font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:2px}
+ul.check li.done label{color:var(--muted);text-decoration:line-through}
+.info{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 17px;margin-bottom:10px;font-size:14.5px}
+.info b{display:block;margin-bottom:4px;font-size:15px}
+.warn{border-left:4px solid var(--osaka)}
+
+/* ---------- Presupuesto ---------- */
+.total{font-family:var(--disp);font-weight:800;font-size:24px;margin-top:14px}
+.total small{font-family:var(--body);font-weight:400;font-size:13px;color:var(--muted);display:block}
+
+footer{border-top:1px solid var(--line);padding:22px 0;color:var(--muted);font-size:12.5px;font-family:var(--mono)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eki">
+      <h1>Japón</h1><span class="kanji">日本 · Nihon</span>
+      <span class="dates">30 OCT → 12 NOV 2026 · 2 PAX</span>
+    </div>
+  </div>
+  <div class="lineband">
+    <span class="lb-t"><i></i>TOKIO ×5</span><span class="lb-k"><i></i>KANAZAWA ×2</span><span class="lb-y"><i></i>KIOTO ×4</span><span class="lb-o"><i></i>OSAKA ×1</span>
+  </div>
+</header>
+
+<nav aria-label="Secciones">
+  <div class="wrap">
+    <button class="on" data-p="itinerario">Itinerario</button>
+    <button data-p="ciudades">Ciudades</button>
+    <button data-p="trenes">Trenes y buses</button>
+    <button data-p="comer">Dónde comer</button>
+    <button data-p="camaras">Cámaras</button>
+    <button data-p="requisitos">Requisitos</button>
+    <button data-p="presupuesto">Presupuesto</button>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ================= ITINERARIO ================= -->
+<section class="pane on" id="itinerario">
+  <h2>Día a día</h2>
+  <p class="sub">Amanece a las 6:15 y anochece a las 16:40: exteriores por la mañana, neón y templos iluminados de noche. Solo hay dos madrugones innegociables, marcados abajo.</p>
+
+  <details class="day"><summary><span class="dot d-x"></span><span class="dnum">VIE 30 OCT</span><span class="dtit">Vuelo Madrid → Tokio</span><span class="chev">›</span></summary>
+    <div class="dbody"><ol>
+      <li>Noche a bordo. Reloj en hora japonesa al despegar, cena ligera y dormir cuanto se pueda en el primer tramo.</li>
+    </ol></div>
+  </details>
+
+  <details class="day"><summary><span class="dot d-t"></span><span class="dnum">SÁB 31 OCT</span><span class="dtit">Llegada · Shinjuku de noche</span><span class="chev">›</span></summary>
+    <div class="dbody"><ol>
+      <li><span class="t">TARDE</span>Llegada a Haneda. Inmigración con el QR de Visit Japan Web. Cajero 7-Eleven para yenes; Suica en Wallet (iPhone) o Welcome Suica física (Android).</li>
+      <li>Monorraíl + Yamanote o bus limusina a Shinjuku, 45 a 60 min. Check-in.</li>
+      <li><span class="t">NOCHE</span>Paseo por Kabukichō y cena de yakitori en <a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Omoide+Yokocho+Shinjuku" target="_blank" rel="noopener">Omoide Yokochō</a>. Aguantar despiertos hasta las 22:00.</li>
+    </ol></div>
+  </details>
+
+  <details class="day"><summary><span class="dot d-t"></span><span class="dnum">DOM 1 NOV</span><span class="dtit">Asakusa · Yanaka · Akihabara</span><span class="chev">›</span></summary>
+    <div class="dbody"><ol>
+      <li><span class="t">7:30</span><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Sensoji+Asakusa" target="_blank" rel="noopener">Sensō-ji</a> antes del gentío. Nakamise y callejones laterales.</li>
+      <li>Calle <a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Kappabashi+Street+Tokyo" target="_blank" rel="noopener">Kappabashi</a> (utensilios de cocina, comida de plástico) camino de Ueno. Comida en Ameyoko.</li>
+      <li><span class="t">TARDE</span><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Yanaka+Ginza+Tokyo" target="_blank" rel="noopener">Yanaka</a>: el Tokio de casas bajas. Atardecer desde la escalera Yuyake Dandan.</li>
+      <li><span class="t">NOCHE</span><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Akihabara+Electric+Town" target="_blank" rel="noopener">Akihabara</a>: neón, electrónica, retro gaming. Cena de ramen por la zona.</li>
+    </ol></div>
+  </details>
+
+  <details class="day"><summary><span class="dot d-t"></span><span class="dnum">LUN 2 NOV</span><span class="dtit">Tsukiji · teamLab · Ginza</span><span class="chev">›</span></summary>
+    <div class="dbody"><ol>
+      <li><span class="t">8:00</span>Desayuno en el <a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Tsukiji+Outer+Market" target="_blank" rel="noopener">mercado exterior de Tsukiji</a>: tamagoyaki, brochetas de atún. Ir con hambre.</li>
+      <li><span class="t">MAÑANA</span><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=teamLab+Planets+Toyosu" target="_blank" rel="noopener">teamLab Planets</a> (entrada reservada). Se va descalzo y hay agua hasta la rodilla: pantalón remangable.</li>
+      <li><span class="t">TARDE</span>Ginza: Lemon-sha y Katsumido (cámaras clásicas), papelería <a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Itoya+Ginza" target="_blank" rel="noopener">Itoya</a>.</li>
+      <li><span class="t">NOCHE</span>Yakitori y cerveza bajo las vías en los <a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Yurakucho+gado-shita" target="_blank" rel="noopener">gado-shita de Yurakucho</a>.</li>
+    </ol></div>
+  </details>
+
+  <details class="day"><summary><span class="dot d-t"></span><span class="dnum">MAR 3 NOV</span><span class="dtit">Meiji Jingū · Harajuku · Shibuya Sky</span><span class="chev">›</span></summary>
+    <div class="dbody"><ol>
+      <li><span class="t">8:00</span><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Meiji+Jingu" target="_blank" rel="noopener">Meiji Jingū</a>. Es el Día de la Cultura (festivo): posibles ceremonias y demostraciones, y más ambiente del habitual.</li>
+      <li>Harajuku: Takeshita-dōri, Omotesandō y las callejuelas de Ura-Harajuku. Comida por Cat Street.</li>
+      <li><span class="t">TARDE</span>Cruce de <a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Shibuya+Crossing" target="_blank" rel="noopener">Shibuya</a> y Hachikō.</li>
+      <li><span class="t">15:30</span><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Shibuya+Sky" target="_blank" rel="noopener">Shibuya Sky</a> (entrada reservada): día, puesta de sol a las 16:40 con el Fuji al oeste si está despejado, y ciudad iluminada. Sin trípode; codos en el cristal para las nocturnas.</li>
+      <li><span class="t">NOCHE</span>Cena en Shibuya o vuelta a Shinjuku.</li>
+    </ol></div>
+  </details>
+
+  <details class="day"><summary><span class="dot d-t"></span><span class="dnum">MIÉ 4 NOV</span><span class="dtit">Día de cámaras: Nakano y Shinjuku</span><span class="chev">›</span></summary>
+    <div class="dbody"><ol>
+      <li><span class="t">10:00</span>Apertura de <a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Fujiya+Camera+Nakano" target="_blank" rel="noopener">Fujiya Camera</a> en Nakano: edificio principal y satélites, incluida la sección junk.</li>
+      <li><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Nakano+Broadway" target="_blank" rel="noopener">Nakano Broadway</a>: coleccionismo, manga antiguo, relojes. Comida en la galería.</li>
+      <li><span class="t">TARDE</span>Shinjuku: <a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Map+Camera+Shinjuku" target="_blank" rel="noopener">Map Camera</a> (stock consultado la víspera en mapcamera.com) y Kitamura a 200 m. Tax free con pasaporte desde 5.000 ¥ por tienda.</li>
+      <li><span class="t">NOCHE</span>Despedida de Tokio: <a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Golden+Gai+Shinjuku" target="_blank" rel="noopener">Golden Gai</a> y última ronda en Omoide Yokochō.</li>
+    </ol>
+    <p class="hint">Facturas todas juntas. Si superáis 430 € de compras por persona, repartid artículos entre los dos pasaportes en el momento de pagar.</p></div>
+  </details>
+
+  <details class="day"><summary><span class="dot d-k"></span><span class="dnum">JUE 5 NOV</span><span class="dtit">Última mañana en Tokio · tren a Kanazawa</span><span class="chev">›</span></summary>
+    <div class="dbody"><ol>
+      <li><span class="t">MAÑANA</span>Libre: <a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Shinjuku+Gyoen" target="_blank" rel="noopener">Shinjuku Gyoen</a>, compras pendientes o un kissaten de desayuno largo.</li>
+      <li><span class="t">~13:00</span>Hokuriku shinkansen Kagayaki, Tokio → Kanazawa, 2 h 30. Asiento reservado, lado izquierdo para las montañas.</li>
+      <li><span class="t">ANOCHECER</span><a class="map mc-k" href="https://www.google.com/maps/search/?api=1&query=Higashi+Chaya+District+Kanazawa" target="_blank" rel="noopener">Higashi Chaya</a> iluminado y semivacío.</li>
+      <li><span class="t">NOCHE</span>Izakaya en Katamachi: jibu-ni (guiso de pato local) y sake de la región.</li>
+    </ol></div>
+  </details>
+
+  <details class="day"><summary><span class="dot d-k"></span><span class="dnum">VIE 6 NOV</span><span class="dtit">Shirakawa-gō</span><span class="chev">›</span></summary>
+    <div class="dbody"><ol>
+      <li><span class="t">8:40</span>Bus Nohi desde la estación (billete comprado el 6 de octubre), 1 h 15.</li>
+      <li>Primero el <a class="map mc-k" href="https://www.google.com/maps/search/?api=1&query=Shiroyama+Viewpoint+Shirakawa-go" target="_blank" rel="noopener">mirador de Shiroyama</a> para la vista general; luego el pueblo y el interior de la <a class="map mc-k" href="https://www.google.com/maps/search/?api=1&query=Wada+House+Shirakawa-go" target="_blank" rel="noopener">casa Wada</a>. Momiji en pleno color en el valle.</li>
+      <li>Comida en el pueblo (soba, brocheta de hida beef). Bus de vuelta hacia las 14:50.</li>
+      <li><span class="t">TARDE</span><a class="map mc-k" href="https://www.google.com/maps/search/?api=1&query=Nagamachi+Samurai+District" target="_blank" rel="noopener">Nagamachi</a> (barrio samurái, casa Nomura) y <a class="map mc-k" href="https://www.google.com/maps/search/?api=1&query=Omicho+Market+Kanazawa" target="_blank" rel="noopener">Ōmichō</a> antes del cierre (~17:00).</li>
+      <li><span class="t">NOCHE</span>Sushi o kaisendon: el mejor pescado del viaje. Es la noche de gastar un poco más.</li>
+    </ol></div>
+  </details>
+
+  <details class="day"><summary><span class="dot d-y"></span><span class="dnum">SÁB 7 NOV</span><span class="dtit">Kenroku-en · tren a Kioto · Gion</span><span class="chev">›</span></summary>
+    <div class="dbody"><ol>
+      <li><span class="t">8:00</span><a class="map mc-k" href="https://www.google.com/maps/search/?api=1&query=Kenrokuen+Garden" target="_blank" rel="noopener">Kenroku-en</a> recién abierto, con los yukitsuri ya montados. Portones del castillo contiguo.</li>
+      <li><span class="t">~12:30</span>Shinkansen a Tsuruga + expreso Thunderbird a Kioto, 2 h 15 en total (transbordo en la misma estación).</li>
+      <li><span class="t">TARDE</span>Check-in en Karasuma. <a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Nishiki+Market+Kyoto" target="_blank" rel="noopener">Mercado de Nishiki</a> y calles adyacentes.</li>
+      <li><span class="t">ANOCHECER</span>Pontochō y el canal de <a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Shirakawa+Lane+Gion" target="_blank" rel="noopener">Shirakawa en Gion</a> iluminado. Cena de obanzai una calle por detrás de Pontochō.</li>
+    </ol></div>
+  </details>
+
+  <details class="day"><summary><span class="dot d-y"></span><span class="dnum">DOM 8 NOV</span><span class="dtit">Fushimi Inari (madrugón 1) · Higashiyama</span><span class="chev">›</span></summary>
+    <div class="dbody"><ol>
+      <li><span class="t">7:00</span><a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Fushimi+Inari+Taisha" target="_blank" rel="noopener">Fushimi Inari</a>: los diez mil torii sin gente solo existen a esta hora. Subir al menos hasta Yotsutsuji (40 min).</li>
+      <li><span class="t">MAÑANA</span><a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Tofukuji+Temple" target="_blank" rel="noopener">Tōfuku-ji</a>, a una parada: su valle de arces es de los primeros en encenderse.</li>
+      <li><span class="t">TARDE</span><a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Kiyomizu-dera" target="_blank" rel="noopener">Kiyomizu-dera</a> y bajada por Sannenzaka y Ninenzaka hasta Gion al anochecer.</li>
+      <li><span class="t">NOCHE</span>Si la iluminación de otoño está activa (confirmar web esa semana), volver a entrar de noche en Kiyomizu o Kōdai-ji.</li>
+    </ol></div>
+  </details>
+
+  <details class="day"><summary><span class="dot d-y"></span><span class="dnum">LUN 9 NOV</span><span class="dtit">Arashiyama (madrugón 2) · Kinkaku-ji</span><span class="chev">›</span></summary>
+    <div class="dbody"><ol>
+      <li><span class="t">8:00</span><a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Arashiyama+Bamboo+Grove" target="_blank" rel="noopener">Bosque de bambú</a> antes de las 8:30 (tren JR desde Kioto estación, 15 min).</li>
+      <li><a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Tenryuji+Temple" target="_blank" rel="noopener">Tenryū-ji</a>, puente Togetsukyō y, para huir del gentío, el diminuto <a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Gioji+Temple+Kyoto" target="_blank" rel="noopener">Giō-ji</a> (musgo y arces). Comida de tofu, especialidad de la zona.</li>
+      <li><span class="t">TARDE</span><a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Kinkakuji" target="_blank" rel="noopener">Kinkaku-ji</a> con el sol bajo y <a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Ryoanji+Temple" target="_blank" rel="noopener">Ryōan-ji</a>, a 20 min a pie entre ambos.</li>
+      <li><span class="t">NOCHE</span>Libre: cena tranquila, o un sentō de barrio para la nostalgia del onsen.</li>
+    </ol></div>
+  </details>
+
+  <details class="day"><summary><span class="dot d-y"></span><span class="dnum">MAR 10 NOV</span><span class="dtit">Nara</span><span class="chev">›</span></summary>
+    <div class="dbody"><ol>
+      <li><span class="t">MAÑANA</span>Tren Kintetsu o JR a Nara, 45 min. <a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Todaiji+Temple+Nara" target="_blank" rel="noopener">Tōdai-ji</a>: el gran Buda de 15 m. Ciervos por todo el parque (guardad mapas y papeles: se los comen).</li>
+      <li><a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Kasuga+Taisha" target="_blank" rel="noopener">Kasuga-taisha</a> y su bosque de linternas de piedra. Comida en Naramachi.</li>
+      <li><span class="t">TARDE</span>Vuelta a Kioto.</li>
+      <li><span class="t">17:30</span>Si <a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Eikando+Temple+Kyoto" target="_blank" rel="noopener">Eikan-dō</a> ya abre su iluminación nocturna (suele arrancar a mediados de mes), es la noche de ir: el momiji nocturno por excelencia.</li>
+    </ol></div>
+  </details>
+
+  <details class="day"><summary><span class="dot d-o"></span><span class="dnum">MIÉ 11 NOV</span><span class="dtit">Kaiseki de mediodía · noche en Osaka</span><span class="chev">›</span></summary>
+    <div class="dbody"><ol>
+      <li><span class="t">MAÑANA</span>Sin prisa. La comida importante del viaje: kaiseki de mediodía reservado (5.000 a 8.000 ¥). Alternativa: última vuelta por Nishiki.</li>
+      <li><span class="t">~15:00</span>Tren de cercanías a Osaka (30 min) + metro a Namba. Check-in.</li>
+      <li><span class="t">TARDE</span><a class="map mc-o" href="https://www.google.com/maps/search/?api=1&query=Shinsekai+Osaka" target="_blank" rel="noopener">Shinsekai</a>: la torre Tsūtenkaku y el barrio retro. Kushikatsu en Daruma como primera ronda.</li>
+      <li><span class="t">NOCHE</span><a class="map mc-o" href="https://www.google.com/maps/search/?api=1&query=Dotonbori+Osaka" target="_blank" rel="noopener">Dōtonbori</a>: el corredor de Glico, el canal y los neones desde el puente Ebisubashi. Segunda ronda en Ura-Namba.</li>
+    </ol></div>
+  </details>
+
+  <details class="day"><summary><span class="dot d-x"></span><span class="dnum">JUE 12 NOV</span><span class="dtit">Vuelta</span><span class="chev">›</span></summary>
+    <div class="dbody"><ol>
+      <li>Tren Nankai de Namba al aeropuerto de Kansai, 40 a 45 min. En el aeropuerto 3 h antes: el tax free puede requerir mostrar los artículos en aduana a la salida.</li>
+      <li>Llegada a España la misma tarde o noche. Cinco días de margen antes de Lovaina: jet lag resuelto.</li>
+    </ol></div>
+  </details>
+</section>
+
+<!-- ================= CIUDADES ================= -->
+<section class="pane" id="ciudades">
+  <h2>Qué ver en cada ciudad</h2>
+  <p class="sub">Cada tarjeta abre su ubicación (y fotos) en Google Maps con un toque.</p>
+
+  <div class="cityhead">
+    <svg viewBox="0 0 880 120" role="img" aria-label="Silueta de Tokio"><rect width="880" height="120" fill="#EFF3E4"/><g fill="#679B10" opacity=".85"><rect x="60" y="55" width="46" height="65"/><rect x="120" y="35" width="34" height="85"/><rect x="168" y="62" width="52" height="58"/><rect x="240" y="25" width="30" height="95"/><rect x="290" y="48" width="44" height="72"/><rect x="520" y="40" width="38" height="80"/><rect x="574" y="58" width="50" height="62"/><rect x="644" y="30" width="32" height="90"/><rect x="696" y="52" width="46" height="68"/><rect x="762" y="44" width="36" height="76"/><path d="M430 20 L410 120 L450 120 Z"/><rect x="424" y="50" width="12" height="6" fill="#EFF3E4"/><rect x="418" y="80" width="24" height="6" fill="#EFF3E4"/></g></svg>
+    <div class="citysign"><span class="romaji">Tokio</span><span class="kj">東京</span><span class="n">5 NOCHES · SHINJUKU</span></div>
+    <div class="cityband cb-t"></div>
+  </div>
+  <div class="grid">
+    <div class="spot"><span class="tag">Templo</span><b>Sensō-ji, Asakusa</b><p>El templo más antiguo de la ciudad. A las 7:30 o de noche iluminado; a mediodía, marabunta.</p><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Sensoji+Asakusa" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot"><span class="tag">Barrio</span><b>Yanaka</b><p>Casas bajas, templos de barrio y la escalera del atardecer. El contrapunto tranquilo al neón.</p><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Yanaka+Ginza" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot"><span class="tag">Mercado</span><b>Tsukiji exterior</b><p>Desayuno de puesto en puesto. Ir antes de las 9:00 y con hambre.</p><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Tsukiji+Outer+Market" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot"><span class="tag">Arte</span><b>teamLab Planets</b><p>Arte digital inmersivo en Toyosu. Descalzos y con agua hasta la rodilla en una sala. Reservar franja.</p><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=teamLab+Planets" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot"><span class="tag">Santuario</span><b>Meiji Jingū</b><p>Bosque de 100.000 árboles en mitad de la ciudad. Ceremonias sintoístas casi cualquier mañana.</p><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Meiji+Jingu" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot"><span class="tag">Mirador</span><b>Shibuya Sky</b><p>Azotea abierta a 230 m sobre el cruce. Entrada de las 15:30: día, ocaso y noche en una sola visita.</p><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Shibuya+Sky" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot"><span class="tag">Noche</span><b>Golden Gai y Omoide Yokochō</b><p>Doscientos bares de seis taburetes y callejones de yakitori con humo. La noche fotográfica de Shinjuku.</p><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Golden+Gai" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot"><span class="tag">Gratis</span><b>Mirador del Gobierno Metropolitano</b><p>Vistas a 202 m sin pagar, con el Fuji al oeste si está despejado. Comodín para cualquier hueco.</p><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Tokyo+Metropolitan+Government+Building+Observatory" target="_blank" rel="noopener">Maps</a></div>
+  </div>
+
+  <div class="cityhead">
+    <svg viewBox="0 0 880 120" role="img" aria-label="Silueta de Kanazawa"><rect width="880" height="120" fill="#E8EDF5"/><g fill="#2C5387" opacity=".85"><path d="M180 120 L260 45 L340 120 Z"/><path d="M400 120 L490 30 L580 120 Z"/><path d="M620 120 L690 55 L760 120 Z"/><path d="M100 120 Q120 70 140 120 Z"/><circle cx="120" cy="62" r="16"/><path d="M120 46 L104 90 M120 46 L136 90 M120 46 L112 92 M120 46 L128 92" stroke="#2C5387" stroke-width="2" fill="none"/></g></svg>
+    <div class="citysign"><span class="romaji">Kanazawa</span><span class="kj">金沢</span><span class="n">2 NOCHES · ESTACIÓN</span></div>
+    <div class="cityband cb-k"></div>
+  </div>
+  <div class="grid">
+    <div class="spot"><span class="tag">Jardín</span><b>Kenroku-en</b><p>Uno de los tres grandes jardines de Japón. En noviembre, con los yukitsuri montados y momiji. A las 8:00.</p><a class="map mc-k" href="https://www.google.com/maps/search/?api=1&query=Kenrokuen" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot"><span class="tag">Barrio</span><b>Higashi Chaya</b><p>Casas de té de geishas del XIX. Iluminado y casi vacío al anochecer.</p><a class="map mc-k" href="https://www.google.com/maps/search/?api=1&query=Higashi+Chaya" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot"><span class="tag">Barrio</span><b>Nagamachi</b><p>Muros de adobe del barrio samurái. La casa Nomura, visitable, con jardín interior.</p><a class="map mc-k" href="https://www.google.com/maps/search/?api=1&query=Nomura+Samurai+House" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot"><span class="tag">Mercado</span><b>Ōmichō</b><p>El mercado del mar de Japón: cangrejo, erizo, amaebi. Kaisendon a mediodía. Cierra ~17:00.</p><a class="map mc-k" href="https://www.google.com/maps/search/?api=1&query=Omicho+Market" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot"><span class="tag">Excursión</span><b>Shirakawa-gō</b><p>Aldea de casas gassho-zukuri, patrimonio UNESCO, a 1 h 15 en bus. Mirador de Shiroyama primero.</p><a class="map mc-k" href="https://www.google.com/maps/search/?api=1&query=Shirakawa-go" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot"><span class="tag">Arte</span><b>Museo del Siglo XXI</b><p>Arte contemporáneo en edificio circular de SANAA, con la famosa piscina de Leandro Erlich. Opcional.</p><a class="map mc-k" href="https://www.google.com/maps/search/?api=1&query=21st+Century+Museum+Kanazawa" target="_blank" rel="noopener">Maps</a></div>
+  </div>
+
+  <div class="cityhead">
+    <svg viewBox="0 0 880 120" role="img" aria-label="Torii de Kioto"><rect width="880" height="120" fill="#EFEAF3"/><g fill="#6C4F82" opacity=".9"><path d="M300 34 L580 34 L586 50 L294 50 Z"/><rect x="320" y="50" width="18" height="70"/><rect x="542" y="50" width="18" height="70"/><rect x="308" y="62" width="264" height="10"/><path d="M290 30 Q440 16 590 30 L590 36 Q440 22 290 36 Z"/></g><g fill="#6C4F82" opacity=".35"><circle cx="140" cy="70" r="20"/><circle cx="118" cy="86" r="14"/><circle cx="740" cy="66" r="22"/><circle cx="766" cy="86" r="13"/></g></svg>
+    <div class="citysign"><span class="romaji">Kioto</span><span class="kj">京都</span><span class="n">4 NOCHES · KARASUMA</span></div>
+    <div class="cityband cb-y"></div>
+  </div>
+  <div class="grid">
+    <div class="spot"><span class="tag">Madrugón</span><b>Fushimi Inari</b><p>Los túneles de torii, a las 7:00 o nunca. Subir hasta Yotsutsuji: vistas y ya sin gente.</p><a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Fushimi+Inari+Taisha" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot"><span class="tag">Madrugón</span><b>Arashiyama</b><p>Bambú antes de las 8:30, jardín de Tenryū-ji contra las montañas, y Giō-ji para el musgo sin multitudes.</p><a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Arashiyama+Bamboo+Grove" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot"><span class="tag">Templo</span><b>Kiyomizu-dera</b><p>La terraza de madera sobre el valle. Bajada por Sannenzaka y Ninenzaka. Iluminación nocturna de otoño.</p><a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Kiyomizu-dera" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot"><span class="tag">Templo</span><b>Kinkaku-ji y Ryōan-ji</b><p>El Pabellón Dorado (mejor luz de tarde) y el jardín seco de quince rocas, a 20 min a pie entre sí.</p><a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Kinkakuji" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot"><span class="tag">Momiji</span><b>Tōfuku-ji y Eikan-dō</b><p>Los dos grandes escenarios de arces: Tōfuku-ji de día, Eikan-dō iluminado de noche si ya está abierto.</p><a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Eikando" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot"><span class="tag">Barrio</span><b>Gion y Pontochō</b><p>Hanamikōji, el canal de Shirakawa iluminado y el callejón de Pontochō sobre el río Kamo.</p><a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Gion+Kyoto" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot"><span class="tag">Excursión</span><b>Nara</b><p>Tōdai-ji con el gran Buda, ciervos en libertad y el bosque de linternas de Kasuga-taisha. Día completo.</p><a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Nara+Park" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot"><span class="tag">Mercado</span><b>Nishiki</b><p>La despensa de Kioto: encurtidos, tofu, matcha, cuchillos. Para picar y para comprar.</p><a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Nishiki+Market" target="_blank" rel="noopener">Maps</a></div>
+  </div>
+
+  <div class="cityhead">
+    <svg viewBox="0 0 880 120" role="img" aria-label="Neones de Osaka"><rect width="880" height="120" fill="#1B1B1F"/><rect y="92" width="880" height="28" fill="#2A2A31"/><g><rect x="120" y="24" width="120" height="52" rx="6" fill="none" stroke="#D6301F" stroke-width="4"/><rect x="280" y="36" width="90" height="40" rx="6" fill="none" stroke="#F2B705" stroke-width="4"/><rect x="410" y="20" width="70" height="56" rx="6" fill="none" stroke="#2C9BD6" stroke-width="4"/><rect x="520" y="34" width="130" height="42" rx="6" fill="none" stroke="#D6301F" stroke-width="4"/><rect x="690" y="26" width="80" height="50" rx="6" fill="none" stroke="#4CAF6D" stroke-width="4"/><path d="M170 40 L160 62 L172 58 L164 76" stroke="#F2B705" stroke-width="4" fill="none"/></g><g opacity=".5"><rect x="120" y="98" width="120" height="4" fill="#D6301F"/><rect x="280" y="98" width="90" height="4" fill="#F2B705"/><rect x="520" y="98" width="130" height="4" fill="#D6301F"/></g></svg>
+    <div class="citysign"><span class="romaji">Osaka</span><span class="kj">大阪</span><span class="n">1 NOCHE · NAMBA</span></div>
+    <div class="cityband cb-o"></div>
+  </div>
+  <div class="grid">
+    <div class="spot"><span class="tag">Noche</span><b>Dōtonbori</b><p>El canal, el corredor de Glico y la mayor densidad de neón del país. Disparar desde el puente Ebisubashi.</p><a class="map mc-o" href="https://www.google.com/maps/search/?api=1&query=Dotonbori" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot"><span class="tag">Barrio</span><b>Shinsekai</b><p>El barrio retro de posguerra bajo la torre Tsūtenkaku. Kushikatsu y ambiente de otra década.</p><a class="map mc-o" href="https://www.google.com/maps/search/?api=1&query=Shinsekai" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot"><span class="tag">Noche</span><b>Ura-Namba</b><p>Callejones de barras diminutas donde cenan los locales, sin carta en inglés. Esa es la señal buena.</p><a class="map mc-o" href="https://www.google.com/maps/search/?api=1&query=Ura+Namba" target="_blank" rel="noopener">Maps</a></div>
+  </div>
+</section>
+
+<!-- ================= TRENES ================= -->
+<section class="pane" id="trenes">
+  <h2>Trenes y buses</h2>
+  <p class="sub">Sin JR Pass: no compensa en esta ruta. Los shinkansen se compran en máquina o en la app Eki-Net / SmartEX unos días antes, con asiento reservado. Precios por persona.</p>
+  <table>
+    <thead><tr><th>Día</th><th>Trayecto</th><th>Servicio</th><th>Salida</th><th>Duración</th><th>Precio</th><th>Nota</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">31 OCT</td><td>Haneda → Shinjuku</td><td>Monorraíl + Yamanote, o bus limusina</td><td class="mono">al llegar</td><td class="mono">45–60 min</td><td class="mono">~700 ¥ / 1.400 ¥</td><td class="note">Con Suica, sin billete</td></tr>
+      <tr><td class="mono">5 NOV</td><td>Tokio → Kanazawa</td><td>Hokuriku shinkansen Kagayaki</td><td class="mono">~13:00</td><td class="mono">2 h 30</td><td class="mono">~14.400 ¥ (78 €)</td><td class="note">Salidas cada 20 a 40 min. Lado izquierdo: montañas</td></tr>
+      <tr><td class="mono">6 NOV</td><td>Kanazawa ⇄ Shirakawa-gō</td><td>Bus Nohi / Hokutetsu</td><td class="mono">8:40 / vuelta ~14:50</td><td class="mono">1 h 15</td><td class="mono">~2.600 ¥ por trayecto</td><td class="note">Reservado el 6 OCT, asiento asignado</td></tr>
+      <tr><td class="mono">7 NOV</td><td>Kanazawa → Kioto</td><td>Shinkansen a Tsuruga + Thunderbird</td><td class="mono">~12:30</td><td class="mono">2 h 15</td><td class="mono">~8.000 ¥ (43 €)</td><td class="note">Transbordo en Tsuruga, mismo edificio</td></tr>
+      <tr><td class="mono">10 NOV</td><td>Kioto ⇄ Nara</td><td>Kintetsu o JR Nara line</td><td class="mono">mañana</td><td class="mono">45 min</td><td class="mono">~760 ¥ por trayecto</td><td class="note">Kintetsu deja más cerca del parque</td></tr>
+      <tr><td class="mono">11 NOV</td><td>Kioto → Namba (Osaka)</td><td>JR Special Rapid + metro Midōsuji</td><td class="mono">~15:00</td><td class="mono">30 + 10 min</td><td class="mono">~820 ¥</td><td class="note">Cercanías, sin reserva</td></tr>
+      <tr><td class="mono">12 NOV</td><td>Namba → Aeropuerto KIX</td><td>Nankai (exprés o Rapi:t)</td><td class="mono">3 h antes del vuelo</td><td class="mono">40–45 min</td><td class="mono">970 / 1.490 ¥</td><td class="note">Sale de la propia Namba</td></tr>
+    </tbody>
+  </table>
+  <h3>Reglas rápidas</h3>
+  <div class="info">Suica cubre todo lo urbano (metro, buses, cercanías) en las cuatro ciudades; solo los shinkansen, el Thunderbird y el bus de montaña necesitan billete propio. Google Maps da horarios de tren exactos en tiempo real en Japón: es la herramienta de navegación ferroviaria, no solo de calles.</div>
+</section>
+
+<!-- ================= COMER ================= -->
+<section class="pane" id="comer">
+  <h2>Dónde comer</h2>
+  <p class="sub">Filtro fiable: Tabelog por encima de 3,5. Cola a la vista y carta solo en japonés son buenas señales. Precios por persona.</p>
+  <div class="chips" role="tablist" aria-label="Filtrar por ciudad">
+    <button class="on" data-f="all">Todas</button>
+    <button data-f="f-t">Tokio</button>
+    <button data-f="f-k">Kanazawa</button>
+    <button data-f="f-y">Kioto</button>
+    <button data-f="f-o">Osaka</button>
+  </div>
+  <div class="grid">
+    <div class="spot food show f-t"><span class="tag">Tokio · Yakitori</span><b>Omoide Yokochō</b><p>Callejón de posguerra junto a Shinjuku: humo, brochetas y cerveza. 2.000 a 3.500 ¥.</p><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Omoide+Yokocho" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot food show f-t"><span class="tag">Tokio · Yakitori</span><b>Gado-shita de Yurakucho</b><p>Bajo las vías del tren, entre Yurakucho y Shimbashi. Muy fotogénico de noche. 2.500 a 4.000 ¥.</p><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Yurakucho+Sanchoku+Inshokugai" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot food show f-t"><span class="tag">Tokio · Ramen</span><b>Fuunji</b><p>El tsukemen de referencia de Shinjuku. Cola de 30 a 45 min que avanza rápido. ~1.200 ¥.</p><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Fuunji+Shinjuku" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot food show f-t"><span class="tag">Tokio · Ramen</span><b>Nakiryu</b><p>Estrella Michelin a precio de bol de ramen: tantanmen por ~1.300 ¥ en Otsuka. Cola asumible entre semana.</p><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Nakiryu+Otsuka" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot food show f-t"><span class="tag">Tokio · Sushi</span><b>Uogashi Nihon-Ichi</b><p>Sushi de pie en barra: calidad seria a 2.000 a 3.500 ¥, sin reserva. Varias sedes (Shinjuku, Shibuya).</p><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Uogashi+Nihon-Ichi+Shinjuku" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot food show f-t"><span class="tag">Tokio · Mercado</span><b>Depachika de Isetan</b><p>El sótano gastronómico de los grandes almacenes de Shinjuku: bento de nivel para comer en un parque.</p><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Isetan+Shinjuku" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot food show f-t"><span class="tag">Tokio · Café</span><b>Chatei Hatou</b><p>Kissaten clásico de Shibuya: café de sifón, madera oscura y tiempo detenido. Para un desayuno largo.</p><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Chatei+Hatou+Shibuya" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot food show f-k"><span class="tag">Kanazawa · Marisco</span><b>Mercado de Ōmichō</b><p>Kaisendon con pescado del mar de Japón, 2.000 a 3.000 ¥ a mediodía. El mejor género del viaje.</p><a class="map mc-k" href="https://www.google.com/maps/search/?api=1&query=Omicho+Market" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot food show f-k"><span class="tag">Kanazawa · Izakaya</span><b>Itaru (Katamachi)</b><p>Izakaya emblemática de producto local: sashimi, jibu-ni y sake de la región. Reservar o ir al abrir. 4.000 a 6.000 ¥.</p><a class="map mc-k" href="https://www.google.com/maps/search/?api=1&query=Itaru+Honten+Kanazawa" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot food show f-y"><span class="tag">Kioto · Kaiseki</span><b>Kaiseki de mediodía</b><p>La misma alta cocina que a la cena, a un tercio del precio: 5.000 a 8.000 ¥. Reservar vía TableCheck la última semana de octubre.</p><a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=kaiseki+lunch+Gion+Kyoto" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot food show f-y"><span class="tag">Kioto · Soba</span><b>Honke Owariya</b><p>Casa de soba fundada en 1465, proveedora del templo. Menú de fideos por 1.500 a 2.500 ¥.</p><a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=Honke+Owariya+Kyoto" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot food show f-y"><span class="tag">Kioto · Obanzai</span><b>Detrás de Pontochō</b><p>Cocina casera kiotense de platillos en locales pequeños una calle por detrás del callejón. Dentro de Pontochō, precios de turista.</p><a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=obanzai+Kyoto" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot food show f-y"><span class="tag">Kioto · Tofu</span><b>Yudōfu en Arashiyama</b><p>La especialidad de la zona de templos: tofu artesano en caldo, comida ligera perfecta tras el madrugón.</p><a class="map mc-y" href="https://www.google.com/maps/search/?api=1&query=yudofu+Arashiyama" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot food show f-o"><span class="tag">Osaka · Okonomiyaki</span><b>Mizuno</b><p>En el propio Dōtonbori desde 1945. Cola, pero merece. ~1.500 ¥.</p><a class="map mc-o" href="https://www.google.com/maps/search/?api=1&query=Mizuno+Dotonbori" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot food show f-o"><span class="tag">Osaka · Kushikatsu</span><b>Daruma (Shinsekai)</b><p>La casa clásica de las brochetas rebozadas. Regla sagrada: la salsa no se moja dos veces. 2.000 a 3.000 ¥.</p><a class="map mc-o" href="https://www.google.com/maps/search/?api=1&query=Kushikatsu+Daruma+Shinsekai" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot food show f-o"><span class="tag">Osaka · Takoyaki</span><b>Wanaka (Namba)</b><p>Bolas de pulpo de puesto, recién hechas y ardiendo. El cierre callejero del viaje. ~600 ¥.</p><a class="map mc-o" href="https://www.google.com/maps/search/?api=1&query=Takoyaki+Wanaka+Namba" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot food show f-o"><span class="tag">Osaka · Barras</span><b>Ura-Namba</b><p>Callejones de barras minúsculas donde cenan los locales. Entrar donde haya hueco y señalar lo que coma el vecino.</p><a class="map mc-o" href="https://www.google.com/maps/search/?api=1&query=Ura+Namba" target="_blank" rel="noopener">Maps</a></div>
+  </div>
+</section>
+
+<!-- ================= CÁMARAS ================= -->
+<section class="pane" id="camaras">
+  <h2>Cámaras de segunda mano</h2>
+  <p class="sub">Día asignado: miércoles 4 de noviembre. Gradación japonesa (A, AB, B) estricta y fiable. Tax free con pasaporte a partir de 5.000 ¥ por tienda: descuentan el 10 % en caja.</p>
+  <div class="grid">
+    <div class="spot"><span class="tag">Nakano</span><b>Fujiya Camera</b><p>La referencia histórica: edificio principal más satélites en la misma calle, con sección junk de saldos donde aparecen joyas mecánicas.</p><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Fujiya+Camera+Nakano" target="_blank" rel="noopener">Maps</a> · <a class="map mc-t" href="https://www.fujiya-camera.co.jp" target="_blank" rel="noopener">Web</a></div>
+    <div class="spot"><span class="tag">Nakano</span><b>Nakano Broadway</b><p>Centro comercial de los 60: coleccionismo, manga antiguo, relojes, juguetes. A 5 min de Fujiya y muy fotografiable en sí mismo.</p><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Nakano+Broadway" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot"><span class="tag">Shinjuku</span><b>Map Camera</b><p>La mayor tienda de usado de Japón, seis plantas. Consultar stock online la víspera y localizar las piezas objetivo.</p><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Map+Camera+Shinjuku" target="_blank" rel="noopener">Maps</a> · <a class="map mc-t" href="https://www.mapcamera.com" target="_blank" rel="noopener">Stock</a></div>
+    <div class="spot"><span class="tag">Shinjuku</span><b>Kitamura Camera</b><p>Flagship a 200 m de Map Camera con una planta entera de usado. Segunda opinión de precios inmediata.</p><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Camera+no+Kitamura+Shinjuku" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot"><span class="tag">Ginza</span><b>Lemon-sha</b><p>Territorio de coleccionista: telémetros, Leica, ópticas antiguas. Precios más altos, piezas que no hay en otro sitio.</p><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Lemon+camera+Ginza" target="_blank" rel="noopener">Maps</a></div>
+    <div class="spot"><span class="tag">Ginza</span><b>Katsumido</b><p>Clásicas de vitrina en estado de museo. Encaja en la tarde de Ginza del lunes 2.</p><a class="map mc-t" href="https://www.google.com/maps/search/?api=1&query=Katsumido+Camera+Ginza" target="_blank" rel="noopener">Maps</a></div>
+  </div>
+  <h3>Reglas de compra</h3>
+  <div class="info"><b>Aduana a la vuelta</b>Franquicia de 430 € por persona y por viaje, aplicable a artículos completos: no se combinan las dos franquicias para un mismo artículo, pero sí se reparten artículos distintos entre los dos pasaportes. Por encima, corresponde declarar: cámaras y objetivos tienen arancel 0 y tributan el 21 % de IVA sobre el valor íntegro. Guardad todas las facturas.</div>
+  <div class="info"><b>Comprobar antes de pagar</b>En usado: hongos y neblina en lentes (mirar a contraluz con la linterna del móvil), diafragma ágil, helicoide suave, contactos limpios. Las tiendas grandes dejan probar con cuerpo propio sin problema.</div>
+</section>
+
+<!-- ================= REQUISITOS ================= -->
+<section class="pane" id="requisitos">
+  <h2>Requisitos y reservas</h2>
+  <p class="sub" id="progtxt">Marcad lo que ya esté hecho. La lista no se guarda al recargar: es una guía de sesión, la referencia definitiva es vuestra.</p>
+  <div class="prog" id="prog">0 de 12 completados</div>
+  <ul class="check" id="cklist">
+    <li><input type="checkbox" id="c1"><label for="c1"><b>Vuelo multidestino</b> Madrid → Tokio HND (30 oct) y Osaka KIX → Madrid (12 nov), con maleta facturada.<span class="when">YA · objetivo 700 a 950 € por persona</span></label></li>
+    <li><input type="checkbox" id="c2"><label for="c2"><b>teamLab Planets</b>, franja de media mañana del lunes 2 de noviembre.<span class="when">YA · ya está a la venta</span></label></li>
+    <li><input type="checkbox" id="c3"><label for="c3"><b>Hoteles</b>: Shinjuku (5 noches), Kanazawa estación (2), Kioto Karasuma (4), Namba (1). Con cancelación gratuita.<span class="when">PRÓXIMAS 2 SEMANAS</span></label></li>
+    <li><input type="checkbox" id="c4"><label for="c4"><b>Shibuya Sky</b>, franja de las 15:30 del martes 3 de noviembre.<span class="when">PRIMERA SEMANA DE OCTUBRE (venta con 4 semanas)</span></label></li>
+    <li><input type="checkbox" id="c5"><label for="c5"><b>Bus Kanazawa ⇄ Shirakawa-gō</b> ida y vuelta para el 6 de noviembre.<span class="when">6 DE OCTUBRE, el día que abre la reserva</span></label></li>
+    <li><input type="checkbox" id="c6"><label for="c6"><b>Seguro de viaje</b> con 100.000 € o más de cobertura médica. La Tarjeta Sanitaria Europea no vale en Japón.<span class="when">OCTUBRE · 40 a 70 € por persona</span></label></li>
+    <li><input type="checkbox" id="c7"><label for="c7"><b>Kaiseki de mediodía</b> en Kioto para el 11 de noviembre (TableCheck).<span class="when">ÚLTIMA SEMANA DE OCTUBRE</span></label></li>
+    <li><input type="checkbox" id="c8"><label for="c8"><b>Visit Japan Web</b>: registro de inmigración y aduana, genera el QR de llegada.<span class="when">SEMANA PREVIA AL VUELO</span></label></li>
+    <li><input type="checkbox" id="c9"><label for="c9"><b>eSIM de datos</b> (Ubigi, Airalo o similar), 10 a 20 GB, instalada antes de salir.<span class="when">SEMANA PREVIA · 15 a 25 €</span></label></li>
+    <li><input type="checkbox" id="c10"><label for="c10"><b>Pasaportes en vigor</b> (el DNI no vale para entrar en Japón). Sin visado para turismo hasta 90 días.<span class="when">COMPROBAR YA por si hay que renovar</span></label></li>
+    <li><input type="checkbox" id="c11"><label for="c11"><b>Suica</b>: en Apple Wallet cargada desde casa; en Android europeo, Welcome Suica física al llegar a Haneda.<span class="when">SEMANA PREVIA / AL LLEGAR</span></label></li>
+    <li><input type="checkbox" id="c12"><label for="c12"><b>Dinero</b>: tarjeta sin comisiones de cambio y plan de efectivo (cajeros 7-Eleven allí, ~300 a 400 € en yenes por persona en total).<span class="when">ANTES DE SALIR</span></label></li>
+  </ul>
+
+  <h3>Datos prácticos</h3>
+  <div class="info"><b>Clima (30 oct a 12 nov)</b>Tokio y Kioto: 6 a 9 °C por la mañana, 14 a 17 °C a mediodía, mayoría de días despejados. Shirakawa-gō: 2 a 5 °C a primera hora. Kanazawa: el punto con más probabilidad de lluvia. Maleta: capas, abrigo medio o plumas ligero, impermeable plegable y calzado muy cómodo (15 km diarios).</div>
+  <div class="info"><b>Luz</b>Amanece a las 6:15 y anochece a las 16:40. Exteriores por la mañana; la noche temprana es para neón e iluminaciones de templos (Kiyomizu, Kōdai-ji, Eikan-dō suelen abrirlas a mediados de noviembre: confirmar en sus webs esa semana).</div>
+  <div class="info"><b>Enchufes</b>Tipo A (clavija plana americana) y 100 V. Adaptador simple; los cargadores modernos aceptan 100 a 240 V sin transformador.</div>
+  <div class="info"><b>Normas de ambiente</b>No se come andando por la calle (se come junto al puesto), no se habla por teléfono en el tren, y las papeleras públicas casi no existen: bolsa propia para residuos del día.</div>
+  <div class="info warn"><b>El día de la vuelta</b>En Kansai, 3 horas antes del vuelo: el material comprado tax free puede tener que mostrarse en la aduana japonesa de salida. Y a la llegada a la UE, la franquicia de 430 € por persona (detalle en la pestaña Cámaras).</div>
+</section>
+
+<!-- ================= PRESUPUESTO ================= -->
+<section class="pane" id="presupuesto">
+  <h2>Presupuesto por persona</h2>
+  <p class="sub">Cambio de referencia: 1 € ≈ 185 ¥. Alojamiento como mitad de habitación doble.</p>
+  <table>
+    <thead><tr><th>Concepto</th><th>Rango</th><th>Nota</th></tr></thead>
+    <tbody>
+      <tr><td>Vuelos</td><td class="mono">700 – 950 €</td><td class="note">Multidestino HND / KIX con maleta; sumar conexión desde A Coruña</td></tr>
+      <tr><td>Alojamiento (12 noches)</td><td class="mono">600 – 850 €</td><td class="note">Hoteles 3★ tipo Dormy Inn, Mitsui Garden, Daiwa Roynet</td></tr>
+      <tr><td>Trenes y buses</td><td class="mono">~210 €</td><td class="note">Todos los trayectos de la pestaña Trenes, Suica incluida</td></tr>
+      <tr><td>Comida</td><td class="mono">480 – 580 €</td><td class="note">35 a 45 €/día comiendo muy bien, kaiseki incluido</td></tr>
+      <tr><td>Entradas y actividades</td><td class="mono">100 – 130 €</td><td class="note">teamLab, Shibuya Sky, templos (300 a 600 ¥ cada uno)</td></tr>
+      <tr><td>Seguro + eSIM</td><td class="mono">70 – 90 €</td><td class="note">No opcional el seguro</td></tr>
+    </tbody>
+  </table>
+  <p class="total">Total: 2.150 – 2.800 € por persona<small>Compras de Map Camera aparte, que esa partida no la estima nadie.</small></p>
+</section>
+
+</main>
+
+<footer><div class="wrap">GUÍA DE VIAJE · JAPÓN 2026 · TOKIO — KANAZAWA — KIOTO — OSAKA · Precios estimados a agosto de 2026, cambio 185 ¥/€</div></footer>
+
+<script>
+// Pestañas
+const tabs=document.querySelectorAll('nav button');
+const panes=document.querySelectorAll('section.pane');
+tabs.forEach(b=>b.addEventListener('click',()=>{
+  tabs.forEach(x=>x.classList.remove('on'));
+  panes.forEach(p=>p.classList.remove('on'));
+  b.classList.add('on');
+  document.getElementById(b.dataset.p).classList.add('on');
+  window.scrollTo({top:0});
+}));
+// Filtro de comida
+const chips=document.querySelectorAll('.chips button');
+chips.forEach(c=>c.addEventListener('click',()=>{
+  chips.forEach(x=>x.classList.remove('on'));
+  c.classList.add('on');
+  const f=c.dataset.f;
+  document.querySelectorAll('.food').forEach(el=>{
+    el.classList.toggle('show',f==='all'||el.classList.contains(f));
+  });
+}));
+// Checklist (estado en memoria de la sesión)
+const boxes=document.querySelectorAll('#cklist input');
+const prog=document.getElementById('prog');
+function upd(){
+  let n=0;
+  boxes.forEach(b=>{b.closest('li').classList.toggle('done',b.checked); if(b.checked)n++;});
+  prog.textContent=n+' de '+boxes.length+' completados';
+}
+boxes.forEach(b=>b.addEventListener('change',upd));
+upd();
+</script>
+</body>
+</html>
