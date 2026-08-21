@@ -48,7 +48,7 @@ main{max-width:1180px;margin:0 auto;padding:26px 24px 70px}
 .zone-title{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:1.15rem;color:var(--stone);margin:34px 0 14px;display:flex;align-items:baseline;gap:12px}
 .zone-title::after{content:"";flex:1;height:1px;background:var(--line)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:18px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s, transform .2s}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s, transform .2s;scroll-margin-top:70px}
 .card:hover{border-color:var(--teal)}
 .card.highlight{border-color:var(--moss);box-shadow:0 0 0 2px color-mix(in srgb,var(--moss) 35%,transparent)}
 .card-img{aspect-ratio:16/9;width:100%;object-fit:cover;display:block;background:var(--panel-2)}
@@ -236,7 +236,7 @@ PLACES.forEach(p => {
   const m = L.circleMarker([p.lat, p.lng], {
     radius:8, color:"#4fae97", weight:2, fillColor:"#a4c77e", fillOpacity:.85
   }).addTo(map);
-  m.bindPopup(`<b>${p.name}</b><br><a href="#card-${p.id}">Ver ficha ↓</a>`);
+  m.bindPopup(`<b>${p.name}</b><br><a href="#" class="popup-link" data-goto="${p.id}">Ver ficha ↓</a>`);
   markers[p.id] = m;
 });
 
@@ -289,12 +289,14 @@ function render(zoneFilter){
 }
 
 // ---- filtros ----
+let currentZone = "Todo";
 const chipsBox = document.getElementById("chips");
 ["Todo", ...ZONES].forEach((z, i) => {
   const b = document.createElement("button");
   b.className = "chip" + (i === 0 ? " active" : "");
   b.textContent = z;
   b.addEventListener("click", () => {
+    currentZone = z;
     chipsBox.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
     b.classList.add("active");
     render(z);
@@ -318,6 +320,31 @@ content.addEventListener("click", e => {
   document.getElementById("map").scrollIntoView({behavior:"smooth", block:"center"});
   document.querySelectorAll(".card.highlight").forEach(c => c.classList.remove("highlight"));
   document.getElementById(`card-${id}`).classList.add("highlight");
+});
+
+// ---- interacción mapa -> tarjeta ----
+function goToCard(id){
+  const p = PLACES.find(x => x.id === id);
+  if (!p) return;
+  // si el filtro activo oculta la ficha, restaurar "Todo"
+  if (currentZone !== "Todo" && currentZone !== p.zone) {
+    currentZone = "Todo";
+    chipsBox.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+    chipsBox.firstElementChild.classList.add("active");
+    render("Todo");
+  }
+  const card = document.getElementById(`card-${id}`);
+  if (!card) return;
+  document.querySelectorAll(".card.highlight").forEach(c => c.classList.remove("highlight"));
+  card.classList.add("highlight");
+  card.scrollIntoView({behavior:"smooth", block:"start"});
+}
+document.getElementById("map").addEventListener("click", e => {
+  const link = e.target.closest(".popup-link");
+  if (!link) return;
+  e.preventDefault();
+  e.stopPropagation();
+  goToCard(link.dataset.goto);
 });
 
 render("Todo");
