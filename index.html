@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cork y suroeste de Irlanda · 27 ago – 3 sep 2026</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1c18;        /* pizarra atlántica */
+  --panel:#172721;
+  --panel-2:#1d312a;
+  --line:#2b4237;
+  --text:#e9f0ea;
+  --muted:#9db3a6;
+  --moss:#a4c77e;      /* musgo */
+  --teal:#4fae97;      /* Atlántico */
+  --stone:#c9c2b2;     /* caliza */
+  --danger:#d98c6b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:"Public Sans",system-ui,sans-serif;line-height:1.55}
+header{padding:44px 24px 20px;max-width:1180px;margin:0 auto}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(2rem,5vw,3.4rem);line-height:1.05;margin:.35em 0 .3em}
+h1 em{font-style:normal;color:var(--moss)}
+.sub{color:var(--muted);max-width:62ch;font-size:.98rem}
+.meta-row{display:flex;gap:18px;flex-wrap:wrap;margin-top:16px;font-family:"IBM Plex Mono",monospace;font-size:.8rem;color:var(--stone)}
+.meta-row span b{color:var(--text);font-weight:500}
+
+.filters{position:sticky;top:0;z-index:1100;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-block:1px solid var(--line);padding:10px 24px}
+.filters-inner{max-width:1180px;margin:0 auto;display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:transparent;color:var(--muted);font-family:"Public Sans",sans-serif;font-size:.82rem;font-weight:600;padding:7px 14px;border-radius:999px;cursor:pointer;transition:all .15s}
+.chip:hover{border-color:var(--teal);color:var(--text)}
+.chip.active{background:var(--teal);border-color:var(--teal);color:#0b1512}
+.chip:focus-visible{outline:2px solid var(--moss);outline-offset:2px}
+
+#map{height:56vh;min-height:340px;max-width:1180px;margin:22px auto 0;border:1px solid var(--line);border-radius:14px;z-index:1}
+@media (max-width:640px){#map{border-radius:0;border-inline:none}}
+.leaflet-popup-content-wrapper{background:var(--panel-2);color:var(--text);border-radius:10px;font-family:"Public Sans",sans-serif}
+.leaflet-popup-tip{background:var(--panel-2)}
+.leaflet-popup-content a{color:var(--moss)}
+
+main{max-width:1180px;margin:0 auto;padding:26px 24px 70px}
+.zone-title{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:1.15rem;color:var(--stone);margin:34px 0 14px;display:flex;align-items:baseline;gap:12px}
+.zone-title::after{content:"";flex:1;height:1px;background:var(--line)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:18px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s, transform .2s}
+.card:hover{border-color:var(--teal)}
+.card.highlight{border-color:var(--moss);box-shadow:0 0 0 2px color-mix(in srgb,var(--moss) 35%,transparent)}
+.card-img{aspect-ratio:16/9;width:100%;object-fit:cover;display:block;background:var(--panel-2)}
+.card-img.placeholder{display:flex;align-items:center;justify-content:center;color:var(--line)}
+.card-body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
+.card h3{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:1.12rem;line-height:1.2}
+.coords{font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--muted)}
+.coords b{color:var(--teal);font-weight:500}
+.desc{font-size:.9rem;color:#cfdcd2}
+.tip{font-size:.84rem;color:var(--moss);border-left:2px solid var(--moss);padding-left:10px}
+.facts{display:flex;flex-wrap:wrap;gap:6px 14px;font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--stone);margin-top:auto;padding-top:6px}
+.links{display:flex;gap:10px;margin-top:8px}
+.btn{flex:1;text-align:center;text-decoration:none;font-size:.82rem;font-weight:600;padding:9px 10px;border-radius:9px;border:1px solid var(--line);color:var(--text);transition:all .15s}
+.btn:hover{border-color:var(--moss);color:var(--moss)}
+.btn.primary{background:var(--moss);border-color:var(--moss);color:#0b1512}
+.btn.primary:hover{filter:brightness(1.08);color:#0b1512}
+.credit{font-size:.62rem;color:var(--muted);opacity:.7;padding:4px 18px 0}
+footer{border-top:1px solid var(--line);color:var(--muted);font-size:.8rem;text-align:center;padding:24px;font-family:"IBM Plex Mono",monospace}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card{transition:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Cuaderno de ruta · Irlanda</div>
+  <h1>Cork y el <em>suroeste atlántico</em></h1>
+  <p class="sub">Dieciocho puntos entre Cork, Kinsale, West Cork, Killarney y Tipperary. Llegada el 27 de agosto por la tarde, devolución del coche el 3 de septiembre a mediodía. Conducción por la izquierda; los tiempos reales en West Cork y Kerry superan la estimación del navegador.</p>
+  <div class="meta-row">
+    <span>Base: <b>Cork (51.898 N, 8.476 W)</b></span>
+    <span>Ocaso a final de agosto: <b>~20:30 IST</b></span>
+    <span>Días completos: <b>6</b></span>
+  </div>
+</header>
+
+<div class="filters" role="toolbar" aria-label="Filtrar por zona">
+  <div class="filters-inner" id="chips"></div>
+</div>
+
+<div id="map" aria-label="Mapa de los puntos del viaje"></div>
+
+<main id="content"></main>
+
+<footer>Distancias en línea recta desde Cork (fórmula del haversine, R = 6371 km). Horarios de agosto 2026, verificar antes de cada visita.</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+const PHOTOS = {
+  english:"https://lh3.googleusercontent.com/place-photos/AG9NLjAy9nTB9y42czBGMIVdFZtEaUX9ifvH_dkV1Xf8c2mDy-thQ_dzeZkNKRtMl5xU_i-je8mpIpoRO4XeCZ-xO6XDDzD8N_fwhMAjRSuMpvBjYraMaHucaa73xB1_moMEHEs7TUp4bX938Sra8A=s4800-w800-h600",
+  blarney:"https://lh3.googleusercontent.com/place-photos/AG9NLjDG5XBDv6fhwJ25GDvYStQG6kjD1X9ASZJInA-AClz7DPwz2bgEY5XQ7EY158neMiJSj9zf4sVbE8-iWiMl-uDRQujrweQtnNQsn0U-gEAj-8fWb0WN1LR0hzup-xuUXr73DpYmvqYG1Fff2g=s4800-w800-h600",
+  cobh:"https://lh3.googleusercontent.com/place-photos/AG9NLjCbL4WwUdYtNQO18ZNiTpldtv3cM-UbzPMz9PDOFo2o_lrfmarx8HWY66a3vPiG_D0VeQ9ltU1dCjDOiEEYMMtKPj8cc-baRGxx5OQh6-v9OPnVdS3YKwkmHQpUhbB5ZNNqBUlO8Y8H3vfbALM=s4800-w800-h600",
+  charles:"https://lh3.googleusercontent.com/place-photos/AG9NLjBdM3qlYt6lajZ5MqN-q7fOWGjIe4B8I2Ck-cmi5CWw9njrGoKZTRGoeKncmmbg_tRwuHyg_tSrlrA1bd5Ekev-e0o3CnRqOj52bakNTQZp3jfkHJKv7EYB3voc48LSxZinBjYp6lJXcOI9pw=s4800-w800-h600",
+  mizen:"https://lh3.googleusercontent.com/place-photos/AG9NLjDpqQfDjHP3y6UbS8XMEVclCIy8aeXOM6bsgZNvt68Y4tVN-lsxgZ26z9BytSLc2uyU79czAe1sqE7R3TUrnWgl3UtZhfzwhNSsfPeV4Fguos_jQLPuwtG9MFyKwDSPs3ZowgYbUYOIGkmglg=s4800-w800-h600",
+  gougane:"https://lh3.googleusercontent.com/place-photos/AG9NLjDy2JiHSsNusUO3xJXZL6BcZKkIgL-1f-ckDgln2TJXQlALfaaz54AS-UPooMJCzEJS2UldJs9somyzrPflrwh54oWr4TV2sJCqaLSWuAxEOVE6fjnw627Lg3_hvXuqJXzAxhR8VZs0w-gQEsA=s4800-w800-h600",
+  killarney:"https://lh3.googleusercontent.com/place-photos/AG9NLjALVmBs4g_KbTZgaaPbafrdp6R_3VKcvvfZ7LuNddCLhe7o6y_vgaiMoOW58a5pp9yRMFb1Z2noqe2d9zLwaG0byay0gvbMYLIxKTskCyLjCbpkOz0L3V4f6Qeqj7Cp3ea2vPWOcqeg8q-bEc6YSh_F=s4800-w800-h600",
+  cashel:"https://lh3.googleusercontent.com/place-photos/AG9NLjDyBJdZgxqKRke9fYxukGX6Z1UhPVxvhhafe1YsomSDjlMRjsWYBu1FEZzBtyuzVMXSHwpOT5EhvjGtLSHU3H9YStZotf0KkRhmqxjjoQJUCUlzxZO-7DlFe57XcF3VJamVS4iwpL-Ch0OoEMQ=s4800-w800-h600"
+};
+
+const ZONES = ["Cork ciudad","Entorno de Cork","Kinsale y costa sur","West Cork","Killarney","Tipperary"];
+
+const PLACES = [
+ {id:"english", zone:"Cork ciudad", name:"The English Market", lat:51.8976635, lng:-8.4750684,
+  desc:"Mercado cubierto en funcionamiento desde 1788: pescado, carnicería tradicional, quesos y panadería. Buen sitio para comprar el avituallamiento de las rutas.",
+  tip:"Cierra los domingos. El 30 de agosto cae en domingo: planificar la visita otro día.",
+  hours:"L–S 8:30–18:00", price:"Gratis", time:"1 h", photo:PHOTOS.english,
+  web:"http://www.englishmarket.ie/"},
+ {id:"finbarre", zone:"Cork ciudad", name:"Saint Fin Barre's Cathedral", lat:51.8943871, lng:-8.480636,
+  desc:"Catedral neogótica de tres agujas (1879), obra de William Burges. Vidrieras notables y cantería muy fotogénica desde casi cualquier ángulo.",
+  tip:"La luz de última hora de la tarde favorece la fachada oeste.",
+  hours:"9:00–17:00 (Do 12:30–17:30)", price:"8 €", time:"45 min", photo:null,
+  web:"https://corkcathedral.webs.com/"},
+ {id:"gaol", zone:"Cork ciudad", name:"Cork City Gaol", lat:51.8994495, lng:-8.4990008,
+  desc:"Cárcel victoriana en uso entre 1824 y 1923, con recreaciones de celdas y documentación del sistema penal del s. XIX. Opción sólida para un día de lluvia.",
+  tip:"La audioguía (2 € extra) compensa. Aparcamiento gratuito en la puerta.",
+  hours:"10:00–17:00", price:"~12 €", time:"1–1,5 h", photo:null,
+  web:"https://corkcitygaol.com/"},
+ {id:"blarney", zone:"Entorno de Cork", name:"Blarney Castle & Gardens", lat:51.9290922, lng:-8.5708847,
+  desc:"Torre del s. XV con la piedra de la elocuencia y, sobre todo, un conjunto de jardines extenso que incluye el Poison Garden y arboledas centenarias.",
+  tip:"Llegar a la apertura (9:00): la cola de la piedra alcanza 60 min a mediodía. El aparcamiento cierra a las 18:00.",
+  hours:"9:00–18:00", price:"~24 €", time:"3 h", photo:PHOTOS.blarney,
+  web:"https://blarneycastle.ie/"},
+ {id:"cobh", zone:"Entorno de Cork", name:"Cobh · St Colman's Cathedral", lat:51.8515234, lng:-8.293461,
+  desc:"Catedral neogótica con el carillón más grande de Irlanda, dominando el último puerto de escala del Titanic (1912). Las casas de colores de West View componen la vista clásica del pueblo.",
+  tip:"El encuadre canónico (catedral tras la fila de casas, la «Deck of Cards») se toma desde West View.",
+  hours:"9:00–18:00", price:"Donativo", time:"Medio día con el pueblo", photo:PHOTOS.cobh,
+  web:"https://www.cobhcathedralparish.ie/"},
+ {id:"fota", zone:"Entorno de Cork", name:"Fota Wildlife Park", lat:51.8908738, lng:-8.3069536,
+  desc:"Parque de fauna en semilibertad en la isla de Fota: jirafas, guepardos (con alimentación en carrera mediante tirolina), lémures y canguros sueltos por los senderos.",
+  tip:"Entradas online más baratas que en taquilla. Se combina bien con Cobh en el mismo día.",
+  hours:"9:30–18:00", price:"~18 €", time:"2–3 h", photo:null,
+  web:"https://www.fotawildlife.ie/"},
+ {id:"midleton", zone:"Entorno de Cork", name:"Midleton Distillery Experience", lat:51.9132135, lng:-8.1693376,
+  desc:"Destilería histórica donde se elaboran Jameson, Redbreast y Powers. Alberga el alambique de cobre más grande del mundo. Visita guiada con cata final.",
+  tip:"Reservar la visita con antelación; el conductor puede pedir la opción sin alcohol con descuento.",
+  hours:"10:00–18:00", price:"Desde ~28 €", time:"2 h", photo:null,
+  web:"https://www.jamesonwhiskey.com/"},
+ {id:"charles", zone:"Kinsale y costa sur", name:"Charles Fort (Kinsale)", lat:51.6974202, lng:-8.4990188,
+  desc:"Fortificación estrellada de 1682 sobre la bocana del puerto de Kinsale, uno de los mejores ejemplos de traza italiana en Irlanda.",
+  tip:"Llegar a pie por el sendero costero desde Kinsale (30 min): mejores encuadres que desde la carretera alta.",
+  hours:"10:00–17:00", price:"8 €", time:"1,5 h + pueblo", photo:PHOTOS.charles,
+  web:"https://heritageireland.ie/places-to-visit/charles-fort-national-monument/"},
+ {id:"oldhead", zone:"Kinsale y costa sur", name:"Old Head · Lusitania Museum", lat:51.6204332, lng:-8.5426092,
+  desc:"Torre de señales napoleónica restaurada y memorial del RMS Lusitania, hundido frente a este cabo en 1915. Jardín conmemorativo con placa de bronce y vistas del promontorio.",
+  tip:"El faro del cabo está dentro de un campo de golf privado; el punto de acceso público es la torre.",
+  hours:"10:00–17:00", price:"~6 €", time:"1 h", photo:null,
+  web:"https://oldheadofkinsale.com/"},
+ {id:"drombeg", zone:"West Cork", name:"Drombeg Stone Circle", lat:51.5645, lng:-9.087,
+  desc:"Círculo de 17 piedras (c. 1100–800 a. C.) con la piedra recumbente alineada con el ocaso del solsticio de invierno. Junto al círculo, restos de un fulacht fiadh (cocina prehistórica).",
+  tip:"Acceso libre. A 10 min en coche de Glandore, buena parada de ruta hacia el oeste.",
+  hours:"Siempre abierto", price:"Gratis", time:"30 min", photo:null,
+  web:null},
+ {id:"mizen", zone:"West Cork", name:"Mizen Head", lat:51.45706, lng:-9.80034,
+  desc:"Extremo suroccidental de la isla: estación de señales de 1909, acantilados de esquisto plegado y un puente sobre la garganta. Punto habitual de avistamiento de aves marinas y cetáceos.",
+  tip:"Unos 120 km desde Cork por carreteras lentas: salir temprano. Viento fuerte casi garantizado en el cabo.",
+  hours:"~10:00–18:00 (verano)", price:"~7,5 €", time:"1,5 h + trayecto", photo:PHOTOS.mizen,
+  web:"https://mizenhead.ie/"},
+ {id:"gougane", zone:"West Cork", name:"Gougane Barra", lat:51.83941, lng:-9.31478,
+  desc:"Valle glaciar cerrado con lago y el oratorio de St Finbarr sobre un islote conectado por una calzada. Probablemente el motivo más fotografiado del interior de Cork.",
+  tip:"Encaja como parada camino de Killarney por el paso de Keimaneigh. Reflejos óptimos a primera hora, con el aire en calma.",
+  hours:"Siempre abierto", price:"Aparcamiento ~5 €", time:"1 h", photo:PHOTOS.gougane,
+  web:null},
+ {id:"killarney", zone:"Killarney", name:"Killarney National Park", lat:52.0058447, lng:-9.5561803,
+  desc:"Primer parque nacional de Irlanda (1932): tres lagos, robledales atlánticos y la única manada nativa de ciervo rojo del país. Engloba Torc, Muckross, Ross Castle y Ladies View.",
+  tip:"En coche, recorrer el Ring of Kerry en sentido antihorario, el mismo que los autobuses, para no cruzárselos en tramos estrechos.",
+  hours:"24 h", price:"Gratis", time:"Día completo", photo:PHOTOS.killarney,
+  web:"https://www.nationalparks.ie/killarney/"},
+ {id:"torc", zone:"Killarney", name:"Torc Waterfall", lat:52.0033672, lng:-9.5058068,
+  desc:"Salto de unos 20 m del río Owengarriff entre bosque de robles y musgo. Caudal máximo tras lluvia, que en Kerry rara vez falta.",
+  tip:"10 min a pie desde el aparcamiento, que se llena pronto. Para la seda del agua: trípode y tiempos largos, la penumbra del bosque ayuda.",
+  hours:"Siempre abierto", price:"Gratis", time:"45 min", photo:null,
+  web:null},
+ {id:"muckross", zone:"Killarney", name:"Muckross House", lat:52.0180696, lng:-9.5041358,
+  desc:"Mansión victoriana de 1843 junto al Lough Leane, amueblada de época, con jardines y granjas tradicionales. La abadía franciscana en ruinas queda a corta distancia.",
+  tip:"La abadía de Muckross, con su tejo centenario en el claustro, suele quedar fuera de los itinerarios apresurados y merece el desvío.",
+  hours:"9:15–17:30", price:"~15 € (casa)", time:"2 h", photo:null,
+  web:"https://www.muckross-house.ie/"},
+ {id:"ross", zone:"Killarney", name:"Ross Castle", lat:52.0412494, lng:-9.5314381,
+  desc:"Torre-fortaleza del s. XV a orillas del Lough Leane, sede del clan O'Donoghue. Desde el embarcadero salen barcas hacia la isla de Innisfallen y su monasterio.",
+  tip:"Los senderos del entorno atraviesan zonas con ciervos; al amanecer, probabilidad alta de verlos junto al lago.",
+  hours:"9:30–17:00", price:"5 € (interior)", time:"1–1,5 h", photo:null,
+  web:"https://heritageireland.ie/places-to-visit/ross-castle/"},
+ {id:"ladies", zone:"Killarney", name:"Ladies View", lat:51.9671671, lng:-9.5930341,
+  desc:"Mirador sobre el valle de los tres lagos en la N71, llamado así por las damas de compañía de la reina Victoria (visita de 1861). Cafetería con terraza en el propio mirador.",
+  tip:"A media tarde el sol queda lateral al eje del valle: mejor luz que a mediodía.",
+  hours:"Mirador siempre; café 9:30–17:30", price:"Gratis", time:"30 min", photo:null,
+  web:null},
+ {id:"cashel", zone:"Tipperary", name:"Rock of Cashel", lat:52.5200763, lng:-7.8904521,
+  desc:"Conjunto medieval sobre un cerro calizo: capilla de Cormac (románico irlandés, c. 1134, con frescos), catedral gótica del s. XIII y torre circular de 28 m.",
+  tip:"Última entrada 15:45, cierre 16:45. Desde Hore Abbey, al pie del cerro, se obtiene la mejor panorámica del conjunto.",
+  hours:"9:00–16:45", price:"8 €", time:"1,5–2 h", photo:PHOTOS.cashel,
+  web:"https://heritageireland.ie/places-to-visit/the-rock-of-cashel/"},
+ {id:"cahir", zone:"Tipperary", name:"Cahir Castle", lat:52.3745471, lng:-7.9270751,
+  desc:"Uno de los castillos mejor conservados de Irlanda (s. XIII–XV), sobre un islote del río Suir: muralla, torreón, mazmorras y pasadizos visitables.",
+  tip:"A 15 min de Cashel: se combinan bien en el mismo medio día. Cuidado con la cabeza en las mazmorras.",
+  hours:"9:00–17:45", price:"5 €", time:"1 h", photo:null,
+  web:"https://heritageireland.ie/places-to-visit/cahir-castle/"}
+];
+
+// ---- utilidades ----
+const CORK = [51.8976, -8.4751];
+const R = 6371;
+function haversine(a, b){
+  const rad = x => x * Math.PI / 180;
+  const dLat = rad(b[0]-a[0]), dLng = rad(b[1]-a[1]);
+  const h = Math.sin(dLat/2)**2 + Math.cos(rad(a[0]))*Math.cos(rad(b[0]))*Math.sin(dLng/2)**2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+function fmtCoord(lat, lng){
+  const dms = (v, pos, neg) => {
+    const s = v < 0 ? neg : pos, a = Math.abs(v);
+    const d = Math.floor(a), m = Math.floor((a-d)*60), sec = Math.round(((a-d)*60-m)*60);
+    return `${d}°${String(m).padStart(2,"0")}′${String(sec).padStart(2,"0")}″${s}`;
+  };
+  return `${dms(lat,"N","S")} ${dms(lng,"E","W")}`;
+}
+const gmaps = p => `https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}&travelmode=driving`;
+
+// ---- mapa ----
+const map = L.map("map", {scrollWheelZoom:false}).setView([51.95, -8.8], 8);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {attribution:"© OpenStreetMap contributors", maxZoom:18}).addTo(map);
+map.on("click", () => map.scrollWheelZoom.enable());
+
+const markers = {};
+PLACES.forEach(p => {
+  const m = L.circleMarker([p.lat, p.lng], {
+    radius:8, color:"#4fae97", weight:2, fillColor:"#a4c77e", fillOpacity:.85
+  }).addTo(map);
+  m.bindPopup(`<b>${p.name}</b><br><a href="#card-${p.id}">Ver ficha ↓</a>`);
+  markers[p.id] = m;
+});
+
+// ---- fichas ----
+const content = document.getElementById("content");
+function svgPlaceholder(){
+  return `<div class="card-img placeholder" aria-hidden="true">
+    <svg width="90" height="60" viewBox="0 0 90 60" fill="none" stroke="currentColor" stroke-width="1.4">
+      <path d="M4 48 C20 30 30 42 45 26 C60 10 70 24 86 12"/>
+      <path d="M4 56 C22 42 34 52 50 38 C64 26 74 36 86 28"/>
+      <circle cx="70" cy="10" r="4"/>
+    </svg></div>`;
+}
+function render(zoneFilter){
+  content.innerHTML = "";
+  ZONES.forEach(zone => {
+    if (zoneFilter !== "Todo" && zoneFilter !== zone) return;
+    const places = PLACES.filter(p => p.zone === zone);
+    if (!places.length) return;
+    const h = document.createElement("h2");
+    h.className = "zone-title"; h.textContent = zone;
+    content.appendChild(h);
+    const grid = document.createElement("div");
+    grid.className = "grid";
+    places.forEach(p => {
+      const km = haversine(CORK, [p.lat, p.lng]).toFixed(0);
+      const card = document.createElement("article");
+      card.className = "card"; card.id = `card-${p.id}`;
+      card.innerHTML = `
+        ${p.photo ? `<img class="card-img" src="${p.photo}" alt="${p.name}" loading="lazy">` : svgPlaceholder()}
+        <div class="card-body">
+          <h3>${p.name}</h3>
+          <div class="coords"><b>${fmtCoord(p.lat, p.lng)}</b> · ${km} km de Cork (recta)</div>
+          <p class="desc">${p.desc}</p>
+          <p class="tip">${p.tip}</p>
+          <div class="facts">
+            <span>⏱ ${p.time}</span><span>🕘 ${p.hours}</span><span>€ ${p.price}</span>
+          </div>
+          <div class="links">
+            <a class="btn primary" href="${gmaps(p)}" target="_blank" rel="noopener">Cómo llegar</a>
+            <button class="btn" data-fly="${p.id}">Ver en mapa</button>
+            ${p.web ? `<a class="btn" href="${p.web}" target="_blank" rel="noopener">Web</a>` : ""}
+          </div>
+        </div>
+        ${p.photo ? `<div class="credit">Foto: colaboradores de Google Maps</div>` : ""}`;
+      grid.appendChild(card);
+    });
+    content.appendChild(grid);
+  });
+}
+
+// ---- filtros ----
+const chipsBox = document.getElementById("chips");
+["Todo", ...ZONES].forEach((z, i) => {
+  const b = document.createElement("button");
+  b.className = "chip" + (i === 0 ? " active" : "");
+  b.textContent = z;
+  b.addEventListener("click", () => {
+    chipsBox.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+    b.classList.add("active");
+    render(z);
+    if (z !== "Todo") {
+      const pts = PLACES.filter(p => p.zone === z).map(p => [p.lat, p.lng]);
+      map.fitBounds(L.latLngBounds(pts).pad(0.3));
+    } else {
+      map.setView([51.95, -8.8], 8);
+    }
+  });
+  chipsBox.appendChild(b);
+});
+
+// ---- interacción tarjeta -> mapa ----
+content.addEventListener("click", e => {
+  const id = e.target?.dataset?.fly;
+  if (!id) return;
+  const p = PLACES.find(x => x.id === id);
+  map.flyTo([p.lat, p.lng], 12, {duration: .8});
+  markers[id].openPopup();
+  document.getElementById("map").scrollIntoView({behavior:"smooth", block:"center"});
+  document.querySelectorAll(".card.highlight").forEach(c => c.classList.remove("highlight"));
+  document.getElementById(`card-${id}`).classList.add("highlight");
+});
+
+render("Todo");
+</script>
+</body>
+</html>
