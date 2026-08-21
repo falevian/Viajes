@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Cork y alrededores (27 ago - 3 sep)</name>
+    <description>Puntos de interés del viaje a Cork, Irlanda</description>
+    <Style id="principal"><IconStyle><Icon><href>http://maps.google.com/mapfiles/kml/paddle/red-circle.png</href></Icon></IconStyle></Style>
+    <Style id="secundario"><IconStyle><Icon><href>http://maps.google.com/mapfiles/kml/paddle/blu-circle.png</href></Icon></IconStyle></Style>
+
+    <Folder><name>Cork ciudad</name>
+      <Placemark><name>The English Market</name><description>Mercado cubierto de 1788. Cierra domingos. 8:30-18:00.</description><styleUrl>#principal</styleUrl><Point><coordinates>-8.4750684,51.8976635,0</coordinates></Point></Placemark>
+      <Placemark><name>Saint Fin Barre's Cathedral</name><description>Neogótico, tres agujas. Entrada 8 EUR. 9:00-17:00.</description><styleUrl>#secundario</styleUrl><Point><coordinates>-8.480636,51.8943871,0</coordinates></Point></Placemark>
+      <Placemark><name>Cork City Gaol</name><description>Cárcel victoriana. Audioguía recomendada. 10:00-17:00.</description><styleUrl>#secundario</styleUrl><Point><coordinates>-8.4990008,51.8994495,0</coordinates></Point></Placemark>
+    </Folder>
+
+    <Folder><name>Entorno de Cork</name>
+      <Placemark><name>Blarney Castle &amp; Gardens</name><description>Castillo s. XV y jardines. Llegar a las 9:00. ~24 EUR.</description><styleUrl>#principal</styleUrl><Point><coordinates>-8.5708847,51.9290922,0</coordinates></Point></Placemark>
+      <Placemark><name>St Colman's Cathedral (Cobh)</name><description>Catedral neogótica sobre el último puerto del Titanic. Vista clásica desde West View.</description><styleUrl>#principal</styleUrl><Point><coordinates>-8.293461,51.8515234,0</coordinates></Point></Placemark>
+      <Placemark><name>Fota Wildlife Park</name><description>Parque de fauna en semilibertad. 9:30-18:00. Entradas online más baratas.</description><styleUrl>#secundario</styleUrl><Point><coordinates>-8.3069536,51.8908738,0</coordinates></Point></Placemark>
+      <Placemark><name>Midleton Distillery Experience</name><description>Destilería histórica de Jameson. Visitas guiadas 10:00-18:00.</description><styleUrl>#secundario</styleUrl><Point><coordinates>-8.1693376,51.9132135,0</coordinates></Point></Placemark>
+    </Folder>
+
+    <Folder><name>Kinsale y costa sur</name>
+      <Placemark><name>Charles Fort (Kinsale)</name><description>Fuerte estrellado de 1682. Sendero costero desde Kinsale. 10:00-17:00.</description><styleUrl>#principal</styleUrl><Point><coordinates>-8.4990188,51.6974202,0</coordinates></Point></Placemark>
+      <Placemark><name>Lusitania Museum y Old Head Signal Tower</name><description>Torre de señales y memorial del Lusitania (1915). 10:00-17:00.</description><styleUrl>#secundario</styleUrl><Point><coordinates>-8.5426092,51.6204332,0</coordinates></Point></Placemark>
+    </Folder>
+
+    <Folder><name>West Cork</name>
+      <Placemark><name>Drombeg Stone Circle</name><description>Círculo megalítico orientado al ocaso del solsticio de invierno. Acceso libre.</description><styleUrl>#secundario</styleUrl><Point><coordinates>-9.087,51.5645,0</coordinates></Point></Placemark>
+      <Placemark><name>Mizen Head</name><description>Extremo suroccidental de Irlanda. Estación de señales, acantilados y puente.</description><styleUrl>#principal</styleUrl><Point><coordinates>-9.80034,51.45706,0</coordinates></Point></Placemark>
+      <Placemark><name>Gougane Barra</name><description>Lago glaciar con oratorio en islote. Camino de Killarney por Keimaneigh.</description><styleUrl>#principal</styleUrl><Point><coordinates>-9.31478,51.83941,0</coordinates></Point></Placemark>
+    </Folder>
+
+    <Folder><name>Killarney (Kerry)</name>
+      <Placemark><name>Killarney National Park</name><description>Parque nacional. Abierto 24 h.</description><styleUrl>#principal</styleUrl><Point><coordinates>-9.5561803,52.0058447,0</coordinates></Point></Placemark>
+      <Placemark><name>Torc Waterfall</name><description>Cascada a 10 min a pie del aparcamiento. Ir temprano.</description><styleUrl>#secundario</styleUrl><Point><coordinates>-9.5058068,52.0033672,0</coordinates></Point></Placemark>
+      <Placemark><name>Muckross House</name><description>Casa victoriana y jardines junto al lago. 9:15-17:30.</description><styleUrl>#secundario</styleUrl><Point><coordinates>-9.5041358,52.0180696,0</coordinates></Point></Placemark>
+      <Placemark><name>Ross Castle</name><description>Torre del s. XV a orillas del Lough Leane. 9:30-17:00.</description><styleUrl>#secundario</styleUrl><Point><coordinates>-9.5314381,52.0412494,0</coordinates></Point></Placemark>
+      <Placemark><name>Ladies View</name><description>Mirador panorámico sobre los lagos, con cafetería y terraza.</description><styleUrl>#secundario</styleUrl><Point><coordinates>-9.5930341,51.9671671,0</coordinates></Point></Placemark>
+    </Folder>
+
+    <Folder><name>Tipperary</name>
+      <Placemark><name>Rock of Cashel</name><description>Capilla de Cormac (c. 1134), catedral gótica y torre circular. Cierra 16:45.</description><styleUrl>#principal</styleUrl><Point><coordinates>-7.8904521,52.5200763,0</coordinates></Point></Placemark>
+      <Placemark><name>Cahir Castle</name><description>Uno de los castillos mejor conservados de Irlanda. 5 EUR. 9:00-17:45.</description><styleUrl>#secundario</styleUrl><Point><coordinates>-7.9270751,52.3745471,0</coordinates></Point></Placemark>
+    </Folder>
+  </Document>
+</kml>
