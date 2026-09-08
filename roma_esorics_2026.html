@@ -352,16 +352,25 @@ footer .firma{margin-top:20px;font-family:'Marcellus',serif;letter-spacing:.2em;
     <div><b>Lunes cerrado</b>Borghese, Vicus Caprarius, la exposición Horvat y muchos museos municipales. Caracalla, los lunes, solo hasta las 14:00.</div>
     <div><b>Septiembre</b>Máximas de 27-29 °C, luz dorada desde las 18:30 y ocaso a las 19:17 el día 17. Botella reutilizable: los nasoni dan agua fría por toda la ciudad.</div>
   </div>
-  <div class="firma">S · P · Q · R — GUÍA GENERADA PARA ESORICS MMXXVI</div>
+  <div class="firma">VERSIÓN 5 · actualizada con hotel, tiendas y exposiciones<br>S · P · Q · R — GUÍA GENERADA PARA ESORICS MMXXVI</div>
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 const U = "https://upload.wikimedia.org/wikipedia/commons/thumb/";
 const IMG = {
+torlonia:U+"d/da/Casina_Delle_Civette%2C_Villa_Torlonia%2C_Rome_01.JPG/960px-Casina_Delle_Civette%2C_Villa_Torlonia%2C_Rome_01.JPG",
+sanluigi:U+"6/68/San_Luigi_dei_Francesi_%28Rome%29_-_Interior_HDR.jpg/960px-San_Luigi_dei_Francesi_%28Rome%29_-_Interior_HDR.jpg",
+espresso:U+"0/00/Espresso_coffee.jpg/960px-Espresso_coffee.jpg",
+gelato:U+"8/81/Gelato_Museum_-_Molds_for_cones.jpg/960px-Gelato_Museum_-_Molds_for_cones.jpg",
+pasta:U+"2/2d/Spaghetti_alla_Carbonara_%28Madrid%29.JPG/960px-Spaghetti_alla_Carbonara_%28Madrid%29.JPG",
+carciofo:U+"a/a6/Carciofi_alla_Giud%C3%ACa.jpg/960px-Carciofi_alla_Giud%C3%ACa.jpg",
+vino:U+"6/64/Syreni_%C5%9Apiew_Koneser_Bar.jpg/960px-Syreni_%C5%9Apiew_Koneser_Bar.jpg",
+costanza:U+"1/19/Mausoleo_di_santa_costanza%2C_mosaici_001.jpg/960px-Mausoleo_di_santa_costanza%2C_mosaici_001.jpg",
+pizzataglio:"https://upload.wikimedia.org/wikipedia/commons/4/43/Pizza_al_taglio.jpg",
 sanlorenzo:U+"c/c9/Basilica_of_Saint_Lawrence_outside_the_Walls.jpg/960px-Basilica_of_Saint_Lawrence_outside_the_Walls.jpg",
 verano:U+"9/96/Roma_-_Ingresso_del_Cimitero_Monumentale_del_Verano.jpg/960px-Roma_-_Ingresso_del_Cimitero_Monumentale_del_Verano.jpg",
-fermi:"https://upload.wikimedia.org/wikipedia/commons/c/c9/Regio_Istituto_di_Fisica_Esterno.png",
+fermi:U+"c/c9/Regio_Istituto_di_Fisica_Esterno.png/960px-Regio_Istituto_di_Fisica_Esterno.png",
 meridiana:U+"7/70/3234_-_Roma_-_Santa_Maria_degli_Angeli_-_Meridiana_-_Foto_Giovanni_Dall%27Orto_17-June-2007.jpg/960px-3234_-_Roma_-_Santa_Maria_degli_Angeli_-_Meridiana_-_Foto_Giovanni_Dall%27Orto_17-June-2007.jpg",
 portamaggiore:U+"f/fc/Porta_Maggiore_%28%22Larger_Gate%22%29.jpg/960px-Porta_Maggiore_%28%22Larger_Gate%22%29.jpg",
 borghese:U+"5/5d/Galleria_borghese_facade.jpg/960px-Galleria_borghese_facade.jpg",
@@ -423,7 +432,7 @@ const LUGARES = [
  web:"", maps:"", mapsUrl:"https://maps.app.goo.gl/nomCXGbkaWs1cERv8"},
 
 /* ======================= JUNTO AL HOTEL ======================= */
-{nombre:"Santa Costanza y Sant'Agnese", zona:"Nomentana · a 14 min del hotel", tipo:"visita", dias:["L14","M15","X16","V18"], img:"coppede", lat:41.9228, lng:12.5190,
+{nombre:"Santa Costanza y Sant'Agnese", zona:"Nomentana · a 14 min del hotel", tipo:"visita", dias:["L14","M15","X16","V18"], img:"costanza", lat:41.9228, lng:12.5190,
  desc:"El mausoleo de Constantina (h. 350), hija de Constantino: planta circular perfecta, deambulatorio abovedado con los mosaicos cristianos más antiguos de Roma y un sarcófago de pórfido. Al lado, la basílica de Sant'Agnese con su ábside bizantino y catacumbas de tres niveles. Prácticamente vacío siempre.",
  desdeHotel:"<b>14 min a pie</b> (1,2 km) subiendo Via Nomentana, o bus 60/90 dos paradas",
  horario:"Mausoleo: todos los días 9:00–12:00 y 15:00–18:00, gratis. Catacumbas L–S 10:00–13:00 y 15:00–18:00, con visita guiada",
@@ -432,7 +441,7 @@ const LUGARES = [
  tip:"Geometría pura: rotonda de 22,5 m con doce pares de columnas de granito y bóveda anular. Los mosaicos de vendimia del deambulatorio son paganos reciclados, y con el 35 a f/2 se cubren de un extremo a otro. Cerrado durante las misas.",
  foto:true, web:"https://www.santagnese.net", maps:"Mausoleo di Santa Costanza, Roma"},
 
-{nombre:"Villa Torlonia y Casina delle Civette", zona:"Nomentana · a 8 min del hotel", tipo:"foto", dias:["L14","M15","X16","V18"], img:"coppede", lat:41.9136, lng:12.5116,
+{nombre:"Villa Torlonia y Casina delle Civette", zona:"Nomentana · a 8 min del hotel", tipo:"foto", dias:["L14","M15","X16","V18"], img:"torlonia", lat:41.9136, lng:12.5116,
  desc:"El parque más cercano al hotel, con la villa que fue residencia de Mussolini y, escondida entre los árboles, la Casina delle Civette: un capricho liberty de vidrieras con búhos, pavos reales y glicinas, luz coloreada filtrándose por todas partes.",
  desdeHotel:"<b>8 min a pie</b> (650 m). El paseo antes de cenar más obvio de la semana",
  horario:"Parque abierto todo el día. Museos Ma–Do 9:00–19:00 (última entrada 18:00); lunes cerrado",
@@ -466,7 +475,7 @@ const LUGARES = [
  tip:"Colas enormes a mediodía: entre semana, a las 9:00 o después de las 18:00 se entra casi directo. Altura/diámetro = 1, una esfera perfecta inscrita; el haz del óculo a media tarde barre el lado este del tambor.",
  web:"https://www.pantheonroma.com", maps:"Pantheon, Roma"},
 
-{nombre:"San Luigi dei Francesi", zona:"Centro storico", tipo:"visita", dias:["L14"], img:"navona", lat:41.8994, lng:12.4745,
+{nombre:"San Luigi dei Francesi", zona:"Centro storico", tipo:"visita", dias:["L14"], img:"sanluigi", lat:41.8994, lng:12.4745,
  desc:"La capilla Contarelli guarda el ciclo de San Mateo de Caravaggio (1599-1602): la Vocación, con el haz diagonal que fundó medio barroco, la Inspiración y el Martirio. Tres obras mayores, gratis, a 150 m del Pantheon.",
  desdeHotel:"Igual que el Pantheon, <b>25 min</b>; están a 150 m",
  horario:"9:30–12:45 y 14:30–18:30 (Do desde 11:30)", precio:"Gratis; 1 € para encender la capilla",
@@ -725,7 +734,7 @@ const LUGARES = [
  foto:true, web:"", maps:"Campo de' Fiori, Roma"},
 
 /* ======================= COMER ======================= */
-{nombre:"Pommidoro", zona:"San Lorenzo", tipo:"comida", dias:["L14","M15","X16"], img:"streetart", lat:41.9005, lng:12.5182,
+{nombre:"Pommidoro", zona:"San Lorenzo", tipo:"comida", dias:["L14","M15","X16"], img:"pasta", lat:41.9005, lng:12.5182,
  desc:"Trattoria histórica del barrio a cinco minutos del congreso: mesa de universitarios, artistas y, en su día, Pasolini, que cenó aquí su última noche. Parrilla de brasa a la vista.",
  desdeHotel:"<b>12 min a pie</b>. La cena de cualquier noche de congreso sin coger transporte",
  horario:"L–S, comidas y cenas; cerrado domingos", precio:"20–30 €", pedir:"Rigatoni alla carbonara, carne a la brasa",
@@ -733,7 +742,7 @@ const LUGARES = [
  tip:"La pausa larga del mediodía cabe aquí sin agobio. Reservar si vais más de dos.",
  web:"", maps:"Trattoria Pommidoro, Piazza dei Sanniti, Roma"},
 
-{nombre:"Said dal 1923", zona:"San Lorenzo", tipo:"comida", dias:["L14","M15","X16"], img:"streetart", lat:41.9008, lng:12.5156,
+{nombre:"Said dal 1923", zona:"San Lorenzo", tipo:"comida", dias:["L14","M15","X16"], img:"espresso", lat:41.9008, lng:12.5156,
  desc:"Antigua fábrica de chocolate reconvertida en café-bistró, con la maquinaria original a la vista. Interior de madera y hierro, penumbra cálida: buen sitio para la cámara además de para el café.",
  desdeHotel:"<b>13 min a pie</b> por Via Tiburtina",
  horario:"Tardes y noches; comprobar horario de mediodía", precio:"5–10 €", pedir:"Chocolate caliente denso, pralinés",
@@ -741,7 +750,7 @@ const LUGARES = [
  tip:"Las máquinas de templar chocolate iluminadas por bombillas de filamento son un motivo en sí: ISO 3200 y el 50 a f/1.4.",
  web:"", maps:"SAID dal 1923, Via Tiburtina 135, Roma"},
 
-{nombre:"Forno Ceralli 1920", zona:"Piazza Rondanini · Pantheon", tipo:"comida", dias:["L14"], img:"campofiori", lat:41.8999, lng:12.4762,
+{nombre:"Forno Ceralli 1920", zona:"Piazza Rondanini · Pantheon", tipo:"comida", dias:["L14"], img:"pizzataglio", lat:41.8999, lng:12.4762,
  desc:"Horno de leña de Frascati desde 1920, con sede romana a 200 m del Pantheon desde finales de 2024. Pizza rossa fina y crujiente, panes, ciambelline al vino y pupazza frascatana. Cola corta y de romanos, al contrario que la bocadillería famosa de al lado.",
  desdeHotel:"En el paseo del lunes, junto al Pantheon",
  horario:"Todos los días 8:30–20:00/21:00", precio:"5–10 €", pedir:"Pizza rossa en teglia, panino de porchetta",
@@ -749,7 +758,7 @@ const LUGARES = [
  tip:"Se compra al peso y se come de pie: encaja exactamente en el paseo del lunes.",
  web:"", maps:"", mapsUrl:"https://maps.app.goo.gl/19MqpiJYuEfBuKhU9"},
 
-{nombre:"Armando al Pantheon", zona:"Centro storico", tipo:"comida", dias:["L14"], img:"pantheon", lat:41.8989, lng:12.4766,
+{nombre:"Armando al Pantheon", zona:"Centro storico", tipo:"comida", dias:["L14"], img:"pasta", lat:41.8989, lng:12.4766,
  desc:"Familiar desde 1961 a 30 m del Pantheon, con la cocina romana de manual y sin concesiones al turismo pese a la ubicación.",
  desdeHotel:"Metro B a Termini + bus 64/40, <b>25 min</b>",
  horario:"L–V comidas y cenas; sábado solo comida", precio:"35–45 €", pedir:"Spaghetti alla gricia, abbacchio",
@@ -757,7 +766,7 @@ const LUGARES = [
  tip:"Reservar con días de antelación en su web; sin reserva es misión imposible.",
  web:"", maps:"Armando al Pantheon, Roma"},
 
-{nombre:"Roscioli Salumeria", zona:"Campo de' Fiori", tipo:"comida", dias:["L14"], img:"campofiori", lat:41.8938, lng:12.4737,
+{nombre:"Roscioli Salumeria", zona:"Campo de' Fiori", tipo:"comida", dias:["L14"], img:"carciofo", lat:41.8938, lng:12.4737,
  desc:"Salumeria-restaurante de culto: la carbonara más citada de Roma y una carta de vinos seria, entre jamones colgados y estanterías de conservas.",
  desdeHotel:"Metro B a Termini + bus 64, <b>27 min</b>",
  horario:"Comidas y cenas; reserva casi obligatoria", precio:"45–60 €", pedir:"Carbonara, burrata con anchoas del Cantábrico",
@@ -765,7 +774,7 @@ const LUGARES = [
  tip:"Se reserva con semanas. Si no hay mesa, el forno de al lado (Roscioli) salva cualquier comida rápida.",
  web:"", maps:"Salumeria Roscioli, Via dei Giubbonari, Roma"},
 
-{nombre:"Nonna Betta", zona:"Ghetto", tipo:"comida", dias:["L14"], img:"ghetto", lat:41.8928, lng:12.4774,
+{nombre:"Nonna Betta", zona:"Ghetto", tipo:"comida", dias:["L14"], img:"carciofo", lat:41.8928, lng:12.4774,
  desc:"Cocina judeo-romana kosher en plena Via del Portico d'Ottavia, con el carciofo alla giudia como emblema. En septiembre las alcachofas son de cámara, pero la fritura salva.",
  desdeHotel:"Bus 40/64 desde Largo Argentina de vuelta a Termini + Metro B, <b>30 min</b>",
  horario:"Cierra viernes noche y sábado mediodía (shabbat)", precio:"30–40 €", pedir:"Carciofo alla giudia, aliciotti con indivia",
@@ -773,7 +782,7 @@ const LUGARES = [
  tip:"De postre, la pizza ebraica del Forno Boccione, un horno sin cartel con cola propia. Después, cruzar la Isla Tiberina iluminada.",
  web:"", maps:"Nonna Betta, Via del Portico d'Ottavia, Roma"},
 
-{nombre:"Ai Tre Scalini", zona:"Monti", tipo:"comida", dias:["M15"], img:"monti", lat:41.8952, lng:12.4907,
+{nombre:"Ai Tre Scalini", zona:"Monti", tipo:"comida", dias:["M15"], img:"vino", lat:41.8952, lng:12.4907,
  desc:"Vineria centenaria con hiedra en la fachada, en Via Panisperna, a un portal del Museo Fermi. El aperitivo largo que acaba convirtiéndose en cena.",
  desdeHotel:"Metro B Cavour, <b>15 min</b>. Vuelta directa en metro hasta las 23:30",
  horario:"Desde las 18:00 hasta tarde; sin reservas", precio:"20–30 €", pedir:"Tablas de quesos y embutidos, vino natural",
@@ -781,7 +790,7 @@ const LUGARES = [
  tip:"Llegar antes de las 19:30 o esperar en la calle con la copa en la mano. Combina con la visita al CREF por la tarde.",
  web:"", maps:"Ai Tre Scalini, Via Panisperna 251, Roma"},
 
-{nombre:"Da Enzo al 29", zona:"Trastevere", tipo:"comida", dias:["X16"], img:"trastevere", lat:41.8886, lng:12.4772,
+{nombre:"Da Enzo al 29", zona:"Trastevere", tipo:"comida", dias:["X16"], img:"pasta", lat:41.8886, lng:12.4772,
  desc:"Diminuta y sin reservas para cenar: la cola empieza a las 18:45 para abrir a las 19:15. Cocina romana estricta y honesta, en una calle de adoquín y ropa tendida.",
  desdeHotel:"Trastevere no tiene metro: vuelta en bus H a Termini + Metro B, <b>40 min</b>, o taxi ~20 €",
  horario:"Comidas y cenas; cerrado domingos", precio:"25–35 €", pedir:"Tonnarelli cacio e pepe, alcachofa",
@@ -789,7 +798,7 @@ const LUGARES = [
  tip:"Mientras esperas en la calle tienes veinte minutos de luz de última hora en una de las calles más fotogénicas de Trastevere.",
  web:"", maps:"Da Enzo al 29, Via dei Vascellari, Roma"},
 
-{nombre:"Felice a Testaccio", zona:"Testaccio", tipo:"comida", dias:["X16"], img:"testaccio", lat:41.8776, lng:12.4770,
+{nombre:"Felice a Testaccio", zona:"Testaccio", tipo:"comida", dias:["X16"], img:"pasta", lat:41.8776, lng:12.4770,
  desc:"Institución de 1936 en el barrio más comestible de Roma: la cacio e pepe se termina de emulsionar delante del cliente, con tenedor y paciencia.",
  desdeHotel:"Metro B Piramide + 10 min, <b>28 min</b>. Vuelta directa en metro: la cena más cómoda fuera del centro",
  horario:"Comidas y cenas; reservar sí o sí", precio:"35–45 €", pedir:"Tonnarelli cacio e pepe",
@@ -805,7 +814,7 @@ const LUGARES = [
  tip:"Cola de romanos a las 13:00, buena escena de mercado mientras esperas.",
  web:"", maps:"Mordi e Vai, Mercato Testaccio, Roma"},
 
-{nombre:"Pastasciutta", zona:"Via delle Grazie · Borgo", tipo:"comida", dias:["J17"], img:"prati", lat:41.9047, lng:12.4581,
+{nombre:"Pastasciutta", zona:"Via delle Grazie · Borgo", tipo:"comida", dias:["J17"], img:"pasta", lat:41.9047, lng:12.4581,
  desc:"Laboratorio de pasta fresca a la vista: la producen por la mañana y la cuecen en dos o tres minutos cuando la pides, con carta de cuatro o cinco platos que cambia cada semana.",
  desdeHotel:"Metro A Ottaviano, <b>32 min</b>. Encaja en el día vaticano",
  horario:"Todos los días 10:00–22:00; sin reservas", precio:"5–10 €", pedir:"Plato del día, 200 g de pasta fresca",
@@ -813,7 +822,7 @@ const LUGARES = [
  tip:"La comida lógica del jueves vaticano si prefieres sentarte. Alternativa de pie: Pizzarium.",
  web:"", maps:"", mapsUrl:"https://maps.app.goo.gl/ncuhucudUonZzKS89"},
 
-{nombre:"Pizzarium (Bonci)", zona:"Prati · Vaticano", tipo:"comida", dias:["J17"], img:"prati", lat:41.9068, lng:12.4451,
+{nombre:"Pizzarium (Bonci)", zona:"Prati · Vaticano", tipo:"comida", dias:["J17"], img:"pizzataglio", lat:41.9068, lng:12.4451,
  desc:"La pizza al corte más influyente de Italia, a cinco minutos del Metro Cipro y a diez de los Museos Vaticanos. Sin sillas: se come de pie en la acera.",
  desdeHotel:"Metro A Cipro, <b>34 min</b>",
  horario:"11:00–22:00 aprox.", precio:"8–15 €", pedir:"Pizza al taglio, la de patata es el clásico",
@@ -821,7 +830,7 @@ const LUGARES = [
  tip:"Encaja entre los Vaticanos y el Mercato Trionfale, que está a cuatro manzanas.",
  web:"", maps:"Pizzarium Bonci, Via della Meloria 43, Roma"},
 
-{nombre:"Sant'Eustachio il Caffè", zona:"Centro storico", tipo:"comida", dias:["L14"], img:"navona", lat:41.8983, lng:12.4753,
+{nombre:"Sant'Eustachio il Caffè", zona:"Centro storico", tipo:"comida", dias:["L14"], img:"espresso", lat:41.8983, lng:12.4753,
  desc:"Tostadero de leña desde 1938, entre Pantheon y Navona. El espresso de referencia de la ciudad, con la barra siempre a tres filas.",
  desdeHotel:"En el paseo del lunes, entre Pantheon y Navona",
  horario:"7:30–1:00", precio:"1,50–4 €", pedir:"Gran Caffè (pedirlo 'amaro' si lo quieres sin azúcar)",
@@ -829,7 +838,7 @@ const LUGARES = [
  tip:"En la barra cuesta bastante menos que sentado: se paga primero en caja y se enseña el recibo al barista. Preparan el café tapando la máquina, es su secreto declarado.",
  web:"", maps:"Sant'Eustachio Il Caffè, Roma"},
 
-{nombre:"Giolitti y Otaleg", zona:"Centro storico / Trastevere", tipo:"comida", dias:["L14","X16"], img:"navona", lat:41.9007, lng:12.4767,
+{nombre:"Giolitti y Otaleg", zona:"Centro storico / Trastevere", tipo:"comida", dias:["L14","X16"], img:"gelato", lat:41.9007, lng:12.4767,
  desc:"Duelo de heladerías: Giolitti (1900), la clásica de diputados y turistas, abierta hasta la una de la madrugada; Otaleg, en Trastevere, gelato de autor con fruta de mercado.",
  desdeHotel:"Giolitti en el paseo del lunes; Otaleg, en Trastevere el miércoles",
  horario:"Giolitti hasta la 1:00; Otaleg tardes", precio:"3–6 €", pedir:"Pistacho y crema en Giolitti; el sabor de temporada en Otaleg",
