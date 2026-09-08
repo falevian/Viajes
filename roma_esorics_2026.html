@@ -50,6 +50,7 @@ header .indice a:hover{color:#E8C87A;border-color:#E8C87A}
 .chip.activo[data-tipo="comida"]{background:var(--laurel);border-color:var(--laurel)}
 .chip.activo[data-tipo="tienda"]{background:var(--bronce);border-color:var(--bronce)}
 .chip.activo[data-tipo="expo"]{background:var(--morado);border-color:var(--morado)}
+.chip.activo[data-tipo="base"]{background:var(--tinta);border-color:var(--tinta)}
 .sep{width:1px;height:22px;background:var(--linea);margin:0 4px}
 .contador{margin-left:auto;font-size:.8rem;color:var(--tinta-suave)}
 
@@ -86,7 +87,7 @@ header .indice a:hover{color:#E8C87A;border-color:#E8C87A}
 .card .foto .credito{position:absolute;bottom:0;right:0;font-size:.6rem;color:#fff;background:rgba(0,0,0,.45);padding:2px 7px;border-top-left-radius:6px}
 .badges{position:absolute;top:10px;left:10px;display:flex;gap:6px;flex-wrap:wrap;max-width:calc(100% - 20px)}
 .badge{font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:5px;color:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3)}
-.b-visita{background:var(--pompeya)}.b-foto{background:var(--azul)}.b-comida{background:var(--laurel)}.b-tienda{background:var(--bronce)}.b-expo{background:var(--morado)}
+.b-visita{background:var(--pompeya)}.b-foto{background:var(--azul)}.b-comida{background:var(--laurel)}.b-tienda{background:var(--bronce)}.b-expo{background:var(--morado)}.b-base{background:var(--tinta)}
 .b-dia{background:rgba(38,34,28,.78);font-family:'Marcellus',serif;letter-spacing:.1em;font-weight:400}
 .card .cuerpo{padding:18px 18px 16px;display:flex;flex-direction:column;flex:1}
 .card h3{font-size:1.2rem;margin-bottom:4px}
@@ -160,7 +161,7 @@ footer .firma{margin-top:20px;font-family:'Marcellus',serif;letter-spacing:.2em;
 <header>
   <div class="eyebrow">ESORICS 2026 · Sapienza Università di Roma</div>
   <h1>Rafa en <span class="roma">Roma</span></h1>
-  <p class="sub">Congreso por las mañanas (L, M, X) en la Città Universitaria; el resto del tiempo, la ciudad con la M11-P al hombro. Filtra por tipo de sitio y por día.</p>
+  <p class="sub">Base en el Mercure Piazza Bologna, congreso a 15 min a pie y Metro B a dos manzanas. Filtra por tipo de sitio y por día.</p>
   <div class="fechas">XIII — XVIII · SEPTIEMBRE · MMXXVI</div>
   <nav class="indice">
     <a href="#plan">Plan</a><a href="#mapa-sec">Mapa</a><a href="#lugares">Sitios</a><a href="#paseos">Paseos</a><a href="#curiosidades">Curiosidades</a><a href="#transporte">Transporte</a>
@@ -176,6 +177,7 @@ footer .firma{margin-top:20px;font-family:'Marcellus',serif;letter-spacing:.2em;
     <button class="chip" data-tipo="comida">Comer</button>
     <button class="chip" data-tipo="tienda">Tiendas</button>
     <button class="chip" data-tipo="expo">Expos</button>
+    <button class="chip" data-tipo="base">Hotel</button>
     <span class="sep"></span>
     <span class="grupo-label">Día</span>
     <button class="chip activo" data-dia="todos">Todos</button>
@@ -194,7 +196,7 @@ footer .firma{margin-top:20px;font-family:'Marcellus',serif;letter-spacing:.2em;
     <div class="dia">
       <div class="num">D · XIII</div><div class="nombre">Llegada, noche</div>
       <ul>
-        <li><span class="quien">Noche</span>Check-in y paseo corto</li>
+        <li><span class="quien">Noche</span>Check-in en el Mercure Piazza Bologna; metro B directo al centro</li>
         <li><span class="quien">Noche</span>Trevi iluminada después de las 22:30</li>
       </ul>
     </div>
@@ -255,6 +257,7 @@ footer .firma{margin-top:20px;font-family:'Marcellus',serif;letter-spacing:.2em;
       <span><i class="punto p-tienda"></i>Tienda</span>
       <span><i class="punto p-expo"></i>Expo</span>
       <span>★ Sapienza</span>
+      <span>⌂ Hotel</span>
     </div>
   </div>
   <div id="mapa"></div>
@@ -306,6 +309,16 @@ footer .firma{margin-top:20px;font-family:'Marcellus',serif;letter-spacing:.2em;
         </ul>
       </div>
       <div class="trans-card">
+        <h3>Desde el hotel (Bologna)</h3>
+        <ul>
+          <li><b>Sapienza</b> — 15 min a pie por Viale delle Province, o bus 649 <span class="precio-tag">1,2 km</span></li>
+          <li><b>Metro B Bologna</b> — a 200 m: Colosseo 12 min, Circo Massimo 15, Garbatella 20, EUR 27</li>
+          <li><b>Verano y San Lorenzo</b> — 11 y 13 min a pie <span class="precio-tag">1 km</span></li>
+          <li><b>Coppedè</b> — 22 min a pie o tranvía 3/19 desde Viale Regina Margherita</li>
+          <li><b>Fiumicino</b> — metro a Termini + Leonardo Express, ~55 min puerta a puerta</li>
+        </ul>
+      </div>
+      <div class="trans-card">
         <h3>Desde el congreso</h3>
         <ul>
           <li><b>Tranvía 3 / 19</b> — Verano → Coppedè, Villa Borghese, Trastevere</li>
@@ -320,6 +333,7 @@ footer .firma{margin-top:20px;font-family:'Marcellus',serif;letter-spacing:.2em;
           <li><b>Metro</b> — solo A y B son útiles; el centro histórico se camina</li>
           <li><b>Tranvía 8</b> — Piazza Venezia ⇄ Trastevere</li>
           <li><b>Bus 64 / 40</b> — Termini ⇄ Vaticano; vigilar la cámara, son los clásicos de los carteristas</li>
+          <li><b>Bifurcación en Bologna</b> — la línea B se abre ahí en dos ramas: hacia el centro da igual, pero al volver comprueba el destino (Rebibbia o Jonio)</li>
           <li><b>Horario metro</b> — hasta 23:30 (V y S hasta 1:30)</li>
         </ul>
       </div>
@@ -392,10 +406,19 @@ const TIPO = {
   foto:{lab:"Foto", col:"#2F5A7C"},
   comida:{lab:"Comer", col:"#4A5D45"},
   tienda:{lab:"Tienda", col:"#A67C2E"},
-  expo:{lab:"Expo", col:"#6B4A7A"}
+  expo:{lab:"Expo", col:"#6B4A7A"},
+  base:{lab:"Hotel", col:"#26221C"}
 };
 
 const LUGARES = [
+
+/* ======================= BASE ======================= */
+{nombre:"Mercure Roma Piazza Bologna", zona:"Nomentano \u00b7 Via Reggio Calabria 54", tipo:"base", dias:["D13","L14","M15","X16","J17","V18"], img:"coppede", lat:41.9124, lng:12.5193,
+ desc:"Base de operaciones en Piazza Bologna, barrio residencial sin turismo al norte de la Sapienza. Ubicaci\u00f3n mejor de lo que parece en el mapa: la boca de Metro B queda a 200 m y desde ah\u00ed sale casi todo el itinerario de la semana sin transbordos.",
+ horario:"Check-in habitual desde las 15:00; salida hasta las 12:00", precio:"Consigna de equipaje el viernes en recepci\u00f3n, gratis",
+ transporte:"Metro B Bologna a 2 min. Sapienza: 15 min a pie o tres paradas del bus 649. Termini: 5 min en metro. Fiumicino: metro hasta Termini y Leonardo Express, ~55 min puerta a puerta",
+ tip:"Reserva mental de tiempos desde la puerta: Colosseo 12 min en metro, Circo Massimo 15, Garbatella 20, EUR 27. El Verano y San Lorenzo est\u00e1n a 11 y 13 min andando, as\u00ed que la foto del amanecer en el cementerio sale sin madrugar mucho.",
+ web:"", maps:"", mapsUrl:"https://maps.app.goo.gl/nomCXGbkaWs1cERv8"},
 
 /* ======================= VISITAS ======================= */
 {nombre:"Colosseo · Foro · Palatino", zona:"Roma antigua", tipo:"visita", dias:["M15"], img:"colosseo", lat:41.8902, lng:12.4922,
@@ -939,7 +962,7 @@ document.getElementById("grid-curio").innerHTML = CURIOSIDADES.map(c =>
 /* ======================= MAPA ======================= */
 let mapa, capaLugares, capaPaseos;
 function initMapa(){
-  mapa = L.map("mapa", {scrollWheelZoom:false}).setView([41.8930, 12.4870], 13);
+  mapa = L.map("mapa", {scrollWheelZoom:false}).setView([41.8990, 12.4950], 13);
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom:19, attribution:"&copy; OpenStreetMap"}).addTo(mapa);
   mapa.on("click", () => mapa.scrollWheelZoom.enable());
 
@@ -947,6 +970,11 @@ function initMapa(){
     html:'<div style="font-size:22px;line-height:22px;text-shadow:0 1px 3px #fff,0 0 6px #fff">★</div>',
     iconSize:[22,22], iconAnchor:[11,11]})})
    .addTo(mapa).bindPopup("<b>Sapienza · Città Universitaria</b>ESORICS 2026, Piazzale Aldo Moro 5");
+
+  L.marker([41.9124, 12.5193], {icon: L.divIcon({className:"",
+    html:'<div style="font-size:20px;line-height:20px;text-shadow:0 1px 3px #fff,0 0 6px #fff">\u2302</div>',
+    iconSize:[20,20], iconAnchor:[10,10]})})
+   .addTo(mapa).bindPopup('<b>Mercure Roma Piazza Bologna</b>Via Reggio Calabria 54<br><a href="https://maps.app.goo.gl/nomCXGbkaWs1cERv8" target="_blank" rel="noopener">Abrir en Google Maps</a>');
 
   capaLugares = L.layerGroup().addTo(mapa);
   capaPaseos = L.layerGroup().addTo(mapa);
