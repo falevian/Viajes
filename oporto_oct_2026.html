@@ -6,153 +6,170 @@
 <title>Oporto · 16–18 octubre 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Karla:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..700,0..100,0..1;1,9..144,300..700,0..100,0..1&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
 :root{
-  --piedra:#F4F2EC; --piedra-2:#E9E6DD; --tinta:#1E2630; --tinta-suave:#55606B;
-  --azulejo:#1F4E79; --azulejo-osc:#153A5C; --vinho:#7A2E3A; --oro:#B08A3E; --rabelo:#3E6B5A;
-  --linea:#D5D1C6; --blanco:#FFFFFF;
-  --sombra:0 2px 14px rgba(30,38,48,.08); --radio:10px;
+  --esmalte:#F6F5F0; --esmalte-2:#ECEAE2; --granito:#5B5E5A; --granito-claro:#C9C8C0;
+  --tinta:#1B2430; --tinta-suave:#56606B;
+  --cobalto:#1D4E89; --cobalto-osc:#143A69; --cobalto-prof:#0E2A4D;
+  --vinho:#6B1E2E; --vinho-osc:#4A1420; --oiro:#C9A227; --verde-azulejo:#3F7F6E;
+  --linea:#D3D1C8; --blanco:#FFFFFF;
+  --sombra:0 2px 14px rgba(27,36,48,.08); --radio:4px;
+  --tile:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'><rect width='40' height='40' fill='%231D4E89'/><g fill='none' stroke='%23F6F5F0' stroke-width='1.3'><circle cx='0' cy='0' r='8'/><circle cx='40' cy='0' r='8'/><circle cx='0' cy='40' r='8'/><circle cx='40' cy='40' r='8'/><circle cx='0' cy='0' r='3.5'/><circle cx='40' cy='0' r='3.5'/><circle cx='0' cy='40' r='3.5'/><circle cx='40' cy='40' r='3.5'/><path d='M20 7C25 12 25 16 20 20C15 16 15 12 20 7ZM20 33C25 28 25 24 20 20C15 24 15 28 20 33ZM7 20C12 15 16 15 20 20C16 25 12 25 7 20ZM33 20C28 15 24 15 20 20C24 25 28 25 33 20Z'/><circle cx='20' cy='20' r='2' fill='%23F6F5F0'/></g><rect x='.5' y='.5' width='39' height='39' fill='none' stroke='%23F6F5F0' stroke-opacity='.4'/></svg>");
+  --tile-claro:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'><rect width='40' height='40' fill='%23F6F5F0'/><g fill='none' stroke='%231D4E89' stroke-width='1.2'><circle cx='0' cy='0' r='8'/><circle cx='40' cy='0' r='8'/><circle cx='0' cy='40' r='8'/><circle cx='40' cy='40' r='8'/><path d='M20 7C25 12 25 16 20 20C15 16 15 12 20 7ZM20 33C25 28 25 24 20 20C15 24 15 28 20 33ZM7 20C12 15 16 15 20 20C16 25 12 25 7 20ZM33 20C28 15 24 15 20 20C24 25 28 25 33 20Z'/></g><rect x='.5' y='.5' width='39' height='39' fill='none' stroke='%231D4E89' stroke-opacity='.35'/></svg>");
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:'Karla',system-ui,sans-serif;background:var(--piedra);color:var(--tinta);line-height:1.55;font-size:16px}
-h1,h2,h3{font-family:'Marcellus',serif;font-weight:400;letter-spacing:.02em}
+body{font-family:'Source Sans 3',system-ui,sans-serif;background:var(--esmalte);color:var(--tinta);line-height:1.55;font-size:16.5px}
+h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:500;letter-spacing:-.01em;font-variation-settings:"opsz" 72,"SOFT" 50}
 
-header{background:linear-gradient(180deg,#132C45 0%,#1F4E79 100%);color:#EEF2F6;padding:52px 24px 40px;text-align:center;border-bottom:4px solid var(--oro)}
-header .eyebrow{font-size:.78rem;letter-spacing:.28em;text-transform:uppercase;color:#D9B96A;margin-bottom:14px}
-header h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.1}
-header h1 .ciudad{color:#E8C87A}
-header p.sub{max-width:660px;margin:16px auto 0;color:#C4D0DC;font-size:.98rem}
-header .fechas{display:inline-block;margin-top:20px;padding:8px 22px;border:1px solid rgba(232,200,122,.45);border-radius:999px;font-family:'Marcellus',serif;font-size:.95rem;color:#E8C87A;letter-spacing:.12em}
-header .indice{margin-top:22px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
-header .indice a{color:#C4D0DC;text-decoration:none;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;border:1px solid rgba(196,208,220,.3);border-radius:5px}
-header .indice a:hover{color:#E8C87A;border-color:#E8C87A}
+/* Friso de azulejo: una fila de 40 px repetida */
+.friso{height:40px;background:var(--tile) repeat-x center;background-size:40px 40px;border-top:2px solid var(--esmalte);border-bottom:2px solid var(--esmalte)}
+.friso.claro{background-image:var(--tile-claro);border-color:var(--linea)}
 
-.filtros{position:sticky;top:0;z-index:1001;background:rgba(244,242,236,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--linea);padding:14px 24px}
-.filtros-inner{max-width:1180px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.filtros .grupo-label{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--tinta-suave);margin-right:2px}
-.chip{border:1px solid var(--linea);background:var(--blanco);color:var(--tinta);padding:7px 16px;border-radius:6px;cursor:pointer;font-family:'Karla',sans-serif;font-size:.88rem;font-weight:500;transition:all .15s ease}
-.chip:hover{border-color:var(--oro)}
-.chip:focus-visible{outline:2px solid var(--azulejo);outline-offset:2px}
-.chip.activo{background:var(--azulejo);border-color:var(--azulejo);color:#fff}
+header{position:relative;background:var(--cobalto-prof);color:var(--esmalte);padding:0;text-align:center;overflow:hidden}
+header .azulejos{position:absolute;inset:0;background:var(--tile) repeat;background-size:40px 40px;opacity:.16;pointer-events:none}
+header .interior{position:relative;padding:60px 24px 44px;background:radial-gradient(ellipse at 50% 100%,rgba(14,42,77,0) 30%,rgba(14,42,77,.85) 100%)}
+header .eyebrow{font-size:.76rem;letter-spacing:.3em;text-transform:uppercase;color:var(--oiro);margin-bottom:16px;font-weight:600}
+header h1{font-size:clamp(2.4rem,6vw,4rem);line-height:1.02;font-weight:400;font-variation-settings:"opsz" 144,"SOFT" 100,"WONK" 1}
+header h1 .ciudad{font-style:italic;color:#FFF;font-weight:300}
+header p.sub{max-width:640px;margin:18px auto 0;color:#C6D4E6;font-size:1rem}
+header .fechas{display:inline-flex;gap:0;margin-top:24px;border:1px solid rgba(246,245,240,.5);border-radius:2px;overflow:hidden;font-family:'Fraunces',serif;font-size:1rem}
+header .fechas span{padding:8px 18px;border-right:1px solid rgba(246,245,240,.35);background:rgba(246,245,240,.06)}
+header .fechas span:last-child{border-right:none}
+header .fechas small{display:block;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--oiro);font-family:'Source Sans 3',sans-serif;font-weight:600}
+header .indice{margin-top:26px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+header .indice a{color:#C6D4E6;text-decoration:none;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;padding:6px 12px;border-bottom:2px solid transparent}
+header .indice a:hover{color:#FFF;border-color:var(--oiro)}
+
+.filtros{position:sticky;top:0;z-index:1001;background:rgba(246,245,240,.97);backdrop-filter:blur(6px);border-bottom:1px solid var(--linea);padding:12px 24px}
+.filtros-inner{max-width:1180px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.filtros .grupo-label{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--granito);margin-right:4px;font-weight:600}
+.chip{border:1px solid var(--granito-claro);background:var(--blanco);color:var(--tinta);padding:7px 15px;border-radius:2px;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:.9rem;font-weight:600;transition:all .15s ease;letter-spacing:.01em}
+.chip:hover{border-color:var(--cobalto)}
+.chip:focus-visible{outline:2px solid var(--cobalto);outline-offset:2px}
+.chip.activo{background:var(--cobalto);border-color:var(--cobalto);color:#fff}
 .chip.activo.mirador{background:var(--vinho);border-color:var(--vinho)}
-.chip.activo.foto{background:var(--rabelo);border-color:var(--rabelo)}
+.chip.activo.foto{background:var(--verde-azulejo);border-color:var(--verde-azulejo)}
 .sep{width:1px;height:24px;background:var(--linea);margin:0 6px}
-.contador{margin-left:auto;font-size:.82rem;color:var(--tinta-suave)}
+.contador{margin-left:auto;font-size:.82rem;color:var(--granito)}
 
-.seccion{max-width:1180px;margin:0 auto;padding:48px 24px}
-.seccion>h2{font-size:1.7rem;margin-bottom:6px}
-.seccion>.nota{color:var(--tinta-suave);font-size:.95rem;margin-bottom:26px;max-width:780px}
+.seccion{max-width:1180px;margin:0 auto;padding:52px 24px}
+.seccion>h2{font-size:2rem;margin-bottom:8px;display:flex;align-items:center;gap:14px}
+.seccion>h2::before{content:"";width:22px;height:22px;background:var(--tile);background-size:22px 22px;flex-shrink:0;box-shadow:0 0 0 1px var(--esmalte),0 0 0 2px var(--cobalto)}
+.seccion>.nota{color:var(--tinta-suave);font-size:.97rem;margin-bottom:28px;max-width:780px}
 
-.timeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
-.dia{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);padding:18px 18px 16px;box-shadow:var(--sombra);border-top:3px solid var(--oro)}
-.dia .num{font-family:'Marcellus',serif;font-size:1.5rem;color:var(--azulejo);letter-spacing:.06em}
-.dia .nombre{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--tinta-suave);margin-bottom:10px}
-.dia ul{list-style:none;font-size:.86rem}
-.dia li{padding:5px 0;border-top:1px dashed var(--linea)}
+.timeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px}
+.dia{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);padding:0 0 16px;box-shadow:var(--sombra);overflow:hidden}
+.dia .cab{background:var(--cobalto);color:var(--esmalte);padding:12px 18px;display:flex;align-items:baseline;gap:10px;background-image:linear-gradient(rgba(29,78,137,.9),rgba(29,78,137,.9)),var(--tile);background-size:auto,40px 40px}
+.dia .num{font-family:'Fraunces',serif;font-size:1.6rem;letter-spacing:.02em;font-variation-settings:"opsz" 72,"WONK" 1}
+.dia .nombre{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:#C6D4E6;font-weight:600}
+.dia ul{list-style:none;font-size:.88rem;padding:8px 18px 0}
+.dia li{padding:7px 0;border-top:1px dashed var(--linea)}
 .dia li:first-child{border-top:none}
-.dia .hora{display:inline-block;font-family:'Marcellus',serif;font-size:.78rem;color:var(--vinho);min-width:52px;margin-right:4px}
-.luz{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
-.luz div{background:var(--blanco);border:1px solid var(--linea);border-left:3px solid var(--vinho);border-radius:6px;padding:10px 14px;font-size:.84rem;color:var(--tinta-suave)}
-.luz b{color:var(--tinta);display:block;font-family:'Marcellus',serif;letter-spacing:.04em;margin-bottom:2px}
+.dia .hora{display:inline-block;font-family:'Fraunces',serif;font-size:.82rem;color:var(--vinho);min-width:52px;margin-right:4px;font-weight:600}
+.luz{margin-top:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.luz div{background:var(--blanco);border:1px solid var(--linea);border-top:3px solid var(--oiro);border-radius:var(--radio);padding:12px 14px;font-size:.86rem;color:var(--tinta-suave)}
+.luz b{color:var(--tinta);display:block;font-family:'Fraunces',serif;font-size:1.05rem;margin-bottom:3px}
 
 /* Mapa */
 #mapa{height:540px;border-radius:var(--radio);border:1px solid var(--linea);box-shadow:var(--sombra);z-index:1}
 .mapa-controles{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-bottom:14px;font-size:.86rem}
 .mapa-controles label{display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--tinta-suave)}
-.mapa-controles input{accent-color:var(--azulejo)}
+.mapa-controles input{accent-color:var(--cobalto)}
 .leyenda{display:flex;gap:14px;flex-wrap:wrap;margin-left:auto}
 .leyenda span{display:flex;align-items:center;gap:5px;font-size:.8rem;color:var(--tinta-suave)}
 .punto{width:12px;height:12px;border-radius:50%;display:inline-block;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.2)}
-.p-visita{background:var(--azulejo)}.p-mirador{background:var(--vinho)}.p-foto{background:var(--rabelo)}.p-comer{background:var(--tinta);border-radius:2px}
-.leaflet-popup-content{font-family:'Karla',sans-serif;font-size:.85rem}
-.leaflet-popup-content b{font-family:'Marcellus',serif;font-size:1rem;display:block;margin-bottom:2px}
-.leaflet-popup-content a{color:var(--azulejo);font-weight:700;text-decoration:none}
+.p-visita{background:var(--cobalto)}.p-mirador{background:var(--vinho)}.p-foto{background:var(--verde-azulejo)}.p-comer{background:var(--tinta);border-radius:2px}
+.leaflet-popup-content{font-family:'Source Sans 3',sans-serif;font-size:.88rem}
+.leaflet-popup-content b{font-family:'Fraunces',serif;font-size:1.05rem;display:block;margin-bottom:2px}
+.leaflet-popup-content a{color:var(--cobalto);font-weight:700;text-decoration:none}
 
-/* Tarjetas de lugares */
+/* Tarjetas de lugares: marco de azulejo esmaltado */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:22px}
 .card{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);overflow:hidden;box-shadow:var(--sombra);display:flex;flex-direction:column;transition:transform .15s ease, box-shadow .15s ease}
-.card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(30,38,48,.13)}
-.card .foto{position:relative;height:190px;background:var(--piedra-2);overflow:hidden}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(27,36,48,.14)}
+.card .foto{position:relative;height:200px;background:var(--esmalte-2);overflow:hidden}
 .card .foto img{width:100%;height:100%;object-fit:cover;display:block}
-.card .foto .credito{position:absolute;bottom:0;right:0;font-size:.6rem;color:#fff;background:rgba(0,0,0,.45);padding:2px 7px;border-top-left-radius:6px}
-.badges{position:absolute;top:10px;left:10px;display:flex;gap:6px;flex-wrap:wrap;max-width:calc(100% - 20px)}
-.badge{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:5px;color:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3)}
-.b-visita{background:var(--azulejo)}.b-mirador{background:var(--vinho)}.b-foto{background:var(--rabelo)}
-.b-dia{background:rgba(30,38,48,.78);font-family:'Marcellus',serif;letter-spacing:.1em;font-weight:400}
+.card .foto::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 4px var(--esmalte),inset 0 0 0 5px var(--cobalto);pointer-events:none;opacity:.9}
+.card .foto .credito{position:absolute;bottom:5px;right:5px;font-size:.6rem;color:#fff;background:rgba(14,42,77,.7);padding:2px 7px;z-index:2}
+.badges{position:absolute;top:12px;left:12px;display:flex;gap:6px;flex-wrap:wrap;max-width:calc(100% - 24px);z-index:2}
+.badge{font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:2px;color:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.b-visita{background:var(--cobalto)}.b-mirador{background:var(--vinho)}.b-foto{background:var(--verde-azulejo)}
+.b-dia{background:var(--esmalte);color:var(--cobalto-prof);font-family:'Fraunces',serif;letter-spacing:.04em;font-weight:600;text-transform:none;font-size:.74rem}
 .card .cuerpo{padding:18px 18px 16px;display:flex;flex-direction:column;flex:1}
-.card h3{font-size:1.22rem;margin-bottom:4px}
-.card .zona{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--oro);margin-bottom:10px}
-.card p.desc{font-size:.9rem;color:var(--tinta-suave);margin-bottom:12px}
-.datos{border-top:1px solid var(--linea);font-size:.85rem}
+.card h3{font-size:1.35rem;margin-bottom:3px;line-height:1.15}
+.card .zona{font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--vinho);margin-bottom:10px;font-weight:600}
+.card p.desc{font-size:.92rem;color:var(--tinta-suave);margin-bottom:12px}
+.datos{border-top:1px solid var(--linea);font-size:.86rem}
 .datos .fila{display:flex;gap:10px;padding:7px 0;border-bottom:1px dashed var(--linea)}
 .datos .fila:last-child{border-bottom:none}
-.datos .k{flex:0 0 78px;font-weight:700;font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;padding-top:1px}
+.datos .k{flex:0 0 78px;font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;padding-top:2px;color:var(--granito)}
 .datos .v{flex:1;color:var(--tinta-suave)}
-.tip{margin-top:12px;background:var(--piedra);border-left:3px solid var(--vinho);padding:9px 12px;font-size:.84rem;border-radius:0 6px 6px 0}
-.tip b{color:var(--vinho)}
+.tip{margin-top:12px;background:#F3F5F8;border-left:3px solid var(--cobalto);padding:10px 12px;font-size:.86rem;border-radius:0 var(--radio) var(--radio) 0}
+.tip b{color:var(--cobalto);font-family:'Fraunces',serif;font-style:italic;font-weight:500}
 .acciones{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:6px;font-size:.84rem;font-weight:700;text-decoration:none;transition:background .15s ease;cursor:pointer;border:none;font-family:'Karla',sans-serif}
-.btn-mapa{background:var(--tinta);color:#fff}
-.btn-mapa:hover{background:#000}
-.btn-web{background:var(--piedra-2);color:var(--tinta);border:1px solid var(--linea)}
-.btn-web:hover{border-color:var(--oro)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:2px;font-size:.84rem;font-weight:700;text-decoration:none;transition:background .15s ease;cursor:pointer;border:none;font-family:'Source Sans 3',sans-serif;letter-spacing:.02em}
+.btn-mapa{background:var(--cobalto-prof);color:#fff}
+.btn-mapa:hover{background:var(--cobalto)}
+.btn-web{background:var(--esmalte);color:var(--tinta);border:1px solid var(--granito-claro)}
+.btn-web:hover{border-color:var(--cobalto)}
 .vacio{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--tinta-suave);font-size:.95rem}
 
-/* Paseos */
-.paseos-fondo{background:var(--piedra-2);border-top:1px solid var(--linea);border-bottom:1px solid var(--linea)}
-.paseo{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);box-shadow:var(--sombra);padding:22px;display:flex;flex-direction:column}
+/* Paseos: fondo granito */
+.paseos-fondo{background:#E4E3DC;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .36 0 0 0 0 .37 0 0 0 0 .35 0 0 0 .18 0'/></filter><rect width='200' height='200' filter='url(%23g)'/></svg>");border-top:1px solid var(--linea);border-bottom:1px solid var(--linea)}
+.paseo{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);box-shadow:var(--sombra);padding:22px;display:flex;flex-direction:column;border-top:4px solid var(--cobalto)}
 .paseo .cabecera{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
-.paseo h3{font-size:1.18rem}
-.paseo .metricas{display:flex;gap:12px;font-size:.78rem;color:var(--tinta-suave);margin-bottom:12px;flex-wrap:wrap;align-items:center}
-.paseo .metricas b{color:var(--vinho);font-family:'Marcellus',serif;font-size:.9rem}
-.paseo .etapas{font-size:.86rem;color:var(--tinta-suave);margin-bottom:12px;line-height:1.8}
-.paseo .etapas .flecha{color:var(--oro);margin:0 3px}
-.paseo p.desc{font-size:.88rem;color:var(--tinta-suave);margin-bottom:12px}
-.ruta-color{width:26px;height:8px;border-radius:4px;display:inline-block;flex-shrink:0;margin-top:8px}
+.paseo h3{font-size:1.3rem;line-height:1.15}
+.paseo .metricas{display:flex;gap:12px;font-size:.8rem;color:var(--tinta-suave);margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.paseo .metricas b{color:var(--vinho);font-family:'Fraunces',serif;font-size:.95rem}
+.paseo .etapas{font-size:.88rem;color:var(--tinta-suave);margin-bottom:12px;line-height:1.8}
+.paseo .etapas .flecha{color:var(--oiro);margin:0 4px}
+.paseo p.desc{font-size:.9rem;color:var(--tinta-suave);margin-bottom:12px}
+.ruta-color{width:26px;height:8px;border-radius:2px;display:inline-block;flex-shrink:0;margin-top:8px}
 
 /* Comer */
 .grid-comer{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
 .rest{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);box-shadow:var(--sombra);padding:20px;display:flex;flex-direction:column}
-.rest .tipo{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
-.t-desayuno{color:var(--oro)}.t-comida{color:var(--rabelo)}.t-cena{color:var(--vinho)}.t-dulce{color:var(--azulejo)}
-.rest h3{font-size:1.1rem;margin-bottom:2px}
-.rest .zona-r{font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;color:var(--tinta-suave);margin-bottom:10px}
-.rest .plato{font-size:.87rem;margin-bottom:8px}
-.rest .plato b{color:var(--vinho)}
-.rest p.nota-r{font-size:.83rem;color:var(--tinta-suave);flex:1;margin-bottom:12px}
+.rest .tipo{font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.t-desayuno{color:var(--oiro)}.t-comida{color:var(--verde-azulejo)}.t-cena{color:var(--vinho)}.t-dulce{color:var(--cobalto)}
+.rest h3{font-size:1.2rem;margin-bottom:2px}
+.rest .zona-r{font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--granito);margin-bottom:10px;font-weight:600}
+.rest .plato{font-size:.88rem;margin-bottom:8px}
+.rest .plato b{color:var(--vinho);font-family:'Fraunces',serif;font-style:italic;font-weight:500}
+.rest p.nota-r{font-size:.85rem;color:var(--tinta-suave);flex:1;margin-bottom:12px}
 .rest .pie-r{display:flex;justify-content:space-between;align-items:center;border-top:1px dashed var(--linea);padding-top:10px}
-.rest .precio-r{font-family:'Marcellus',serif;color:var(--tinta);font-size:.9rem}
-.rest a{color:var(--azulejo);font-weight:700;text-decoration:none;font-size:.84rem}
+.rest .precio-r{font-family:'Fraunces',serif;color:var(--tinta);font-size:.95rem}
+.rest a{color:var(--cobalto);font-weight:700;text-decoration:none;font-size:.84rem}
 
-/* Curiosidades */
-.curio-fondo{background:linear-gradient(180deg,#132C45,#1B3A5C);color:#C9D3DD}
-.curio-fondo h2{color:#EEF2F6}
-.curio-fondo .nota{color:#8FA3B7}
+/* Curiosidades: vino de Oporto */
+.curio-fondo{background:linear-gradient(180deg,var(--vinho-osc),var(--vinho));color:#E6D4D8}
+.curio-fondo h2{color:#FFF}
+.curio-fondo h2::before{box-shadow:0 0 0 1px var(--vinho),0 0 0 2px var(--oiro)}
+.curio-fondo .nota{color:#D2B3BA}
 .grid-curio{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
-.curio{border:1px solid rgba(201,211,221,.2);border-radius:var(--radio);padding:20px;background:rgba(255,255,255,.03)}
-.curio .cat{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:#E8C87A;margin-bottom:8px;font-weight:700}
-.curio h3{color:#EEF2F6;font-size:1.05rem;margin-bottom:8px}
-.curio p{font-size:.86rem;color:#AFBCC9}
+.curio{border:1px solid rgba(230,212,216,.22);border-radius:var(--radio);padding:20px;background:rgba(255,255,255,.04)}
+.curio .cat{font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--oiro);margin-bottom:8px;font-weight:700}
+.curio h3{color:#FFF;font-size:1.15rem;margin-bottom:8px}
+.curio p{font-size:.88rem;color:#E0C9CF}
 
 /* Transporte */
-.transporte{background:var(--piedra-2);border-top:1px solid var(--linea);border-bottom:1px solid var(--linea)}
+.transporte{background:var(--esmalte-2);border-top:1px solid var(--linea);border-bottom:1px solid var(--linea)}
 .trans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:8px}
-.trans-card{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);padding:20px}
-.trans-card h3{font-size:1.05rem;margin-bottom:10px;color:var(--azulejo)}
+.trans-card{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);padding:20px;border-top:4px solid var(--cobalto)}
+.trans-card h3{font-size:1.15rem;margin-bottom:10px;color:var(--cobalto-prof)}
 .trans-card ul{list-style:none;font-size:.88rem}
 .trans-card li{padding:6px 0;border-bottom:1px dashed var(--linea);color:var(--tinta-suave)}
 .trans-card li:last-child{border-bottom:none}
 .trans-card li b{color:var(--tinta)}
-.precio-tag{float:right;font-family:'Marcellus',serif;color:var(--vinho);font-size:.95rem}
+.precio-tag{float:right;font-family:'Fraunces',serif;color:var(--vinho);font-size:.98rem;font-weight:600}
 
-footer{background:#132C45;color:#C4D0DC;padding:36px 24px;text-align:center;font-size:.85rem}
-footer .consejos{max-width:860px;margin:0 auto 18px;text-align:left;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
-footer .consejos div{border-left:2px solid var(--oro);padding-left:12px}
-footer .consejos b{color:#E8C87A;display:block;margin-bottom:3px;font-family:'Marcellus',serif;letter-spacing:.06em}
-footer .firma{margin-top:20px;font-family:'Marcellus',serif;letter-spacing:.2em;color:#8FA3B7;font-size:.78rem}
+footer{background:var(--cobalto-prof);color:#C6D4E6;padding:40px 24px 32px;text-align:center;font-size:.86rem}
+footer .consejos{max-width:880px;margin:0 auto 22px;text-align:left;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+footer .consejos div{border-left:2px solid var(--oiro);padding-left:12px}
+footer .consejos b{color:#FFF;display:block;margin-bottom:3px;font-family:'Fraunces',serif;font-size:1rem}
+footer .firma{margin-top:24px;font-family:'Fraunces',serif;font-style:italic;letter-spacing:.06em;color:#8FA6C2;font-size:.9rem}
 
 @media (max-width:640px){
   .seccion{padding:36px 16px}
@@ -160,6 +177,7 @@ footer .firma{margin-top:20px;font-family:'Marcellus',serif;letter-spacing:.2em;
   .contador{width:100%;margin-left:0;order:99}
   #mapa{height:420px}
   .leyenda{margin-left:0}
+  header .fechas{flex-wrap:wrap}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -167,14 +185,20 @@ footer .firma{margin-top:20px;font-family:'Marcellus',serif;letter-spacing:.2em;
 <body>
 
 <header>
-  <div class="eyebrow">Fin de semana · Centro histórico y Gaia · a pie</div>
-  <h1>Dos días en <span class="ciudad">Oporto</span></h1>
-  <p class="sub">Llegada el viernes al caer la tarde, sábado completo y domingo hasta el mediodía. Todo a pie: granito, azulejo, seis colinas y un río con dos orillas que se miran. La guía está ordenada por franjas de luz, porque es lo que manda cuando se viaja con cámara.</p>
-  <div class="fechas">XVI — XVIII · OCTUBRE · MMXXVI</div>
-  <nav class="indice">
-    <a href="#plan">Plan</a><a href="#mapa-sec">Mapa</a><a href="#lugares">Sitios</a><a href="#paseos">Paseos</a><a href="#comer">Comer</a><a href="#curiosidades">Curiosidades</a><a href="#transporte">Transporte</a>
-  </nav>
+  <div class="azulejos"></div>
+  <div class="interior">
+    <div class="eyebrow">Invicta · fin de semana a pie · centro histórico y Gaia</div>
+    <h1>Dos días en <span class="ciudad">Oporto</span></h1>
+    <p class="sub">Llegada el viernes al caer la tarde, sábado completo y domingo hasta el mediodía. Todo a pie: granito, azulejo, seis colinas y un río con dos orillas que se miran. La guía está ordenada por franjas de luz, porque es lo que manda cuando se viaja con cámara.</p>
+    <div class="fechas">
+      <span><small>Sexta</small>16</span><span><small>Sábado</small>17</span><span><small>Domingo</small>18</span><span><small>Outubro</small>2026</span>
+    </div>
+    <nav class="indice">
+      <a href="#plan">Plan</a><a href="#mapa-sec">Mapa</a><a href="#lugares">Sitios</a><a href="#paseos">Paseos</a><a href="#comer">Comer</a><a href="#curiosidades">Curiosidades</a><a href="#transporte">Transporte</a>
+    </nav>
+  </div>
 </header>
+<div class="friso"></div>
 
 <nav class="filtros" aria-label="Filtros">
   <div class="filtros-inner">
@@ -186,9 +210,9 @@ footer .firma{margin-top:20px;font-family:'Marcellus',serif;letter-spacing:.2em;
     <span class="sep"></span>
     <span class="grupo-label">Día</span>
     <button class="chip activo" data-dia="todos">Todos</button>
-    <button class="chip" data-dia="V16">V 16</button>
-    <button class="chip" data-dia="S17">S 17</button>
-    <button class="chip" data-dia="D18">D 18</button>
+    <button class="chip" data-dia="V16">Sex 16</button>
+    <button class="chip" data-dia="S17">Sáb 17</button>
+    <button class="chip" data-dia="D18">Dom 18</button>
     <span class="contador" id="contador"></span>
   </div>
 </nav>
@@ -198,7 +222,7 @@ footer .firma{margin-top:20px;font-family:'Marcellus',serif;letter-spacing:.2em;
   <p class="nota">Esqueleto orientativo. Lo único con hora fija es la luz: Portugal va una hora por detrás de España (todas las horas de esta guía son hora portuguesa) y el sol se pone a las 18:50, así que el sábado se organiza al revés de lo habitual: museos y calles por la mañana, miradores por la tarde.</p>
   <div class="timeline">
     <div class="dia">
-      <div class="num">V · XVI</div><div class="nombre">Llegada y noche</div>
+      <div class="cab"><div class="num">Sexta 16</div><div class="nombre">Llegada y noche</div></div>
       <ul>
         <li><span class="hora">17–18</span>Llegada (hora portuguesa), hotel, cámara al hombro</li>
         <li><span class="hora">19:30</span>Paseo nocturno: Ribeira → tablero inferior del puente → Cais de Gaia → Jardim do Morro → tablero superior → Sé</li>
@@ -206,7 +230,7 @@ footer .firma{margin-top:20px;font-family:'Marcellus',serif;letter-spacing:.2em;
       </ul>
     </div>
     <div class="dia">
-      <div class="num">S · XVII</div><div class="nombre">Sábado, el día grande</div>
+      <div class="cab"><div class="num">Sábado 17</div><div class="nombre">El día grande</div></div>
       <ul>
         <li><span class="hora">08:00</span>Desayuno en el Bolhão (abre a las 8:00) y Capela das Almas sin nadie delante</li>
         <li><span class="hora">09:30</span>Baixa: São Bento, Rua das Flores, Clérigos (subir a primera hora), Lello (franja 9:30–10:30), Carmo, Miradouro da Vitória</li>
@@ -217,7 +241,7 @@ footer .firma{margin-top:20px;font-family:'Marcellus',serif;letter-spacing:.2em;
       </ul>
     </div>
     <div class="dia">
-      <div class="num">D · XVIII</div><div class="nombre">Domingo, mañana corta</div>
+      <div class="cab"><div class="num">Domingo 18</div><div class="nombre">Mañana corta</div></div>
       <ul>
         <li><span class="hora">07:50</span>Amanecer desde la Sé o la Muralha Fernandina: el puente y Gaia a contraluz</li>
         <li><span class="hora">08:30</span>Barredo, Escadas das Verdades, Guindais y la Ribeira todavía vacía</li>
@@ -256,6 +280,7 @@ footer .firma{margin-top:20px;font-family:'Marcellus',serif;letter-spacing:.2em;
   <div class="grid" id="grid"></div>
 </section>
 
+<div class="friso claro"></div>
 <div class="paseos-fondo" id="paseos">
   <section class="seccion">
     <h2>Paseos</h2>
@@ -277,6 +302,7 @@ footer .firma{margin-top:20px;font-family:'Marcellus',serif;letter-spacing:.2em;
   <div class="grid-comer" id="grid-comer"></div>
 </section>
 
+<div class="friso"></div>
 <div class="curio-fondo" id="curiosidades">
   <section class="seccion">
     <h2>Curiosidades</h2>
@@ -326,6 +352,7 @@ footer .firma{margin-top:20px;font-family:'Marcellus',serif;letter-spacing:.2em;
   </div>
 </section>
 
+<div class="friso"></div>
 <footer>
   <div class="consejos">
     <div><b>La hora</b>Portugal está en UTC+1 en octubre (el cambio a horario de invierno es el 25). Relojes del móvil al cruzar el Miño: una hora menos. Las reservas de cena a las 20:00 portuguesas son las 21:00 de Galicia.</div>
@@ -335,7 +362,7 @@ footer .firma{margin-top:20px;font-family:'Marcellus',serif;letter-spacing:.2em;
     <div><b>Vino de Oporto</b>Las caves de Gaia (Graham's, Taylor's, Ferreira, Cálem) hacen visitas con cata de 45 min por 20–30 €. Si se quiere una, Cálem o Ferreira están al pie del puente y encajan en el paseo del sábado por la tarde; Graham's y Taylor's quedan más arriba y requieren subir.</div>
     <div><b>Cámara</b>Luz muy contrastada entre callejones y cielo: exponer para las altas luces y recuperar sombras. Para el puente desde Gaia, 24–35 mm; para comprimir la Ribeira desde la Serra do Pilar, 70–100 mm. La niebla de la mañana sobre el Douro aguanta hasta las 9:30 en octubre.</div>
   </div>
-  <div class="firma">PORTUS CALE — GUÍA GENERADA PARA EL FIN DE SEMANA DEL XVI AL XVIII DE OCTUBRE DE MMXXVI</div>
+  <div class="firma">Antiga, Mui Nobre, Sempre Leal e Invicta Cidade do Porto — 16 a 18 de outubro de 2026</div>
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -366,7 +393,7 @@ const IMG = {
 "cedofeita": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Rua_Miguel_Bombarda_%28Porto%29.jpg/960px-Rua_Miguel_Bombarda_%28Porto%29.jpg"
 };
 
-const NOMBRE_DIA = {V16:"V·XVI", S17:"S·XVII", D18:"D·XVIII"};
+const NOMBRE_DIA = {V16:"Sex 16", S17:"Sáb 17", D18:"Dom 18"};
 const COLOR = {visita:"#1F4E79", mirador:"#7A2E3A", foto:"#3E6B5A"};
 const ETIQ_TIPO = {visita:"Visita", mirador:"Mirador", foto:"Calle y foto"};
 
