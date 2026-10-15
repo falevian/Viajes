@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oporto · 16–18 octubre 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Karla:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<style>
+:root{
+  --piedra:#F4F2EC; --piedra-2:#E9E6DD; --tinta:#1E2630; --tinta-suave:#55606B;
+  --azulejo:#1F4E79; --azulejo-osc:#153A5C; --vinho:#7A2E3A; --oro:#B08A3E; --rabelo:#3E6B5A;
+  --linea:#D5D1C6; --blanco:#FFFFFF;
+  --sombra:0 2px 14px rgba(30,38,48,.08); --radio:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Karla',system-ui,sans-serif;background:var(--piedra);color:var(--tinta);line-height:1.55;font-size:16px}
+h1,h2,h3{font-family:'Marcellus',serif;font-weight:400;letter-spacing:.02em}
+
+header{background:linear-gradient(180deg,#132C45 0%,#1F4E79 100%);color:#EEF2F6;padding:52px 24px 40px;text-align:center;border-bottom:4px solid var(--oro)}
+header .eyebrow{font-size:.78rem;letter-spacing:.28em;text-transform:uppercase;color:#D9B96A;margin-bottom:14px}
+header h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.1}
+header h1 .ciudad{color:#E8C87A}
+header p.sub{max-width:660px;margin:16px auto 0;color:#C4D0DC;font-size:.98rem}
+header .fechas{display:inline-block;margin-top:20px;padding:8px 22px;border:1px solid rgba(232,200,122,.45);border-radius:999px;font-family:'Marcellus',serif;font-size:.95rem;color:#E8C87A;letter-spacing:.12em}
+header .indice{margin-top:22px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+header .indice a{color:#C4D0DC;text-decoration:none;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;border:1px solid rgba(196,208,220,.3);border-radius:5px}
+header .indice a:hover{color:#E8C87A;border-color:#E8C87A}
+
+.filtros{position:sticky;top:0;z-index:1001;background:rgba(244,242,236,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--linea);padding:14px 24px}
+.filtros-inner{max-width:1180px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.filtros .grupo-label{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--tinta-suave);margin-right:2px}
+.chip{border:1px solid var(--linea);background:var(--blanco);color:var(--tinta);padding:7px 16px;border-radius:6px;cursor:pointer;font-family:'Karla',sans-serif;font-size:.88rem;font-weight:500;transition:all .15s ease}
+.chip:hover{border-color:var(--oro)}
+.chip:focus-visible{outline:2px solid var(--azulejo);outline-offset:2px}
+.chip.activo{background:var(--azulejo);border-color:var(--azulejo);color:#fff}
+.chip.activo.mirador{background:var(--vinho);border-color:var(--vinho)}
+.chip.activo.foto{background:var(--rabelo);border-color:var(--rabelo)}
+.sep{width:1px;height:24px;background:var(--linea);margin:0 6px}
+.contador{margin-left:auto;font-size:.82rem;color:var(--tinta-suave)}
+
+.seccion{max-width:1180px;margin:0 auto;padding:48px 24px}
+.seccion>h2{font-size:1.7rem;margin-bottom:6px}
+.seccion>.nota{color:var(--tinta-suave);font-size:.95rem;margin-bottom:26px;max-width:780px}
+
+.timeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.dia{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);padding:18px 18px 16px;box-shadow:var(--sombra);border-top:3px solid var(--oro)}
+.dia .num{font-family:'Marcellus',serif;font-size:1.5rem;color:var(--azulejo);letter-spacing:.06em}
+.dia .nombre{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--tinta-suave);margin-bottom:10px}
+.dia ul{list-style:none;font-size:.86rem}
+.dia li{padding:5px 0;border-top:1px dashed var(--linea)}
+.dia li:first-child{border-top:none}
+.dia .hora{display:inline-block;font-family:'Marcellus',serif;font-size:.78rem;color:var(--vinho);min-width:52px;margin-right:4px}
+.luz{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.luz div{background:var(--blanco);border:1px solid var(--linea);border-left:3px solid var(--vinho);border-radius:6px;padding:10px 14px;font-size:.84rem;color:var(--tinta-suave)}
+.luz b{color:var(--tinta);display:block;font-family:'Marcellus',serif;letter-spacing:.04em;margin-bottom:2px}
+
+/* Mapa */
+#mapa{height:540px;border-radius:var(--radio);border:1px solid var(--linea);box-shadow:var(--sombra);z-index:1}
+.mapa-controles{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-bottom:14px;font-size:.86rem}
+.mapa-controles label{display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--tinta-suave)}
+.mapa-controles input{accent-color:var(--azulejo)}
+.leyenda{display:flex;gap:14px;flex-wrap:wrap;margin-left:auto}
+.leyenda span{display:flex;align-items:center;gap:5px;font-size:.8rem;color:var(--tinta-suave)}
+.punto{width:12px;height:12px;border-radius:50%;display:inline-block;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.2)}
+.p-visita{background:var(--azulejo)}.p-mirador{background:var(--vinho)}.p-foto{background:var(--rabelo)}.p-comer{background:var(--tinta);border-radius:2px}
+.leaflet-popup-content{font-family:'Karla',sans-serif;font-size:.85rem}
+.leaflet-popup-content b{font-family:'Marcellus',serif;font-size:1rem;display:block;margin-bottom:2px}
+.leaflet-popup-content a{color:var(--azulejo);font-weight:700;text-decoration:none}
+
+/* Tarjetas de lugares */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:22px}
+.card{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);overflow:hidden;box-shadow:var(--sombra);display:flex;flex-direction:column;transition:transform .15s ease, box-shadow .15s ease}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(30,38,48,.13)}
+.card .foto{position:relative;height:190px;background:var(--piedra-2);overflow:hidden}
+.card .foto img{width:100%;height:100%;object-fit:cover;display:block}
+.card .foto .credito{position:absolute;bottom:0;right:0;font-size:.6rem;color:#fff;background:rgba(0,0,0,.45);padding:2px 7px;border-top-left-radius:6px}
+.badges{position:absolute;top:10px;left:10px;display:flex;gap:6px;flex-wrap:wrap;max-width:calc(100% - 20px)}
+.badge{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:5px;color:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.b-visita{background:var(--azulejo)}.b-mirador{background:var(--vinho)}.b-foto{background:var(--rabelo)}
+.b-dia{background:rgba(30,38,48,.78);font-family:'Marcellus',serif;letter-spacing:.1em;font-weight:400}
+.card .cuerpo{padding:18px 18px 16px;display:flex;flex-direction:column;flex:1}
+.card h3{font-size:1.22rem;margin-bottom:4px}
+.card .zona{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--oro);margin-bottom:10px}
+.card p.desc{font-size:.9rem;color:var(--tinta-suave);margin-bottom:12px}
+.datos{border-top:1px solid var(--linea);font-size:.85rem}
+.datos .fila{display:flex;gap:10px;padding:7px 0;border-bottom:1px dashed var(--linea)}
+.datos .fila:last-child{border-bottom:none}
+.datos .k{flex:0 0 78px;font-weight:700;font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;padding-top:1px}
+.datos .v{flex:1;color:var(--tinta-suave)}
+.tip{margin-top:12px;background:var(--piedra);border-left:3px solid var(--vinho);padding:9px 12px;font-size:.84rem;border-radius:0 6px 6px 0}
+.tip b{color:var(--vinho)}
+.acciones{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:6px;font-size:.84rem;font-weight:700;text-decoration:none;transition:background .15s ease;cursor:pointer;border:none;font-family:'Karla',sans-serif}
+.btn-mapa{background:var(--tinta);color:#fff}
+.btn-mapa:hover{background:#000}
+.btn-web{background:var(--piedra-2);color:var(--tinta);border:1px solid var(--linea)}
+.btn-web:hover{border-color:var(--oro)}
+.vacio{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--tinta-suave);font-size:.95rem}
+
+/* Paseos */
+.paseos-fondo{background:var(--piedra-2);border-top:1px solid var(--linea);border-bottom:1px solid var(--linea)}
+.paseo{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);box-shadow:var(--sombra);padding:22px;display:flex;flex-direction:column}
+.paseo .cabecera{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
+.paseo h3{font-size:1.18rem}
+.paseo .metricas{display:flex;gap:12px;font-size:.78rem;color:var(--tinta-suave);margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.paseo .metricas b{color:var(--vinho);font-family:'Marcellus',serif;font-size:.9rem}
+.paseo .etapas{font-size:.86rem;color:var(--tinta-suave);margin-bottom:12px;line-height:1.8}
+.paseo .etapas .flecha{color:var(--oro);margin:0 3px}
+.paseo p.desc{font-size:.88rem;color:var(--tinta-suave);margin-bottom:12px}
+.ruta-color{width:26px;height:8px;border-radius:4px;display:inline-block;flex-shrink:0;margin-top:8px}
+
+/* Comer */
+.grid-comer{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.rest{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);box-shadow:var(--sombra);padding:20px;display:flex;flex-direction:column}
+.rest .tipo{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.t-desayuno{color:var(--oro)}.t-comida{color:var(--rabelo)}.t-cena{color:var(--vinho)}.t-dulce{color:var(--azulejo)}
+.rest h3{font-size:1.1rem;margin-bottom:2px}
+.rest .zona-r{font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;color:var(--tinta-suave);margin-bottom:10px}
+.rest .plato{font-size:.87rem;margin-bottom:8px}
+.rest .plato b{color:var(--vinho)}
+.rest p.nota-r{font-size:.83rem;color:var(--tinta-suave);flex:1;margin-bottom:12px}
+.rest .pie-r{display:flex;justify-content:space-between;align-items:center;border-top:1px dashed var(--linea);padding-top:10px}
+.rest .precio-r{font-family:'Marcellus',serif;color:var(--tinta);font-size:.9rem}
+.rest a{color:var(--azulejo);font-weight:700;text-decoration:none;font-size:.84rem}
+
+/* Curiosidades */
+.curio-fondo{background:linear-gradient(180deg,#132C45,#1B3A5C);color:#C9D3DD}
+.curio-fondo h2{color:#EEF2F6}
+.curio-fondo .nota{color:#8FA3B7}
+.grid-curio{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+.curio{border:1px solid rgba(201,211,221,.2);border-radius:var(--radio);padding:20px;background:rgba(255,255,255,.03)}
+.curio .cat{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:#E8C87A;margin-bottom:8px;font-weight:700}
+.curio h3{color:#EEF2F6;font-size:1.05rem;margin-bottom:8px}
+.curio p{font-size:.86rem;color:#AFBCC9}
+
+/* Transporte */
+.transporte{background:var(--piedra-2);border-top:1px solid var(--linea);border-bottom:1px solid var(--linea)}
+.trans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:8px}
+.trans-card{background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);padding:20px}
+.trans-card h3{font-size:1.05rem;margin-bottom:10px;color:var(--azulejo)}
+.trans-card ul{list-style:none;font-size:.88rem}
+.trans-card li{padding:6px 0;border-bottom:1px dashed var(--linea);color:var(--tinta-suave)}
+.trans-card li:last-child{border-bottom:none}
+.trans-card li b{color:var(--tinta)}
+.precio-tag{float:right;font-family:'Marcellus',serif;color:var(--vinho);font-size:.95rem}
+
+footer{background:#132C45;color:#C4D0DC;padding:36px 24px;text-align:center;font-size:.85rem}
+footer .consejos{max-width:860px;margin:0 auto 18px;text-align:left;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+footer .consejos div{border-left:2px solid var(--oro);padding-left:12px}
+footer .consejos b{color:#E8C87A;display:block;margin-bottom:3px;font-family:'Marcellus',serif;letter-spacing:.06em}
+footer .firma{margin-top:20px;font-family:'Marcellus',serif;letter-spacing:.2em;color:#8FA3B7;font-size:.78rem}
+
+@media (max-width:640px){
+  .seccion{padding:36px 16px}
+  .filtros{padding:12px 14px}
+  .contador{width:100%;margin-left:0;order:99}
+  #mapa{height:420px}
+  .leyenda{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Fin de semana · Centro histórico y Gaia · a pie</div>
+  <h1>Dos días en <span class="ciudad">Oporto</span></h1>
+  <p class="sub">Llegada el viernes al caer la tarde, sábado completo y domingo hasta el mediodía. Todo a pie: granito, azulejo, seis colinas y un río con dos orillas que se miran. La guía está ordenada por franjas de luz, porque es lo que manda cuando se viaja con cámara.</p>
+  <div class="fechas">XVI — XVIII · OCTUBRE · MMXXVI</div>
+  <nav class="indice">
+    <a href="#plan">Plan</a><a href="#mapa-sec">Mapa</a><a href="#lugares">Sitios</a><a href="#paseos">Paseos</a><a href="#comer">Comer</a><a href="#curiosidades">Curiosidades</a><a href="#transporte">Transporte</a>
+  </nav>
+</header>
+
+<nav class="filtros" aria-label="Filtros">
+  <div class="filtros-inner">
+    <span class="grupo-label">Tipo</span>
+    <button class="chip activo" data-tipo="todos">Todos</button>
+    <button class="chip" data-tipo="visita">Visitas</button>
+    <button class="chip mirador" data-tipo="mirador">Miradores</button>
+    <button class="chip foto" data-tipo="foto">Calle y foto</button>
+    <span class="sep"></span>
+    <span class="grupo-label">Día</span>
+    <button class="chip activo" data-dia="todos">Todos</button>
+    <button class="chip" data-dia="V16">V 16</button>
+    <button class="chip" data-dia="S17">S 17</button>
+    <button class="chip" data-dia="D18">D 18</button>
+    <span class="contador" id="contador"></span>
+  </div>
+</nav>
+
+<section class="seccion" id="plan">
+  <h2>Plan del fin de semana</h2>
+  <p class="nota">Esqueleto orientativo. Lo único con hora fija es la luz: Portugal va una hora por detrás de España (todas las horas de esta guía son hora portuguesa) y el sol se pone a las 18:50, así que el sábado se organiza al revés de lo habitual: museos y calles por la mañana, miradores por la tarde.</p>
+  <div class="timeline">
+    <div class="dia">
+      <div class="num">V · XVI</div><div class="nombre">Llegada y noche</div>
+      <ul>
+        <li><span class="hora">17–18</span>Llegada (hora portuguesa), hotel, cámara al hombro</li>
+        <li><span class="hora">19:30</span>Paseo nocturno: Ribeira → tablero inferior del puente → Cais de Gaia → Jardim do Morro → tablero superior → Sé</li>
+        <li><span class="hora">21:00</span>Cena en Ribeira (Taberna dos Mercadores, reservar) o en Gaia (Taberninha do Manel)</li>
+      </ul>
+    </div>
+    <div class="dia">
+      <div class="num">S · XVII</div><div class="nombre">Sábado, el día grande</div>
+      <ul>
+        <li><span class="hora">08:00</span>Desayuno en el Bolhão (abre a las 8:00) y Capela das Almas sin nadie delante</li>
+        <li><span class="hora">09:30</span>Baixa: São Bento, Rua das Flores, Clérigos (subir a primera hora), Lello (franja 9:30–10:30), Carmo, Miradouro da Vitória</li>
+        <li><span class="hora">13:00</span>Palácio da Bolsa (visita guiada) o São Francisco; comida en Miragaia o Rua das Flores</li>
+        <li><span class="hora">15:30</span>Virtudes → Palácio de Cristal → Miragaia → Ribeira</li>
+        <li><span class="hora">17:45</span>Cruzar a Gaia por el tablero superior; Serra do Pilar para el ocaso (18:50) y Jardim do Morro para la hora azul</li>
+        <li><span class="hora">20:30</span>Cena en Gaia o de vuelta en la Baixa (Gazela, Brasão)</li>
+      </ul>
+    </div>
+    <div class="dia">
+      <div class="num">D · XVIII</div><div class="nombre">Domingo, mañana corta</div>
+      <ul>
+        <li><span class="hora">07:50</span>Amanecer desde la Sé o la Muralha Fernandina: el puente y Gaia a contraluz</li>
+        <li><span class="hora">08:30</span>Barredo, Escadas das Verdades, Guindais y la Ribeira todavía vacía</li>
+        <li><span class="hora">09:30</span>Desayuno (Padaria Ribeiro o Zenith) y paseo de cierre por Cedofeita y Miguel Bombarda si queda hueco</li>
+        <li><span class="hora">11:30</span>Salida hacia casa</li>
+      </ul>
+    </div>
+  </div>
+  <div class="luz">
+    <div><b>Amanecer</b>7:50 (hora de Portugal). Luz lateral sobre Gaia desde la orilla norte hasta las 9:30.</div>
+    <div><b>Ocaso</b>18:50. El sol cae detrás de la Foz, al oeste: desde Gaia, la Ribeira queda iluminada de frente la última hora.</div>
+    <div><b>Hora azul</b>19:00–19:35. El puente y la Ribeira encienden luces hacia las 19:10, el momento exacto para la foto clásica desde el Jardim do Morro.</div>
+    <div><b>Octubre</b>Máximas de 20–22 °C, mínimas de 11–13 °C. Probabilidad de lluvia moderada: chubasquero fino y bolsa para la cámara. Niebla matinal frecuente sobre el río.</div>
+  </div>
+</section>
+
+<section class="seccion" id="mapa-sec">
+  <h2>Mapa</h2>
+  <p class="nota">Los marcadores obedecen a los filtros de arriba (tipo y día). Las líneas discontinuas son los paseos; los cuadrados oscuros, sitios para comer. Pulsa cualquier elemento para ver su ficha y el enlace a Google Maps.</p>
+  <div class="mapa-controles">
+    <label><input type="checkbox" id="chk-paseos" checked> Mostrar paseos</label>
+    <label><input type="checkbox" id="chk-comer" checked> Mostrar sitios de comer</label>
+    <div class="leyenda">
+      <span><i class="punto p-visita"></i>Visita</span>
+      <span><i class="punto p-mirador"></i>Mirador</span>
+      <span><i class="punto p-foto"></i>Calle y foto</span>
+      <span><i class="punto p-comer"></i>Comer</span>
+    </div>
+  </div>
+  <div id="mapa"></div>
+</section>
+
+<section class="seccion" id="lugares">
+  <h2>Sitios</h2>
+  <p class="nota">Tarjetas separadas por tipo: <b>visitas</b> (monumentos con entrada), <b>miradores</b> (desde dónde se ve algo) y <b>calle y foto</b> (barrios, mercados y rincones donde la cámara manda). Precios y horarios de octubre de 2026: conviene verificar en la web oficial al reservar. Los consejos de foto van pensados para cámara en mano, con luz baja y granito mojado.</p>
+  <div class="grid" id="grid"></div>
+</section>
+
+<div class="paseos-fondo" id="paseos">
+  <section class="seccion">
+    <h2>Paseos</h2>
+    <p class="nota">Oporto se explica andando y cuesta arriba. Cada ruta está pensada para una franja de luz concreta y termina cerca de una mesa. El botón abre el recorrido a pie completo en Google Maps, con todas las etapas como puntos intermedios. Todas están dibujadas en el mapa.</p>
+    <div class="grid" id="grid-paseos"></div>
+  </section>
+</div>
+
+<section class="seccion" id="comer">
+  <h2>Dónde comer</h2>
+  <p class="nota">Selección corta: desayunos de panadería y mercado, tascas de mantel de papel, bocadillos que son instituciones y el pastel de nata de referencia. Precios por persona sin vino. Dos reglas locales: se come de 12:30 a 14:30 y se cena a partir de las 19:30, pronto para un español; y lo bueno de la Ribeira se reserva o se hace cola.</p>
+  <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
+    <button class="chip activo" data-comer="todos">Todo</button>
+    <button class="chip" data-comer="desayuno">Desayunos</button>
+    <button class="chip" data-comer="comida">Comidas</button>
+    <button class="chip" data-comer="cena">Cenas</button>
+    <button class="chip" data-comer="dulce">Café y dulce</button>
+  </div>
+  <div class="grid-comer" id="grid-comer"></div>
+</section>
+
+<div class="curio-fondo" id="curiosidades">
+  <section class="seccion">
+    <h2>Curiosidades</h2>
+    <p class="nota">Datos para la sobremesa, con sesgo confesado hacia la física y la ingeniería: en Oporto los puentes son el monumento.</p>
+    <div class="grid-curio" id="grid-curio"></div>
+  </section>
+</div>
+
+<section class="transporte" id="transporte">
+  <div class="seccion">
+    <h2>Transporte</h2>
+    <p class="nota">Todo lo de esta guía se hace a pie: del Bolhão a la Serra do Pilar hay 2,5 km. El transporte sólo interesa para llegar y salir, y para tres juguetes de ingeniería (funicular, teleférico y tranvía) que además son miradores en movimiento.</p>
+    <div class="trans-grid">
+      <div class="trans-card">
+        <h3>Llegar en coche desde Galicia</h3>
+        <ul>
+          <li><b>A3 / A28</b> — peajes electrónicos sin barrera en la A28 (lector de matrícula); con matrícula española, registrar la tarjeta en la web EasyToll o pagar en CTT/Payshop en los 5 días siguientes</li>
+          <li><b>Aparcar</b> — el centro histórico es un laberinto de sentido único y plazas inexistentes; dejar el coche en un parking (Trindade, Palácio de Cristal, Ribeira) <span class="precio-tag">≈ 15–20 €/día</span></li>
+          <li><b>Vuelta del domingo</b> — a Miño hay ≈ 230 km, 2 h 30 por A3 (Valença) y AP-9</li>
+        </ul>
+      </div>
+      <div class="trans-card">
+        <h3>Si se llega en avión</h3>
+        <ul>
+          <li><b>Metro línea E (morada)</b> — Aeroporto ⇄ Trindade, 30 min, cada 20–30 min; billete Z4 <span class="precio-tag">≈ 2,30 € + 0,60 € tarjeta</span></li>
+          <li><b>Taxi / Uber</b> — 20–25 min al centro <span class="precio-tag">≈ 20–30 €</span></li>
+          <li><b>Trindade → centro</b> — 10 min a pie hasta Aliados; la tarjeta Andante se compra en las máquinas del metro (no hay torniquetes: se valida en el andén)</li>
+        </ul>
+      </div>
+      <div class="trans-card">
+        <h3>Andante (metro y bus)</h3>
+        <ul>
+          <li><b>Z2</b> — cualquier trayecto dentro del centro, 1 h de validez <span class="precio-tag">1,40 €</span></li>
+          <li><b>Andante 24 Z2</b> — día completo si se usa más de cuatro veces <span class="precio-tag">≈ 5,20 €</span></li>
+          <li><b>Realmente necesario</b> — para este plan, no: todo cabe andando. Útil sólo para Casa da Música (metro A/B/C/E/F) o la Foz (bus 500 desde Praça da Liberdade)</li>
+        </ul>
+      </div>
+      <div class="trans-card">
+        <h3>Tres máquinas con vistas</h3>
+        <ul>
+          <li><b>Funicular dos Guindais</b> — Ribeira ⇄ Batalha en 2 min por la muralla; 281 m, pendiente del 20 % <span class="precio-tag">≈ 4 €</span></li>
+          <li><b>Teleférico de Gaia</b> — Cais de Gaia ⇄ Jardim do Morro, 5 min sobre las caves <span class="precio-tag">≈ 8 € ida</span></li>
+          <li><b>Eléctrico línea 1</b> — Infante ⇄ Passeio Alegre (Foz) siguiendo el río, tranvía de madera de 1930 <span class="precio-tag">≈ 6 € trayecto</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="consejos">
+    <div><b>La hora</b>Portugal está en UTC+1 en octubre (el cambio a horario de invierno es el 25). Relojes del móvil al cruzar el Miño: una hora menos. Las reservas de cena a las 20:00 portuguesas son las 21:00 de Galicia.</div>
+    <div><b>Reservas</b>Lello se compra online con franja horaria (10 € canjeables por un libro); Clérigos y Bolsa se compran en puerta. Para cenar en la Ribeira el sábado, reservar el viernes.</div>
+    <div><b>Cuestas y granito</b>Desniveles de 60 m entre el río y la Baixa, escaleras y adoquín pulido que resbala mojado. Calzado con suela de goma; el trípode pequeño, sí; el grande, no.</div>
+    <div><b>Domingo</b>El Mercado do Bolhão cierra, Lello y la Bolsa abren, la Sé tiene misa por la mañana (visita turística limitada hasta las 11:00). Las calles del casco viejo están vacías hasta las 10:00: la mejor franja del viaje para fotografiar sin gente.</div>
+    <div><b>Vino de Oporto</b>Las caves de Gaia (Graham's, Taylor's, Ferreira, Cálem) hacen visitas con cata de 45 min por 20–30 €. Si se quiere una, Cálem o Ferreira están al pie del puente y encajan en el paseo del sábado por la tarde; Graham's y Taylor's quedan más arriba y requieren subir.</div>
+    <div><b>Cámara</b>Luz muy contrastada entre callejones y cielo: exponer para las altas luces y recuperar sombras. Para el puente desde Gaia, 24–35 mm; para comprimir la Ribeira desde la Serra do Pilar, 70–100 mm. La niebla de la mañana sobre el Douro aguanta hasta las 9:30 en octubre.</div>
+  </div>
+  <div class="firma">PORTUS CALE — GUÍA GENERADA PARA EL FIN DE SEMANA DEL XVI AL XVIII DE OCTUBRE DE MMXXVI</div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+const IMG = {
+"saobento": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Estaci%C3%B3n_de_tren_S%C3%A3o_Bento%2C_Oporto%2C_Portugal%2C_2012-05-09%2C_DD_05.JPG/960px-Estaci%C3%B3n_de_tren_S%C3%A3o_Bento%2C_Oporto%2C_Portugal%2C_2012-05-09%2C_DD_05.JPG",
+"se": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Fachada_de_la_Catedral_de_Oporto_%28S%C3%A9_do_Porto%29.jpg/960px-Fachada_de_la_Catedral_de_Oporto_%28S%C3%A9_do_Porto%29.jpg",
+"clerigos": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Torre_de_los_Cl%C3%A9rigos%2C_Oporto%2C_Portugal%2C_2012-05-09%2C_DD_01.JPG/960px-Torre_de_los_Cl%C3%A9rigos%2C_Oporto%2C_Portugal%2C_2012-05-09%2C_DD_01.JPG",
+"lello": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Livraria_Lello%2C_Porto.jpg/960px-Livraria_Lello%2C_Porto.jpg",
+"bolsa": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/BolsaValoresPorto.jpg/960px-BolsaValoresPorto.jpg",
+"saofrancisco": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Igreja_de_S%C3%A3o_Francisco_%28Porto%29%2C_interior.jpg/960px-Igreja_de_S%C3%A3o_Francisco_%28Porto%29%2C_interior.jpg",
+"ribeira": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Ribeira_%28Porto%29.jpg/960px-Ribeira_%28Porto%29.jpg",
+"ponte": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Puente_de_Don_Luis_I%2C_Oporto%2C_Portugal%2C_2019-06-02%2C_DD_29-31_HDR.jpg/960px-Puente_de_Don_Luis_I%2C_Oporto%2C_Portugal%2C_2019-06-02%2C_DD_29-31_HDR.jpg",
+"morro": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Porto_-_Jardim_do_Morro.jpg/960px-Porto_-_Jardim_do_Morro.jpg",
+"pilar": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Igreja_da_Serra_do_Pilar_por_Rodrigo_Tetsuo_Argenton_%2802%29.jpg/960px-Igreja_da_Serra_do_Pilar_por_Rodrigo_Tetsuo_Argenton_%2802%29.jpg",
+"gaia": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Rabelo_boats_and_Ribeira_seen_from_Cais_de_Gaia%2C_20250605_1623_9879.jpg/960px-Rabelo_boats_and_Ribeira_seen_from_Cais_de_Gaia%2C_20250605_1623_9879.jpg",
+"vitoria": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Porto_Cathedral_-_panoramio.jpg/960px-Porto_Cathedral_-_panoramio.jpg",
+"cristal": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Porto%2C_Jardins_do_Palacio_do_Cristal_%2805%29.jpg/960px-Porto%2C_Jardins_do_Palacio_do_Cristal_%2805%29.jpg",
+"virtudes": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Portugal_%2815619222991%29.jpg/960px-Portugal_%2815619222991%29.jpg",
+"bolhao": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Bolh%C3%A3o2023.jpg/960px-Bolh%C3%A3o2023.jpg",
+"flores": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Old_porto_reminds_me_of_the_atlantic_version_of_pre-olympic_old_barcelona-_authentic%2C_abandoned%2C_nostalgic_%2829342755442%29.jpg/960px-Old_porto_reminds_me_of_the_atlantic_version_of_pre-olympic_old_barcelona-_authentic%2C_abandoned%2C_nostalgic_%2829342755442%29.jpg",
+"almas": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Capela_das_Almas_%28Porto%29.jpg/960px-Capela_das_Almas_%28Porto%29.jpg",
+"carmo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Tile_wall_on_the_outside_of_the_Igreja_do_Carmo_in_Porto_%2854046848823%29.jpg/960px-Tile_wall_on_the_outside_of_the_Igreja_do_Carmo_in_Porto_%2854046848823%29.jpg",
+"foz": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Around_the_lighthouse_2_%286263343198%29.jpg/960px-Around_the_lighthouse_2_%286263343198%29.jpg",
+"musica": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Exterior_of_Casa_da_M%C3%BAsica_07.jpg/960px-Exterior_of_Casa_da_M%C3%BAsica_07.jpg",
+"guindais": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Porto_-_Muralhas_Fernandinas_e_funicular.jpg/960px-Porto_-_Muralhas_Fernandinas_e_funicular.jpg",
+"miragaia": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Alfandega_2_%28Porto%29.JPG/960px-Alfandega_2_%28Porto%29.JPG",
+"cedofeita": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Rua_Miguel_Bombarda_%28Porto%29.jpg/960px-Rua_Miguel_Bombarda_%28Porto%29.jpg"
+};
+
+const NOMBRE_DIA = {V16:"V·XVI", S17:"S·XVII", D18:"D·XVIII"};
+const COLOR = {visita:"#1F4E79", mirador:"#7A2E3A", foto:"#3E6B5A"};
+const ETIQ_TIPO = {visita:"Visita", mirador:"Mirador", foto:"Calle y foto"};
+
+const LUGARES = [
+{nombre:"Estação de São Bento", zona:"Baixa", tipo:"visita", dias:["S17"], img:"saobento", lat:41.1456, lng:-8.6105,
+ desc:"Vestíbulo de 1916 con unos 20 000 azulejos de Jorge Colaço: batallas, cortejos reales y, en el friso superior, la historia del transporte hasta el ferrocarril. Es una estación en uso, así que la entrada es libre y el tráfico de viajeros forma parte de la foto.",
+ horario:"Estación abierta ~5:00–1:00; el vestíbulo es de paso", precio:"Gratis",
+ transporte:"A 5 min de Aliados; Metro D São Bento",
+ tip:"El azulejo blanco y azul satura el sensor con poca luz: medir sobre el panel, no sobre la gente. A las 8:30 del sábado el vestíbulo está vacío; a las 11:00 es un andén de móviles en alto. Gran angular desde la escalera de salida para meter techo y los tres muros.",
+ web:"", maps:"Estação de São Bento, Porto"},
+{nombre:"Sé do Porto y Terreiro", zona:"Sé · Batalha", tipo:"visita", dias:["S17","D18"], img:"se", lat:41.1428, lng:-8.6113,
+ desc:"Catedral románica del s. XII fortificada como un castillo, con rosetón, claustro gótico forrado de azulejos del XVIII y una casa capitular con una terraza sobre el río. El Terreiro delante es el primer mirador de la ciudad: puente, Gaia y los tejados del Barredo a los pies.",
+ horario:"Abr–Oct 9:00–18:30; domingo, misa por la mañana (claustro desde ~12:30)", precio:"Catedral gratis; claustro y torre 4 €",
+ transporte:"4 min de São Bento por la Rua de D. Hugo o las escaleras del Largo do Actor Dias",
+ tip:"Subir a la torre con el billete del claustro: la única cota alta de la orilla norte que mira directamente al puente. Domingo a las 8:00, el Terreiro al amanecer con el sol saliendo detrás de la Serra do Pilar es la foto de contraluz del viaje.",
+ web:"", maps:"Sé do Porto"},
+{nombre:"Torre dos Clérigos", zona:"Clérigos", tipo:"mirador", dias:["S17"], img:"clerigos", lat:41.1458, lng:-8.6144,
+ desc:"75,6 m y 225 escalones de barroco de Nasoni (1763), durante siglo y medio el edificio más alto de Portugal y referencia de los barcos que entraban por la barra. Arriba, 360° de tejados: la Sé, el río, la Foz y, al norte, la masa de granito de la Baixa.",
+ horario:"Diario 9:00–19:00 (última subida 18:30); sesiones nocturnas algunos días", precio:"10 € (torre + museo)",
+ transporte:"6 min de São Bento subiendo por la Rua dos Clérigos",
+ tip:"Subir a las 9:00 en punto: luz rasante del este sobre la Sé y nadie en la escalera, que es estrecha y de un solo sentido con cruces. Arriba, 24 mm para el panorama y 85 mm para aislar el casco de la Sé con el puente detrás. La torre en sí se fotografía mejor desde abajo, desde la Rua da Assunção, al mediodía.",
+ web:"https://www.torredosclerigos.pt", maps:"Torre dos Clérigos, Porto"},
+{nombre:"Livraria Lello", zona:"Clérigos", tipo:"visita", dias:["S17"], img:"lello", lat:41.1468, lng:-8.6149,
+ desc:"Librería de 1906 con escalera bifurcada de madera (que es en realidad yeso pintado sobre hormigón), vidriera cenital con el lema 'Decus in Labore' y una fachada neogótica. Monumento Nacional desde 2026 y la cola más larga de la ciudad.",
+ horario:"Diario 9:30–19:00; entrada por franjas horarias", precio:"10 € (vale canjeable por un libro); 15,95 € con libro de la casa incluido",
+ transporte:"A 60 m de la Torre dos Clérigos, Rua das Carmelitas 144",
+ tip:"Comprar online la franja de 9:30 y encadenarla con la torre. Dentro no hay trípode ni calma: 20–24 mm a f/2.8, ISO 1600, apuntando hacia arriba desde el pie de la escalera para sacar vidriera y barandillas en un mismo plano. La curva de la escalera vista desde el piso superior es la otra foto. Quince minutos bastan.",
+ web:"https://www.livrarialello.pt", maps:"Livraria Lello, Porto"},
+{nombre:"Palácio da Bolsa", zona:"São Nicolau · Ribeira", tipo:"visita", dias:["S17","D18"], img:"bolsa", lat:41.1414, lng:-8.6155,
+ desc:"Sede de la Asociación Comercial (1842–1910) levantada sobre el claustro quemado de San Francisco: Pátio das Nações con cúpula de vidrio y hierro, escalera noble de granito y el Salão Árabe, 18 años de estuco dorado neomorisco. Sólo se visita con guía, cada 30 min, en español.",
+ horario:"Abr–Oct diario 9:00–18:30", precio:"12 € (visita guiada de 30–45 min; se compra en puerta)",
+ transporte:"6 min cuesta abajo desde São Bento por Mouzinho da Silveira",
+ tip:"Pedir la visita en español al llegar: los grupos se forman por idioma. El Salão Árabe es dorado sobre dorado y engaña al balance de blancos: fijar a 4000 K. El Pátio das Nações se fotografía desde el primer piso, mirando la cúpula con la escalera, 16–20 mm.",
+ web:"https://palaciodabolsa.com", maps:"Palácio da Bolsa, Porto"},
+{nombre:"Igreja de São Francisco", zona:"São Nicolau · Ribeira", tipo:"visita", dias:["S17"], img:"saofrancisco", lat:41.1407, lng:-8.6160,
+ desc:"Fachada gótica y, dentro, el interior más dorado de Portugal: unos 300 kg de oro en talla barroca del XVIII cubriendo cada superficie. Debajo, catacumbas con osario visible bajo una trampilla de cristal. Pegado a la Bolsa; se visitan en secuencia.",
+ horario:"Oct: diario 9:00–19:00", precio:"≈ 10 € (iglesia + catacumbas + museo)",
+ transporte:"Junto a la Bolsa, Rua do Infante D. Henrique",
+ tip:"Prohibido fotografiar dentro, con celo variable según el vigilante: la ficha va por la experiencia, no por la cámara. El exterior, con la Bolsa y el Infante D. Henrique en bronce, se hace desde la plaza al mediodía.",
+ web:"", maps:"Igreja Monumento de São Francisco, Porto"},
+{nombre:"Ribeira y Cais da Ribeira", zona:"Ribeira", tipo:"foto", dias:["V16","S17","D18"], img:"ribeira", lat:41.1407, lng:-8.6133,
+ desc:"El frente fluvial Patrimonio Mundial: fachadas estrechas de cuatro y cinco plantas, ocre, rosa y azul, con ropa tendida y el Cubo de la Ribeira (1976) en la plaza. Detrás, el Barredo: escaleras, pasadizos y patios donde todavía vive gente del barrio.",
+ horario:"Siempre; terrazas hasta medianoche", precio:"Gratis",
+ transporte:"Desde la Sé, 5 min bajando por la Rua de D. Hugo y las Escadas do Barredo",
+ tip:"La Ribeira se fotografía desde la otra orilla (Cais de Gaia) con luz de tarde, cuando el sol del oeste la ilumina de frente, o desde dentro a primera hora del domingo con las persianas bajadas y los adoquines húmedos. Rua da Fonte Taurina y la Rua dos Canastreiros para la calle estrecha con el puente al fondo.",
+ web:"", maps:"Praça da Ribeira, Porto"},
+{nombre:"Ponte Luís I, tablero superior", zona:"Puente", tipo:"mirador", dias:["V16","S17","D18"], img:"ponte", lat:41.1405, lng:-8.6092,
+ desc:"Arco de hierro de 172 m de luz (Teophile Seyrig, 1886), el mayor de su tipo cuando se inauguró. Dos tableros: el inferior, a 10 m del agua, para coches y peatones; el superior, a 45 m, para el metro y para andar entre dos ciudades con el río debajo. Caminarlo es el mirador en movimiento.",
+ horario:"Siempre abierto a peatones en ambos tableros", precio:"Gratis",
+ transporte:"Tablero superior desde la Sé por la Av. Vímara Peres (3 min); tablero inferior desde la Ribeira",
+ tip:"El metro pasa cada pocos minutos por el tablero superior: con 1/15 s y la cámara apoyada en la barandilla, el tren sale barrido y el arco fijo. De noche, tablero inferior mirando hacia arriba: el arco iluminado contra el cielo, 16 mm, ISO 3200. Viento: sujetar bien la cámara.",
+ web:"", maps:"Ponte Luís I, Porto"},
+{nombre:"Jardim do Morro", zona:"Gaia", tipo:"mirador", dias:["V16","S17"], img:"morro", lat:41.1375, lng:-8.6092,
+ desc:"El jardín al pie de la salida del tablero superior en Gaia: el mirador frontal de Oporto, con la Sé, el Barredo, la Ribeira y el puente en un solo plano. A las 19:00 de un sábado está lleno de gente sentada en la hierba; no estorba, forma parte de la escena.",
+ horario:"Siempre abierto", precio:"Gratis",
+ transporte:"Cruzar el tablero superior desde la Sé: 10 min",
+ tip:"Hora azul (19:05–19:30): las farolas del puente y los focos de la Ribeira ya encendidos y el cielo todavía con densidad. 24–35 mm, trípode de mesa en el pretil, 2–4 s. Para evitar la foto de catálogo, bajar diez metros por las escaleras hacia el teleférico: el mismo encuadre con la escalera y las copas de los árboles como marco.",
+ web:"", maps:"Jardim do Morro, Vila Nova de Gaia"},
+{nombre:"Mosteiro da Serra do Pilar", zona:"Gaia", tipo:"mirador", dias:["S17"], img:"pilar", lat:41.1364, lng:-8.6085,
+ desc:"Monasterio del XVI con iglesia y claustro circulares (los únicos de Portugal), en lo alto del promontorio que cierra el meandro. Fue cuartel de Wellington en 1809 y sigue siendo militar en parte. Su explanada es la cota más alta sobre el río: el puente completo con la ciudad detrás, en escorzo.",
+ horario:"Explanada siempre abierta; iglesia y claustro Ma–Do 10:00–18:30 (último acceso 18:00)", precio:"Explanada gratis; claustro ≈ 2 €, torre con visita ≈ 4 €",
+ transporte:"Desde el Jardim do Morro, subida de 5 min por la Av. da República",
+ tip:"Ocaso (18:50) desde aquí, no desde el Morro: el sol se pone a la derecha del encuadre y tiñe la cara oeste de la Sé y de los Clérigos. 70–100 mm para comprimir Ribeira, puente y catedral en capas. Después, bajar al Morro para la hora azul: los dos miradores están a 300 m.",
+ web:"", maps:"Mosteiro da Serra do Pilar, Vila Nova de Gaia"},
+{nombre:"Cais de Gaia y los rabelos", zona:"Gaia", tipo:"foto", dias:["V16","S17"], img:"gaia", lat:41.1373, lng:-8.6150,
+ desc:"La orilla de las caves: fachadas con los nombres de las casas (Sandeman, Ferreira, Cálem, Graham's) en letras enormes y los rabelos, los barcos de fondo plano que bajaban las pipas desde el Douro, amarrados como reclamo. De frente, la Ribeira entera en una sola línea.",
+ horario:"Siempre; caves con visitas 10:00–18:00 aprox.", precio:"Paseo gratis; visita a una cave con cata 20–30 €",
+ transporte:"Tablero inferior del puente desde la Ribeira, 5 min",
+ tip:"La foto clásica de la Ribeira desde aquí se hace entre las 17:00 y las 18:30, luz frontal y cálida. Los rabelos con el puente detrás, mejor desde el extremo este del muelle, junto al puente, con 35 mm. De noche, reflejos: 1–2 s apoyado en un noray.",
+ web:"", maps:"Cais de Gaia, Vila Nova de Gaia"},
+{nombre:"Miradouro da Vitória", zona:"Vitória", tipo:"mirador", dias:["S17"], img:"vitoria", lat:41.1449, lng:-8.6160,
+ desc:"Una explanada de tierra detrás de la iglesia de la Vitória, sin reja ni cartel, con la vista que el Jardim do Morro da al revés: desde la orilla norte, por encima de los tejados de la Ribeira, hacia el puente, Gaia y la Serra do Pilar. El mirador de los locales.",
+ horario:"Siempre; de noche, iluminación escasa", precio:"Gratis",
+ transporte:"Desde Clérigos, 5 min por la Rua de São Bento da Vitória",
+ tip:"Mediodía y primera hora de la tarde: luz desde el sur sobre Gaia y las caves. Tele corto (70 mm) para apilar tejados, río y monasterio. La Rua de São Bento da Vitória que lleva hasta aquí, con sus escaleras y muros, es la mejor calle de la ciudad para foto de calle a esa hora.",
+ web:"", maps:"Miradouro da Vitória, Porto"},
+{nombre:"Jardins do Palácio de Cristal", zona:"Massarelos", tipo:"mirador", dias:["S17"], img:"cristal", lat:41.1486, lng:-8.6262,
+ desc:"Jardines románticos de 1865 (del paisajista alemán Émile David) en terrazas sobre el río, con pavos reales sueltos, el Pavilhão Rosa Mota (la cúpula de 1952 que sustituyó al palacio de cristal) y una serie de miradores encadenados hacia el Douro, la Arrábida y la Foz.",
+ horario:"Oct: 8:00–19:00", precio:"Gratis",
+ transporte:"15 min desde Clérigos por la Rua de Cedofeita y la Rua D. Manuel II",
+ tip:"La vista es hacia el oeste, hacia la Ponte da Arrábida: luz de media tarde a contraluz, aprovechable para siluetas de pavos reales y balaustradas. Mirador de la Avenida das Tílias y el pequeño balcón junto a la capilla de Carlos Alberto. Sin aglomeraciones.",
+ web:"", maps:"Jardins do Palácio de Cristal, Porto"},
+{nombre:"Passeio das Virtudes", zona:"Virtudes · Miragaia", tipo:"mirador", dias:["S17"], img:"virtudes", lat:41.1452, lng:-8.6198,
+ desc:"Un jardín escalonado de 1737 colgado de la ladera, con un ginkgo centenario y bancos de piedra, que mira al río hacia el poniente. Es el sitio donde la ciudad viene a ver ponerse el sol con una cerveza; en octubre, sin la multitud del verano.",
+ horario:"Siempre", precio:"Gratis",
+ transporte:"5 min desde el Miradouro da Vitória bajando hacia la Rua das Virtudes",
+ tip:"Si el sábado se prefiere el ocaso en la orilla norte en vez de en Gaia, este es el sitio: el sol cae en el eje del río sobre la Arrábida. Para esta guía está puesto como parada de media tarde (16:00–17:00), con la luz ya cálida y tiempo de cruzar a Gaia después.",
+ web:"", maps:"Passeio das Virtudes, Porto"},
+{nombre:"Mercado do Bolhão", zona:"Bolhão", tipo:"foto", dias:["S17"], img:"bolhao", lat:41.1491, lng:-8.6064,
+ desc:"Mercado de 1914 en dos plantas alrededor de un patio, reabierto en 2022 tras una restauración de cuatro años que conservó la estructura de hierro y granito. Pescaderas, flores, quesos, pan y pequeños puestos para comer de pie. El sábado por la mañana es el mercado de verdad, no el escaparate.",
+ horario:"L–V 8:00–20:00, S 8:00–18:00; cerrado domingos", precio:"Gratis",
+ transporte:"Metro A/B/C/E/F Bolhão; 8 min a pie de Aliados",
+ tip:"Desayunar aquí a las 8:30 y fotografiar después: la luz del patio cae cenital por el lucernario y los puestos de la planta baja quedan en sombra abierta, ideal para retrato de calle con 35–50 mm. Pedir permiso con un gesto antes de encuadrar a las vendedoras: suelen decir que sí.",
+ web:"", maps:"Mercado do Bolhão, Porto"},
+{nombre:"Rua das Flores", zona:"Baixa", tipo:"foto", dias:["S17","D18"], img:"flores", lat:41.1437, lng:-8.6133,
+ desc:"La calle renacentista (1521) que une São Bento con la Ribeira, hoy peatonal, con fachadas de azulejo, balcones de hierro y la Igreja da Misericórdia. Es el eje comercial del casco antiguo y la calle con más cafés y tascas por metro.",
+ horario:"Siempre; comercios 10:00–20:00", precio:"Gratis",
+ transporte:"Arranca a 2 min de São Bento",
+ tip:"Calle orientada norte-sur: a media mañana el sol entra por los balcones de un lado y la foto se hace a contraluz con el fondo de la Misericórdia. Domingo a las 9:00 vacía, con los escaparates cerrados y los pavimentos mojados: blanco y negro.",
+ web:"", maps:"Rua das Flores, Porto"},
+{nombre:"Capela das Almas", zona:"Santa Catarina", tipo:"foto", dias:["S17"], img:"almas", lat:41.1500, lng:-8.6063,
+ desc:"Capilla del XVIII forrada por fuera, en 1929, con 15 947 azulejos de Eduardo Leite que cuentan la vida de San Francisco y Santa Catalina. Dos fachadas enteras en azul y blanco en la esquina más transitada de la Rua de Santa Catarina.",
+ horario:"Exterior siempre visible; interior 7:30–13:00 y 15:30–19:00", precio:"Gratis",
+ transporte:"A 100 m del Mercado do Bolhão",
+ tip:"La luz dura del mediodía aplana el azulejo; a las 8:00 del sábado, con el sol bajo y la calle vacía, el esmalte brilla y los paneles leen como vidrieras. 35 mm desde la acera de enfrente para la esquina completa, o 85 mm para un panel aislado. Es la foto de azulejo de la ciudad, mejor que San Bento.",
+ web:"", maps:"Capela das Almas, Porto"},
+{nombre:"Igreja do Carmo y la casa escondida", zona:"Carmo · Cordoaria", tipo:"foto", dias:["S17"], img:"carmo", lat:41.1472, lng:-8.6157,
+ desc:"Dos iglesias gemelas, Carmo (1768, rococó) y Carmelitas, separadas por la casa más estrecha de Portugal, de poco más de un metro de ancho, construida para que no compartieran muro. El lateral del Carmo es un panel único de azulejo (1912) de 400 m² con la fundación de la orden.",
+ horario:"Carmo: 9:00–18:00; casa escondida visitable con el billete de la iglesia", precio:"Iglesia gratis; recorrido con casa escondida ≈ 5 €",
+ transporte:"2 min de Lello, Praça de Gomes Teixeira (la fuente de los leones)",
+ tip:"El panel lateral mira al este: luz directa de 9:00 a 11:00. La fuente de los leones, con el Carmo de fondo y el tranvía 22 pasando, es el encuadre con 35 mm desde la Rua de Carlos Alberto. Jardim da Cordoaria, enfrente, con sus esculturas de Juan Muñoz (los hombres riéndose), para las 'calle y foto' de la mañana.",
+ web:"", maps:"Igreja do Carmo, Porto"},
+{nombre:"Escadas dos Guindais y la muralla", zona:"Guindais · Barredo", tipo:"foto", dias:["V16","D18"], img:"guindais", lat:41.1412, lng:-8.6083,
+ desc:"La escalera que sube desde la Ribeira hasta la Batalha pegada a la Muralha Fernandina (s. XIV), con el funicular cruzando por un túnel en medio. Tramos de adoquín, balcones sobre el río y, a media subida, las Escadas das Verdades hacia la Sé por un barrio de escaleras y patios.",
+ horario:"Siempre; funicular 8:00–20:00 (V y S hasta 22:00)", precio:"Gratis; funicular ≈ 4 €",
+ transporte:"Pie de la escalera en la Rua da Ribeira Negra, junto al tablero inferior del puente",
+ tip:"De noche (viernes) el tablero inferior con el arco iluminado se ve desde la primera rampa de la escalera con 20 mm. Al amanecer (domingo), desde el adarve de la muralla hacia el puente a contraluz, con el metro pasando por arriba. Es la zona menos turística del frente fluvial y la más fotogénica.",
+ web:"", maps:"Escadas dos Guindais, Porto"},
+{nombre:"Miragaia y la Alfândega", zona:"Miragaia", tipo:"foto", dias:["S17"], img:"miragaia", lat:41.1444, lng:-8.6220,
+ desc:"El antiguo barrio de pescadores y armenios, río abajo de la Ribeira, con casas de azulejo verde y azul en la Rua da Reboleira y la Rua de Miragaia, calles en galería bajo los edificios y la Alfândega Nova (1869), la aduana de granito de 36 000 m² que hoy es centro de congresos.",
+ horario:"Siempre", precio:"Gratis",
+ transporte:"10 min hacia el oeste desde la Ribeira por el Cais das Pedras",
+ tip:"Las arcadas de la Rua de Miragaia dan sombra abierta todo el día: retrato y detalle de azulejo. Desde el muelle de la Alfândega, el perfil de la Ribeira con el puente al fondo con 50 mm, sin la gente del Cais da Ribeira. Comer en la Taberna Santo António de la Rua das Virtudes, a 5 min cuesta arriba.",
+ web:"", maps:"Rua de Miragaia, Porto"},
+{nombre:"Casa da Música", zona:"Boavista", tipo:"visita", dias:["D18"], img:"musica", lat:41.1587, lng:-8.6305,
+ desc:"El poliedro de hormigón de Rem Koolhaas (2005): una sala de conciertos con ventanales de vidrio ondulado a ambos lados del escenario, forrada de contrachapado de madera dorado y acústica calculada por Arup. Visita guiada diaria. Está fuera del casco antiguo; sólo si el domingo da tiempo o el vuelo lo permite.",
+ horario:"Visitas guiadas diarias (en inglés y portugués, 11:00 y 16:00 aprox.)", precio:"≈ 12 €",
+ transporte:"Metro A/B/C/E/F Casa da Música (10 min desde Trindade); a pie, 30 min desde Clérigos",
+ tip:"El exterior es para gran angular y cielo nublado: el hormigón blanco pide luz difusa. Las rampas interiores y la escalera naranja son la foto. Para un físico: la sala está acústicamente aislada con doble caja y los ventanales corrugados son el truco para que el vidrio no reflecte el sonido en fase.",
+ web:"https://www.casadamusica.com", maps:"Casa da Música, Porto"},
+{nombre:"Cedofeita y Miguel Bombarda", zona:"Cedofeita", tipo:"foto", dias:["D18"], img:"cedofeita", lat:41.1512, lng:-8.6213,
+ desc:"El barrio de las galerías de arte y las tiendas de diseño: la Rua de Miguel Bombarda, con veinte galerías que inauguran todas a la vez cada dos meses, y la Rua de Cedofeita, la peatonal del comercio local. Fachadas de azulejo industrial y arte urbano en los solares.",
+ horario:"Galerías Ma–S 14:00–19:00; domingo cerrado", precio:"Gratis",
+ transporte:"10 min al norte de Clérigos",
+ tip:"Para el domingo por la mañana vale como paseo de cierre: galerías cerradas pero calle vacía, persianas pintadas y azulejo. Si en cambio sobra hueco el sábado a media tarde, están abiertas. Tienda de cámaras: Colorfoto, en la Rua de Sá da Bandeira 376, para un carrete o un filtro de emergencia.",
+ web:"", maps:"Rua de Miguel Bombarda, Porto"},
+{nombre:"Foz do Douro y el faro", zona:"Foz", tipo:"mirador", dias:["D18"], img:"foz", lat:41.1486, lng:-8.6751,
+ desc:"Donde el Douro entra en el Atlántico: el espigón de Felgueiras con su faro de 1886, las olas rompiendo encima en días de temporal, el Passeio Alegre con sus palmeras y los baños de granito del Pérgola. Se llega con el tranvía 1 siguiendo el río desde el Infante. Plan B para el domingo si el tiempo lo pide o si se quiere mar.",
+ horario:"Siempre; tranvía 1 cada 20–30 min desde 9:15", precio:"Gratis; tranvía ≈ 6 € trayecto",
+ transporte:"Tranvía 1 desde la parada Infante (junto a la Bolsa), 25 min; bus 500 de vuelta",
+ tip:"Con mar de fondo, el faro con las olas por encima es la foto de 200 mm y 1/1000 s; sin él, el paseo del río desde el tranvía con 35 mm por la ventanilla abierta. El viaje de ida ocupa toda la mañana del domingo: elegir entre esto y la ciudad vacía al amanecer, no caben las dos cosas.",
+ web:"", maps:"Farol de Felgueiras, Porto"}
+];
+
+const PASEOS = [
+{nombre:"Viernes noche: las dos orillas", dias:["V16"], color:"#7A2E3A", km:"3,2", tiempo:"1,5–2 h", luz:"noche (desde 19:30)",
+ desc:"Primera toma de contacto con todo encendido: bajar de la Sé a la Ribeira por las escaleras del Barredo, cruzar a Gaia por el tablero inferior pegado al agua, recorrer el Cais de Gaia frente a la Ribeira iluminada, subir por el teleférico o las escaleras al Jardim do Morro y volver por el tablero superior con el río 45 m abajo. Termina en la Sé, a cinco minutos de cualquier cena.",
+ etapas:[["Sé do Porto",41.1428,-8.6113],["Escadas do Barredo",41.1418,-8.6120],["Praça da Ribeira",41.1407,-8.6133],["Ponte Luís I tablero inferior",41.1398,-8.6103],["Cais de Gaia",41.1373,-8.6150],["Jardim do Morro",41.1375,-8.6092],["Ponte Luís I tablero superior",41.1405,-8.6092],["Sé do Porto",41.1428,-8.6113]],
+ tip:"Los reflejos en el río desde el Cais de Gaia: cámara apoyada en el pretil, 1–2 s, ISO 400. En el tablero superior el viento es constante; ráfagas cortas y sin trípode. Cena a las 21:00 en la Taberna dos Mercadores (reservada) o en la Taberninha do Manel en Gaia, a mitad de paseo."},
+{nombre:"Sábado mañana: azulejo, torre y escalera", dias:["S17"], color:"#1F4E79", km:"3,0", tiempo:"4 h con visitas", luz:"8:00–13:00",
+ desc:"El circuito de la Baixa con las entradas que hay que pagar, ordenado para ir siempre a favor de la luz y contra la multitud: desayuno en el Bolhão, la Capela das Almas aún en sombra fresca, bajar a São Bento, subir a los Clérigos a las 9:00 (vista) y entrar en Lello a las 9:30 (franja), el Carmo con la luz del este en el panel y, de postre, el Miradouro da Vitória antes de bajar a la Bolsa por la Rua das Flores.",
+ etapas:[["Mercado do Bolhão",41.1491,-8.6064],["Capela das Almas",41.1500,-8.6063],["Estação de São Bento",41.1456,-8.6105],["Torre dos Clérigos",41.1458,-8.6144],["Livraria Lello",41.1468,-8.6149],["Igreja do Carmo",41.1472,-8.6157],["Miradouro da Vitória",41.1449,-8.6160],["Rua das Flores",41.1437,-8.6133],["Palácio da Bolsa",41.1414,-8.6155]],
+ tip:"Este paseo tiene dos horas fijas: Clérigos a las 9:00 (abre) y Lello a las 9:30 (comprar la franja online el viernes). Todo lo demás se adapta. La Bolsa a las 12:30 encaja con comer después en Cantina 32 o en la Adega São Nicolau."},
+{nombre:"Sábado tarde: poniente y hora azul", dias:["S17"], color:"#B08A3E", km:"4,0", tiempo:"3,5 h", luz:"15:30 → hora azul",
+ desc:"El paseo grande del viaje: desde las Virtudes y los jardines del Palácio de Cristal, con la luz ya inclinada sobre el río, bajar a Miragaia por la Rua da Reboleira, recorrer el frente fluvial hasta la Ribeira con el sol de frente sobre Gaia, cruzar por el tablero superior y estar en la Serra do Pilar a las 18:30 para el ocaso (18:50). Hora azul en el Jardim do Morro y cena abajo en Gaia o de vuelta en la Baixa.",
+ etapas:[["Passeio das Virtudes",41.1452,-8.6198],["Jardins do Palácio de Cristal",41.1486,-8.6262],["Rua de Miragaia",41.1444,-8.6220],["Praça da Ribeira",41.1407,-8.6133],["Sé do Porto",41.1428,-8.6113],["Mosteiro da Serra do Pilar",41.1364,-8.6085],["Jardim do Morro",41.1375,-8.6092]],
+ tip:"Calcular para estar en la explanada de la Serra do Pilar a las 18:30 con el 70–100 mm montado; a las 19:05 bajar al Morro para la hora azul con el gran angular. Si se quiere entrar en una cave con cata, Cálem o Ferreira (al pie del puente, última visita ~17:30) se intercalan entre la Ribeira y la subida, a costa del Palácio de Cristal."},
+{nombre:"Domingo amanecer: la ciudad vacía", dias:["D18"], color:"#3E6B5A", km:"2,4", tiempo:"2 h", luz:"7:45–10:00",
+ desc:"Sin entradas ni colas: el casco viejo antes de que abra. Desde la Sé con el sol saliendo detrás de Gaia, por el adarve de la Muralha Fernandina y las Escadas das Verdades, bajar los Guindais hasta la Ribeira dormida, remontar la Rua das Flores con las persianas echadas y acabar desayunando en la Padaria Ribeiro o en Zenith. Si hace niebla, mejor todavía.",
+ etapas:[["Terreiro da Sé",41.1430,-8.6118],["Muralha Fernandina",41.1420,-8.6090],["Escadas dos Guindais",41.1412,-8.6083],["Praça da Ribeira",41.1407,-8.6133],["Rua das Flores",41.1437,-8.6133],["Padaria Ribeiro",41.1476,-8.6143]],
+ tip:"A las 8:00 de un domingo de octubre el Terreiro da Sé y la Ribeira están completamente vacíos; a las 10:00 llegan los primeros grupos. El contraluz sobre el puente pide exponer para el cielo y dejar la muralla en silueta. Hora de salida a Galicia desde aquí: a las 11:30 se está en el coche con tiempo."}
+];
+
+const COMER = [
+{nombre:"Mercado do Bolhão", zona:"Bolhão", tipo:"desayuno", precio:"4–8 €", lat:41.1491, lng:-8.6064,
+ plato:"Café, pão de ló, queso de Serra con pan de centeno en los puestos del fondo",
+ nota:"Desayunar en el mercado a las 8:00 del sábado, de pie o en los taburetes de los puestos, es la forma de verlo abrir. Después, fotos. Domingo cerrado.",
+ maps:"Mercado do Bolhão, Porto"},
+{nombre:"Confeitaria do Bolhão", zona:"Bolhão", tipo:"desayuno", precio:"3–6 €", lat:41.1490, lng:-8.6070,
+ plato:"Bola de Berlim, pão de Deus, galão",
+ nota:"Confitería de 1896 con mostradores de madera y espejos, frente al mercado. Desayuno portugués de verdad, con cola corta de vecinos a primera hora. Abre a las 6:00.",
+ maps:"Confeitaria do Bolhão, Porto"},
+{nombre:"Padaria Ribeiro", zona:"Cordoaria", tipo:"desayuno", precio:"3–6 €", lat:41.1476, lng:-8.6143,
+ plato:"Tostada en pan de la casa, pastel de nata, bica",
+ nota:"Panadería de 1878 a dos minutos de los Clérigos, con horno propio y terraza en la plaza. Abre a las 7:00 también el domingo: el desayuno del paseo del amanecer.",
+ maps:"Padaria Ribeiro, Praça de Guilherme Gomes Fernandes, Porto"},
+{nombre:"Zenith Brunch & Cocktails", zona:"Carlos Alberto", tipo:"desayuno", precio:"12–18 €", lat:41.1480, lng:-8.6150,
+ plato:"Tostada de aguacate, huevos benedictinos, zumos",
+ nota:"El brunch largo de la ciudad, en la Praça de Carlos Alberto junto al Carmo. Para el domingo sin prisa; abre a las 9:00 y la cola empieza hacia las 10:30.",
+ maps:"Zenith Brunch, Praça de Carlos Alberto, Porto"},
+{nombre:"Casa Guedes", zona:"Poveiros", tipo:"comida", precio:"6–10 €", lat:41.1467, lng:-8.6038,
+ plato:"Sande de pernil con queso de Serra",
+ nota:"El bocadillo de pernil asado en pan crujiente, al corte, con el queso fundiéndose encima; de pie en la barra o en la terraza de la Praça dos Poveiros. Institución desde 1987; comida rápida del sábado si se va justo.",
+ maps:"Casa Guedes Tradicional, Praça dos Poveiros, Porto"},
+{nombre:"Cantina 32", zona:"Rua das Flores", tipo:"comida", precio:"18–28 €", lat:41.1430, lng:-8.6126,
+ plato:"Bacalhau à Brás, tabla de embutidos, mousse de chocolate en maceta",
+ nota:"Cocina portuguesa puesta al día en un local de granito y hierro en plena Rua das Flores. Reservar para el sábado; al mediodía suele haber mesa pronto.",
+ maps:"Cantina 32, Rua das Flores, Porto"},
+{nombre:"Adega São Nicolau", zona:"Ribeira", tipo:"comida", precio:"18–28 €", lat:41.1405, lng:-8.6138,
+ plato:"Polvo à lagareiro, arroz de tamboril, tripas à moda do Porto",
+ nota:"Tasca estrecha en un callejón entre la Bolsa y el río, con mesas de madera y pescado del día. Encaja justo después de la visita a la Bolsa. Sin reserva, cola moderada a las 13:00.",
+ maps:"Adega São Nicolau, Rua de São Nicolau 1, Porto"},
+{nombre:"Taberna Santo António", zona:"Virtudes", tipo:"comida", precio:"12–20 €", lat:41.1452, lng:-8.6193,
+ plato:"Rojões, arroz de pato, el plato del día en pizarra",
+ nota:"Tasca de barrio en la Rua das Virtudes, con la carta en una pizarra y vino de la casa en jarra. La mejor relación calidad/precio de esta lista, a 2 min del Passeio das Virtudes: comida del sábado antes del paseo de la tarde.",
+ maps:"Taberna Santo António, Rua das Virtudes, Porto"},
+{nombre:"Taberna dos Mercadores", zona:"Ribeira", tipo:"cena", precio:"30–45 €", lat:41.1411, lng:-8.6128,
+ plato:"Arroz de marisco, bacalhau na brasa, presa de porco preto",
+ nota:"Diez mesas en una calle estrecha del Barredo, con horno a la vista: la cena de la Ribeira sin las terrazas del río. Reservar por teléfono con días de antelación; es la mesa del viernes.",
+ maps:"Taberna dos Mercadores, Rua dos Mercadores 36, Porto"},
+{nombre:"Taberninha do Manel", zona:"Cais de Gaia", tipo:"cena", precio:"20–30 €", lat:41.1380, lng:-8.6135,
+ plato:"Alheira, bacalhau com broa, francesinha en versión correcta",
+ nota:"Tasca de la orilla de Gaia con terraza frente a la Ribeira iluminada: la cena del viernes a mitad del paseo nocturno, o la del sábado al bajar del Morro. Más honesta que sus vecinas de la Avenida Diogo Leite.",
+ maps:"Taberninha do Manel, Avenida Diogo Leite, Vila Nova de Gaia"},
+{nombre:"Cervejaria Gazela", zona:"Batalha", tipo:"cena", precio:"8–14 €", lat:41.1465, lng:-8.6058,
+ plato:"Cachorrinhos (perritos prensados, cortados en trozos) y cerveza de barril",
+ nota:"Barra con taburetes, sin mesas, en una travesía junto al Teatro Nacional São João. Los cachorrinhos con salsa picante son el plato callejero de la ciudad. Cena rápida y barata del sábado antes de ir a dormir.",
+ maps:"Cervejaria Gazela, Travessa do Cimo de Vila, Porto"},
+{nombre:"Brasão Cervejaria", zona:"Aliados", tipo:"cena", precio:"15–22 €", lat:41.1489, lng:-8.6117,
+ plato:"Francesinha (la del Brasão, con salsa de la casa)",
+ nota:"Si hay que probar la francesinha una vez, que sea aquí: salsa trabajada y pan tostado en vez de la versión empapada. Reservar el sábado; suele haber lista de espera de 20–40 min.",
+ maps:"Brasão Cervejaria Aliados, Rua de Ramalho Ortigão, Porto"},
+{nombre:"Manteigaria", zona:"Bolhão", tipo:"dulce", precio:"1,50–4 €", lat:41.1485, lng:-8.6075,
+ plato:"Pastel de nata recién salido, con canela, y un café",
+ nota:"Obrador a la vista detrás de la vidriera, con la campana que suena cada vez que sale una bandeja del horno. El pastel de nata de referencia de la ciudad, a 100 m del Bolhão.",
+ maps:"Manteigaria, Rua de Alexandre Braga, Porto"},
+{nombre:"Leitaria da Quinta do Paço", zona:"Cordoaria", tipo:"dulce", precio:"3–6 €", lat:41.1473, lng:-8.6147,
+ plato:"Éclair de nata (el original de 1920) o de chocolate",
+ nota:"La lechería de 1920 que inventó el éclair portuense: relleno de nata en vez de crema. Junto a Padaria Ribeiro, en la misma plaza; desayuno o merienda al bajar de los Clérigos.",
+ maps:"Leitaria da Quinta do Paço, Praça de Guilherme Gomes Fernandes, Porto"},
+{nombre:"Café Majestic", zona:"Santa Catarina", tipo:"dulce", precio:"5–12 €", lat:41.1474, lng:-8.6070,
+ plato:"Café y tostada francesa, por el local más que por la carta",
+ nota:"Art nouveau de 1921 con espejos, molduras y camareros de chaleco. Cliché asumido: los precios son de monumento y hay cola, pero la sala es la mejor foto de interior de la Rua de Santa Catarina. Entrar, mirar, decidir.",
+ maps:"Café Majestic, Rua de Santa Catarina, Porto"}
+];
+
+const CURIOSIDADES = [
+{cat:"Ingeniería estructural", titulo:"El arco de Seyrig, no de Eiffel",
+ texto:"El Ponte Luís I (1886) lo diseñó Théophile Seyrig, ex socio de Eiffel y autor del cálculo del Ponte Maria Pia (1877), que está 1,5 km río arriba y sí es de la casa Eiffel. El arco biarticulado de Luís I salva 172 m, récord mundial de arco de hierro forjado en su día, y soporta dos tableros a cotas distintas: el superior cuelga del arco y el inferior se apoya en él. Hoy pasa el metro por arriba, con una carga que el proyecto de 1881 no imaginó."},
+{cat:"Hormigón", titulo:"La Arrábida y el récord de 1963",
+ texto:"La Ponte da Arrábida, visible desde el Palácio de Cristal, es un arco de hormigón armado de 270 m de luz, el mayor del mundo al inaugurarse en 1963, obra de Edgar Cardoso. Se construyó con cimbras de madera apoyadas sobre el río, y Cardoso instrumentó la estructura con extensómetros propios para contrastar el cálculo durante el descimbrado: ensayo a escala real."},
+{cat:"Enología y química", titulo:"Por qué el oporto es dulce",
+ texto:"Se añade aguardiente vínico (77 % vol.) a mitad de fermentación, cuando el mosto aún conserva la mitad de su azúcar: el alcohol sube a 19–22 % y mata la levadura. El vino cruzaba después el Douro en rabelos hasta Gaia, donde las caves, orientadas al norte y con la humedad del río, envejecen a temperatura estable. La Região Demarcada do Douro (1756, Pombal) es la primera región vinícola con delimitación y reglamento del mundo."},
+{cat:"Geología", titulo:"Una ciudad de granito",
+ texto:"Oporto está construida sobre y con el granito hercínico del macizo del norte: muros, aceras, escaleras y la propia Sé. Es un granito de dos micas con feldespato que, pulido por siglos de pisadas, tiene un coeficiente de rozamiento mojado muy bajo. De ahí la regla local de suela de goma y de ahí también que las cuestas del Barredo se traduzcan en escaleras."},
+{cat:"Acústica", titulo:"La caja dentro de la caja",
+ texto:"La Casa da Música de Koolhaas tiene la sala principal como una caja de hormigón de 1 300 plazas suspendida dentro del volumen exterior, con una cámara de aire que la aísla del ruido urbano. Los dos ventanales de vidrio corrugado de 22 m que la abren a la ciudad rompen la reflexión especular del sonido: la ondulación dispersa las reflexiones y evita el eco flotante entre dos superficies paralelas."},
+{cat:"Historia", titulo:"Tripeiros y la toma de Ceuta",
+ texto:"En 1415 la ciudad entregó toda la carne a la flota de Enrique el Navegante para la conquista de Ceuta y se quedó con las vísceras. Las tripas à moda do Porto (callos con alubias blancas) son el plato que resultó y 'tripeiro' es el gentilicio orgulloso. También es el origen de la rivalidad gastronómica con Lisboa, que cada ciudad cuenta a su manera."},
+{cat:"Toponimia", titulo:"Portus Cale",
+ texto:"El nombre del país sale de aquí: Portus Cale era el asentamiento romano en la desembocadura (Cale en la orilla sur, el puerto en la norte). El condado Portucalense del s. IX se convirtió en el reino de Portugal en 1139. Oporto nunca fue capital, y su lema, 'Antiga, Mui Nobre, Sempre Leal e Invicta Cidade do Porto', lo ganó resistiendo dos asedios (1832–33) en las guerras liberales."},
+{cat:"Óptica y azulejo", titulo:"15 947 azulejos y una capilla",
+ texto:"El revestimiento exterior de la Capela das Almas (1929) usa 15 947 azulejos de 14 × 14 cm, esmalte estannífero blanco con óxido de cobalto. El esmalte funciona como una capa dieléctrica de alto índice: el brillo especular que satura la foto al mediodía es reflexión de Fresnel, y el azul profundo sólo aparece con incidencia rasante y cielo despejado, es decir, a primera hora."},
+{cat:"Transporte", titulo:"El funicular con dos pendientes",
+ texto:"El Funicular dos Guindais original (1891) era un plano inclinado de vapor que descarriló en 1893 y se cerró. El actual (2004) recorre 281 m con un cambio de pendiente a mitad de trazado y un túnel bajo la muralla: la cabina tiene el piso escalonado para compensarlo. Sube 61 m de desnivel en 2 minutos, lo mismo que las escaleras en diez."}
+];
+
+/* ---------- Estado y render de lugares ---------- */
+const grid = document.getElementById("grid");
+const contador = document.getElementById("contador");
+let fTipo = "todos", fDia = "todos", fComer = "todos";
+
+function badgeTipo(t){ return `<span class="badge b-${t}">${ETIQ_TIPO[t]}</span>`; }
+function pasaFiltro(l){
+  return (fTipo==="todos" || l.tipo===fTipo) &&
+         (fDia==="todos" || l.dias.includes(fDia));
+}
+
+function render(){
+  const visibles = LUGARES.filter(pasaFiltro);
+  contador.textContent = visibles.length + " de " + LUGARES.length + " sitios";
+  grid.innerHTML = visibles.length ? visibles.map(l => {
+    const mapsUrl = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(l.maps);
+    const dias = l.dias.map(d => NOMBRE_DIA[d]).join(" · ");
+    const src = IMG[l.img];
+    return `
+    <article class="card">
+      <div class="foto">
+        ${src ? `<img src="${src}" alt="${l.nombre}" loading="lazy" onerror="this.parentElement.querySelector('.credito').remove();this.remove()">` : ""}
+        <div class="badges">${badgeTipo(l.tipo)}<span class="badge b-dia">${dias}</span></div>
+        ${src ? `<div class="credito">Wikimedia Commons</div>` : ""}
+      </div>
+      <div class="cuerpo">
+        <h3>${l.nombre}</h3>
+        <div class="zona">${l.zona}</div>
+        <p class="desc">${l.desc}</p>
+        <div class="datos">
+          <div class="fila"><div class="k">Horario</div><div class="v">${l.horario}</div></div>
+          <div class="fila"><div class="k">Precio</div><div class="v">${l.precio}</div></div>
+          <div class="fila"><div class="k">Cómo ir</div><div class="v">${l.transporte}</div></div>
+        </div>
+        <div class="tip"><b>Foto:</b> ${l.tip}</div>
+        <div class="acciones">
+          <a class="btn btn-mapa" href="${mapsUrl}" target="_blank" rel="noopener">📍 Google Maps</a>
+          ${l.web ? `<a class="btn btn-web" href="${l.web}" target="_blank" rel="noopener">Web / reservas</a>` : ""}
+        </div>
+      </div>
+    </article>`;
+  }).join("") : '<div class="vacio">Nada con esa combinación de filtros. Prueba con "Todos" en alguno de los dos grupos.</div>';
+  actualizarMapa();
+}
+
+/* ---------- Paseos ---------- */
+function renderPaseos(){
+  const cont = document.getElementById("grid-paseos");
+  const visibles = PASEOS.filter(p => fDia==="todos" || p.dias.includes(fDia));
+  cont.innerHTML = visibles.length ? visibles.map(p => {
+    const origen = encodeURIComponent(p.etapas[0][0] + ", Porto");
+    const destino = encodeURIComponent(p.etapas[p.etapas.length-1][0] + ", Porto");
+    const way = p.etapas.slice(1,-1).map(e => encodeURIComponent(e[0] + ", Porto")).join("%7C");
+    const dirUrl = `https://www.google.com/maps/dir/?api=1&origin=${origen}&destination=${destino}${way?"&waypoints="+way:""}&travelmode=walking`;
+    const dias = p.dias.map(d => NOMBRE_DIA[d]).join(" · ");
+    return `
+    <article class="paseo">
+      <div class="cabecera">
+        <div><h3>${p.nombre}</h3></div>
+        <span class="ruta-color" style="background:${p.color}"></span>
+      </div>
+      <div class="metricas">
+        <span><b>${p.km} km</b> a pie</span><span><b>${p.tiempo}</b></span><span>Luz: <b>${p.luz}</b></span><span><span class="badge b-dia">${dias}</span></span>
+      </div>
+      <div class="etapas">${p.etapas.map(e => e[0]).join('<span class="flecha">→</span>')}</div>
+      <p class="desc">${p.desc}</p>
+      <div class="tip"><b>Consejo:</b> ${p.tip}</div>
+      <div class="acciones">
+        <a class="btn btn-mapa" href="${dirUrl}" target="_blank" rel="noopener">🚶 Ruta en Google Maps</a>
+      </div>
+    </article>`;
+  }).join("") : '<div class="vacio">Ningún paseo con ese filtro de día.</div>';
+}
+
+/* ---------- Comer ---------- */
+const ETIQ = {desayuno:["t-desayuno","Desayuno"], comida:["t-comida","Comida"], cena:["t-cena","Cena"], dulce:["t-dulce","Café · dulce"]};
+function renderComer(){
+  const cont = document.getElementById("grid-comer");
+  const visibles = COMER.filter(r => fComer==="todos" || r.tipo===fComer);
+  cont.innerHTML = visibles.map(r => {
+    const mapsUrl = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(r.maps);
+    return `
+    <article class="rest">
+      <div class="tipo ${ETIQ[r.tipo][0]}">${ETIQ[r.tipo][1]}</div>
+      <h3>${r.nombre}</h3>
+      <div class="zona-r">${r.zona}</div>
+      <div class="plato"><b>Pedir:</b> ${r.plato}</div>
+      <p class="nota-r">${r.nota}</p>
+      <div class="pie-r"><span class="precio-r">${r.precio}</span><a href="${mapsUrl}" target="_blank" rel="noopener">📍 Mapa</a></div>
+    </article>`;
+  }).join("");
+}
+
+/* ---------- Curiosidades ---------- */
+document.getElementById("grid-curio").innerHTML = CURIOSIDADES.map(c => `
+  <article class="curio"><div class="cat">${c.cat}</div><h3>${c.titulo}</h3><p>${c.texto}</p></article>
+`).join("");
+
+/* ---------- Mapa Leaflet ---------- */
+let mapa, capaLugares, capaPaseos, capaComer;
+function initMapa(){
+  mapa = L.map("mapa", {scrollWheelZoom:false}).setView([41.1445, -8.6150], 15);
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap'
+  }).addTo(mapa);
+  mapa.on("click", () => mapa.scrollWheelZoom.enable());
+
+  capaLugares = L.layerGroup().addTo(mapa);
+  capaPaseos = L.layerGroup().addTo(mapa);
+  capaComer = L.layerGroup().addTo(mapa);
+
+  PASEOS.forEach(p => {
+    const linea = L.polyline(p.etapas.map(e => [e[1], e[2]]), {
+      color: p.color, weight: 3.5, dashArray: "7 6", opacity: .85
+    }).bindPopup(`<b>${p.nombre}</b>${p.km} km · ${p.tiempo} · ${p.luz}`);
+    linea.addTo(capaPaseos);
+  });
+
+  COMER.forEach(r => {
+    const mapsUrl = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(r.maps);
+    L.marker([r.lat, r.lng], {icon: L.divIcon({
+      className:"", html:'<div style="width:10px;height:10px;background:#1E2630;border:2px solid #fff;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.3)"></div>',
+      iconSize:[14,14], iconAnchor:[7,7]
+    })}).bindPopup(`<b>${r.nombre}</b>${ETIQ[r.tipo][1]} · ${r.zona} · ${r.precio}<br><a href="${mapsUrl}" target="_blank" rel="noopener">Abrir en Google Maps</a>`).addTo(capaComer);
+  });
+
+  document.getElementById("chk-paseos").addEventListener("change", e => {
+    e.target.checked ? mapa.addLayer(capaPaseos) : mapa.removeLayer(capaPaseos);
+  });
+  document.getElementById("chk-comer").addEventListener("change", e => {
+    e.target.checked ? mapa.addLayer(capaComer) : mapa.removeLayer(capaComer);
+  });
+
+  actualizarMapa();
+}
+
+function actualizarMapa(){
+  if(!capaLugares) return;
+  capaLugares.clearLayers();
+  LUGARES.filter(pasaFiltro).forEach(l => {
+    const mapsUrl = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(l.maps);
+    L.circleMarker([l.lat, l.lng], {
+      radius: 8, color: "#fff", weight: 2, fillColor: COLOR[l.tipo], fillOpacity: .95
+    }).bindPopup(`<b>${l.nombre}</b>${ETIQ_TIPO[l.tipo]} · ${l.zona} · ${l.dias.map(d=>NOMBRE_DIA[d]).join(" · ")}<br><a href="${mapsUrl}" target="_blank" rel="noopener">Abrir en Google Maps</a>`).addTo(capaLugares);
+  });
+}
+
+/* ---------- Eventos de filtros ---------- */
+document.querySelectorAll("[data-tipo]").forEach(b => {
+  b.addEventListener("click", () => {
+    document.querySelectorAll("[data-tipo]").forEach(x => x.classList.remove("activo"));
+    b.classList.add("activo");
+    fTipo = b.dataset.tipo;
+    render(); renderPaseos();
+  });
+});
+document.querySelectorAll("[data-dia]").forEach(b => {
+  b.addEventListener("click", () => {
+    document.querySelectorAll("[data-dia]").forEach(x => x.classList.remove("activo"));
+    b.classList.add("activo");
+    fDia = b.dataset.dia;
+    render(); renderPaseos();
+  });
+});
+document.querySelectorAll("[data-comer]").forEach(b => {
+  b.addEventListener("click", () => {
+    document.querySelectorAll("[data-comer]").forEach(x => x.classList.remove("activo"));
+    b.classList.add("activo");
+    fComer = b.dataset.comer;
+    renderComer();
+  });
+});
+
+render(); renderPaseos(); renderComer(); initMapa();
+</script>
+</body>
+</html>
